@@ -770,20 +770,13 @@
 
             // Function to fetch user's notes from MongoDB
             async function fetchUserNotes() {
-                try {
-                    const user = firebase.auth().currentUser;
-                    if (!user) {
-                        console.log('User not logged in');
-                        return;
-                    }
-
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    // Authenticated: fetch as before
                     const idToken = await user.getIdToken();
                     const response = await fetch('/api/notes', {
-                        headers: {
-                            'Authorization': `Bearer ${idToken}`
-                        }
+                        headers: { 'Authorization': `Bearer ${idToken}` }
                     });
-
                     if (response.ok) {
                         const userNotes = await response.json();
                         console.log('Fetched notes:', userNotes);
@@ -810,8 +803,32 @@
                         const errorData = await response.json();
                         console.error('Error fetching notes:', errorData.message);
                     }
-                } catch (error) {
-                    console.error('Error fetching notes:', error);
+                } else {
+                    // Guest: fetch guest notes
+                    const response = await fetch(`/api/notes/guest/${guestId}`);
+                    if (response.ok) {
+                        const guestNotes = await response.json();
+                        console.log('Fetched guest notes:', guestNotes);
+                        
+                        // Clear existing notes
+                        const customNotesContainer = document.getElementById('custom-notes');
+                        customNotesContainer.innerHTML = '';
+                        
+                        if (guestNotes.length === 0) {
+                            customNotesContainer.innerHTML = `
+                                <div class="no-notes-message">
+                                    <p>You haven't created any notes yet.</p>
+                                    <button class="add-note-btn" onclick="document.getElementById('add-note-modal').style.display='block'">
+                                        <i class="fas fa-plus"></i> Create Your First Note
+                                    </button>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        // Render all guest notes in the custom notes section
+                        renderNotes(guestNotes, 'custom-notes');
+                    }
                 }
             }
 
@@ -840,6 +857,45 @@
                     if (customNotesContainer) customNotesContainer.innerHTML = '';
                 }
             });
+
+            // On page load
+            let guestId = localStorage.getItem('guestId');
+            if (!guestId) {
+                guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('guestId', guestId);
+            }
+
+            addNoteForm.onsubmit = async (e) => {
+                e.preventDefault();
+                const noteData = {
+                    title: document.getElementById('note-title').value,
+                    description: document.getElementById('note-description').value,
+                    category: document.getElementById('note-category').value,
+                    keyPoints: document.getElementById('key-points').value.split('\n').filter(point => point.trim()),
+                };
+
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    // Authenticated: send as before
+                    const idToken = await user.getIdToken();
+                    await fetch('/api/notes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
+                        body: JSON.stringify(noteData)
+                    });
+                } else {
+                    // Guest: send to guest endpoint
+                    await fetch('/api/notes/guest', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ...noteData, guestId })
+                    });
+                }
+                // ...refresh notes, close modal, etc.
+            };
         });
     </script>
 </body>
