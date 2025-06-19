@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Questions - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --accent-primary: #F97316; 
+            --accent-secondary: #4ecdc4; 
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --accent-primary: #F97316;
+            --accent-secondary: #00796b; 
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-primary);
+            padding: 1rem 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 2rem;
+        }
+
+        .department-selector {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-primary);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .department-selector select {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.8rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .mock-interview-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mock-interview-btn:hover {
+            background: var(--accent-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .mock-interview-btn i {
+            font-size: 1.1rem;
+        }
+
+        .questions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--accent-primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .answer {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.2rem 0.6rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .show-answer-btn {
+            background: transparent;
+            border: 1px solid var(--border-secondary);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .show-answer-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-theme-toggle);
+            border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        /* Add new styles for AI Interview section */
+        .ai-interview-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-primary);
+        }
+
+        .ai-interview-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ai-interview-header h2 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .ai-interview-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ai-input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .ai-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .ai-input-group input,
+        .ai-input-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .ai-input-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .ai-input-group select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 0.5rem;
+        }
+
+        .ai-chat-container {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .user-message {
+            background: var(--accent-primary);
+            color: white;
+            margin-left: 2rem;
+        }
+
+        .assistant-message {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            margin-right: 2rem;
+        }
+
+        .ai-message-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .ai-message-header i {
+            font-size: 1rem;
+        }
+
+        .ai-message-content {
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .ai-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: none;
+        }
+
+        .ai-send-btn {
+            padding: 0 1.5rem;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ai-send-btn:hover {
+            background: var(--accent-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .ai-send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: var(--text-muted);
+        }
+
+        .ai-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @keyframes typing {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: var(--text-muted);
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .questions-container {
+                grid-template-columns: 1fr;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .department-selector {
+                flex-direction: column;
+            }
+            .mock-interview-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .ai-interview-controls {
+                flex-direction: column;
+            }
+            .ai-input-group {
+                width: 100%;
+            }
+        }
+
+        #ai-chat {
+            min-height: 200px;
+        }
+
+        .ai-controls {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .ai-controls.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mic-btn {
+            padding: 0 1.5rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mic-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .mic-btn.recording {
+            background: #dc3545;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .mic-btn i {
+            font-size: 1.2rem;
+        }
+
+        .mic-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="department-selector">
+            <select id="department-select" onchange="loadQuestions()">
+                <option value="">Select Department</option>
+                <option value="cse">Computer Science</option>
+                <option value="ece">Electronics & Communication</option>
+                <option value="chemical">Chemical</option>
+                <option value="mechanical">Mechanical</option>
+                <option value="electrical">Electrical</option>
+            </select>
+            <button class="mock-interview-btn" onclick="startMockInterview()">
+                <i class="fas fa-microphone-alt"></i>
+                Start Mock Interview
+            </button>
+        </div>
+
+        <div class="questions-container" id="questions-container">
+            <!-- Questions will be loaded here dynamically -->
+            </div>
+
+        <!-- Add new AI Interview section -->
+        <div class="ai-interview-section">
+            <div class="ai-interview-header">
+                <h2>AI-Powered Interview Practice</h2>
+                <span class="ai-badge">Powered by Gemini</span>
+            </div>
+
+            <div class="ai-interview-controls">
+                <div class="ai-input-group">
+                    <label for="ai-department">Department/Field (Required)</label>
+                    <select id="ai-department" required>
+                        <option value="">Select Department</option>
+                        <option value="Computer Science">Computer Science Engineering (CSE)</option>
+                        <option value="Electronics & Communication">Electronics & Communication (ECE)</option>
+                        <option value="Mechanical">Mechanical Engineering</option>
+                        <option value="Civil">Civil Engineering</option>
+                        <option value="Electrical">Electrical Engineering</option>
+                        <option value="Chemical">Chemical Engineering</option>
+                    </select>
+                </div>
+                <div class="ai-input-group">
+                    <label for="ai-interests">Specific Interests/Skills (Required)</label>
+                    <input type="text" id="ai-interests" 
+                           placeholder="e.g., Machine Learning, Web Development" 
+                           required>
+                </div>
+                <button id="start-interview-btn" class="mock-interview-btn">
+                    <i class="fas fa-play"></i>
+                    Start AI Interview
+                </button>
+                    </div>
+
+            <div class="ai-chat-container" id="ai-chat">
+                <!-- Chat messages will appear here -->
+                </div>
+
+            <div class="ai-controls">
+                <textarea class="ai-input" id="ai-user-input" placeholder="Type your response here..." rows="2"></textarea>
+                <button class="mic-btn" id="voice-input-btn" title="Click to speak">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="ai-send-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/interview_data.js"></script>
+    <script>
+        function loadQuestions() {
+            const department = document.getElementById('department-select').value;
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            if (!department || !interviewQuestions[department]) {
+                container.innerHTML = '<p>Please select a department to view questions.</p>';
+                return;
+            }
+
+            const questions = interviewQuestions[department];
+
+            // Load technical questions
+            questions.technical.forEach(q => {
+                const card = createQuestionCard(q, 'Technical');
+                container.appendChild(card);
+            });
+
+            // Load HR questions
+            questions.hr.forEach(q => {
+                const card = createQuestionCard(q, 'HR');
+                container.appendChild(card);
+            });
+        }
+
+        function createQuestionCard(questionData, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const typeSpan = document.createElement('span');
+            typeSpan.className = 'question-type';
+            typeSpan.textContent = type;
+            
+            const question = document.createElement('div');
+            question.className = 'question';
+            question.textContent = questionData.question;
+            
+            const answer = document.createElement('div');
+            answer.className = 'answer';
+            answer.innerHTML = questionData.answer;
+            
+            const tags = document.createElement('div');
+            tags.className = 'tags';
+            questionData.tags.forEach(tag => {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'tag';
+                tagSpan.textContent = tag;
+                tags.appendChild(tagSpan);
+            });
+            
+            const button = document.createElement('button');
+            button.className = 'show-answer-btn';
+            button.textContent = 'Show Answer';
+            button.onclick = () => {
+                const isHidden = answer.style.display === 'none' || !answer.style.display;
+                answer.style.display = isHidden ? 'block' : 'none';
+                button.textContent = isHidden ? 'Hide Answer' : 'Show Answer';
+            };
+            
+            card.appendChild(typeSpan);
+            card.appendChild(question);
+            card.appendChild(answer);
+            card.appendChild(tags);
+            card.appendChild(button);
+            
+            return card;
+        }
+
+        function startMockInterview() {
+            const department = document.getElementById('department-select').value;
+            if (!department) {
+                alert('Please select a department before starting a mock interview.');
+                return;
+            }
+            
+            // Get questions for the selected department
+            const deptQuestions = interviewQuestions[department];
+            if (!deptQuestions) {
+                alert('No questions available for this department.');
+                return;
+            }
+
+            // Prepare interview questions
+            const technicalQuestions = deptQuestions.technical.map(q => ({...q, type: 'Technical'}));
+            const hrQuestions = deptQuestions.hr.map(q => ({...q, type: 'HR'}));
+            const allQuestions = [...technicalQuestions, ...hrQuestions];
+
+            // Randomly select 5 questions (or show modal to select number)
+            const selectedQuestions = shuffleArray(allQuestions).slice(0, 5);
+
+            // Start mock interview
+            startInterviewSession(selectedQuestions);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function startInterviewSession(questions) {
+            // Create modal for mock interview
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: var(--bg-card);
+                padding: 2rem;
+                border-radius: 12px;
+                width: 90%;
+                max-width: 800px;
+                max-height: 90vh;
+                overflow-y: auto;
+                position: relative;
+            `;
+
+            // Add close button
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '<i class="fas fa-times"></i>';
+            closeButton.style.cssText = `
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: none;
+                border: none;
+                color: var(--text-primary);
+                font-size: 1.5rem;
+                cursor: pointer;
+            `;
+            closeButton.onclick = () => modal.remove();
+
+            // Add content
+            const content = document.createElement('div');
+            content.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-primary);">Mock Interview Session</h2>
+                <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+                    You have been selected for ${questions.length} questions. Take your time to think and answer each question.
+                    Try to speak your answers out loud as if in a real interview.
+                </p>
+                ${questions.map((q, i) => `
+                    <div style="margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--border-primary); border-radius: 8px;">
+                        <div style="color: var(--accent-primary); margin-bottom: 0.5rem;">${q.type} Question ${i + 1}</div>
+                        <div style="color: var(--text-primary); font-size: 1.1rem; margin-bottom: 1rem;">${q.question}</div>
+                        <button 
+                            onclick="this.nextElementSibling.style.display='block';this.style.display='none';"
+                            style="background: var(--accent-primary); color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;"
+                        >
+                            Show Sample Answer
+                        </button>
+                        <div style="display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary); color: var(--text-secondary);">
+                            ${q.answer}
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+
+            modalContent.appendChild(closeButton);
+            modalContent.appendChild(content);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+        }
+
+        // Theme toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            function setTheme(theme) {
+                if (theme === 'light') {
+                    htmlElement.classList.add('light-mode');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    htmlElement.classList.remove('light-mode');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+        });
+
+        // Add new AI Interview functionality
+        let conversationHistory = [];
+        const BACKEND_URL = window.location.origin; // This will automatically use the correct server URL
+
+        async function callBackendAPI(data) {
+            try {
+                console.log('Sending request to backend:', data);
+                const response = await fetch(`${BACKEND_URL}/api/ask-gemini`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Backend response:', result);
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'Failed to get response from server');
+                }
+
+                return result.aiResponse;
+            } catch (error) {
+                console.error('Error calling backend:', error);
+                throw new Error(`Failed to connect to server: ${error.message}`);
+            }
+        }
+
+        async function initializeAIInterview() {
+            const department = document.getElementById('ai-department').value;
+            const interests = document.getElementById('ai-interests').value.trim();
+
+            if (!department || !interests) {
+                alert('Please fill in both department and interests fields.');
+                return;
+            }
+
+            // Clear previous chat and show loading state
+            document.getElementById('ai-chat').innerHTML = '';
+            conversationHistory = [];
+            const loadingIndicator = showLoadingIndicator();
+
+            try {
+                const response = await callBackendAPI({
+                    department,
+                    interests,
+                    conversationHistory: []
+                });
+
+                loadingIndicator.remove();
+                
+                // Add the AI's initial message to the chat
+                addMessageToChat('assistant', response);
+                
+                // Initialize conversation history with the first AI message
+                conversationHistory = [{
+                    role: 'model',
+                    parts: [{ text: response }]
+                }];
+
+                // Enable the chat controls
+                document.getElementById('ai-user-input').disabled = false;
+                document.querySelector('.ai-send-btn').disabled = false;
+                document.querySelector('.ai-controls').classList.add('active');
+                
+            } catch (error) {
+                console.error('Error in initializeAIInterview:', error);
+                loadingIndicator.remove();
+                addMessageToChat('assistant', `Error: ${error.message}. Please try again.`);
+            }
+        }
+
+        function showLoadingIndicator() {
+            const chat = document.getElementById('ai-chat');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'chat-message assistant-message loading';
+            loadingDiv.innerHTML = `
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+            chat.appendChild(loadingDiv);
+            chat.scrollTop = chat.scrollHeight;
+            return loadingDiv;
+        }
+
+        function addMessageToChat(role, content) {
+            const chat = document.getElementById('ai-chat');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${role}-message`;
+            
+            // Add a header to distinguish between user and AI
+            const header = document.createElement('div');
+            header.className = 'message-header';
+            header.textContent = role === 'user' ? 'You' : 'AI Interviewer';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = content.replace(/\n/g, '<br>');
+            
+            messageDiv.appendChild(header);
+            messageDiv.appendChild(contentDiv);
+            chat.appendChild(messageDiv);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const userInput = document.getElementById('ai-user-input');
+            const message = userInput.value.trim();
+
+            if (!message) return;
+
+            // Stop recording if it's active
+            if (isRecording) {
+                stopRecording();
+            }
+
+            // Disable input, mic button, and send button while processing
+            userInput.disabled = true;
+            document.querySelector('.ai-send-btn').disabled = true;
+            document.querySelector('.mic-btn').disabled = true;
+
+            addMessageToChat('user', message);
+            userInput.value = '';
+
+            const loadingIndicator = showLoadingIndicator();
+            
+            conversationHistory.push({ 
+                role: 'user', 
+                parts: [{ text: message }]
+            });
+
+            try {
+                const response = await callBackendAPI({
+                    department: document.getElementById('ai-department').value,
+                    interests: document.getElementById('ai-interests').value,
+                    conversationHistory,
+                    message
+                });
+
+                loadingIndicator.remove();
+                addMessageToChat('assistant', response);
+                
+                conversationHistory.push({ 
+                    role: 'model', 
+                    parts: [{ text: response }]
+                });
+            } catch (error) {
+                console.error('Error getting AI response:', error);
+                loadingIndicator.remove();
+                addMessageToChat('assistant', 'I apologize, but I encountered an error. Please try again.');
+            } finally {
+                // Re-enable all controls
+                userInput.disabled = false;
+                document.querySelector('.ai-send-btn').disabled = false;
+                document.querySelector('.mic-btn').disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('ai-user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const departmentSelect = document.getElementById('ai-department');
+            const interestsInput = document.getElementById('ai-interests');
+            const startButton = document.getElementById('start-interview-btn');
+            const aiControls = document.querySelector('.ai-controls');
+            
+            // Initially disable the chat controls
+            document.getElementById('ai-user-input').disabled = true;
+            document.querySelector('.ai-send-btn').disabled = true;
+            
+            function checkFields() {
+                const departmentFilled = departmentSelect.value !== '';
+                const interestsFilled = interestsInput.value.trim() !== '';
+                startButton.disabled = !(departmentFilled && interestsFilled);
+                
+                // Also disable/enable voice input button
+                const voiceInputBtn = document.getElementById('voice-input-btn');
+                if (voiceInputBtn) {
+                    voiceInputBtn.disabled = startButton.disabled;
+                }
+            }
+            
+            departmentSelect.addEventListener('change', checkFields);
+            interestsInput.addEventListener('input', checkFields);
+            
+            startButton.addEventListener('click', () => {
+                if (departmentSelect.value && interestsInput.value.trim()) {
+                    startButton.disabled = true;
+                    departmentSelect.disabled = true;
+                    interestsInput.disabled = true;
+                    initializeAIInterview();
+                    aiControls.classList.add('active');
+                }
+            });
+            
+            // Reset button (optional - add this if you want to allow starting over)
+            const resetButton = document.createElement('button');
+            resetButton.className = 'mock-interview-btn';
+            resetButton.innerHTML = '<i class="fas fa-redo"></i> Reset Interview';
+            resetButton.style.marginLeft = '1rem';
+            
+            resetButton.addEventListener('click', () => {
+                departmentSelect.disabled = false;
+                interestsInput.disabled = false;
+                startButton.disabled = false;
+                document.getElementById('ai-chat').innerHTML = '';
+                aiControls.classList.remove('active');
+                conversationHistory = [];
+                checkFields();
+            });
+            
+            document.querySelector('.ai-interview-controls').appendChild(resetButton);
+
+            // Add voice input button listener
+            const voiceInputBtn = document.getElementById('voice-input-btn');
+            voiceInputBtn.addEventListener('click', toggleVoiceInput);
+
+            // Initialize voice recognition
+            setupVoiceRecognition();
+        });
+
+        // Voice Recognition Setup
+        let recognition = null;
+        let isRecording = false;
+
+        function setupVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = true;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    const micBtn = document.getElementById('voice-input-btn');
+                    micBtn.classList.add('recording');
+                    micBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                    document.getElementById('ai-user-input').placeholder = 'Listening...';
+                };
+
+                recognition.onresult = function(event) {
+                    const transcript = Array.from(event.results)
+                        .map(result => result[0])
+                        .map(result => result.transcript)
+                        .join('');
+                    
+                    document.getElementById('ai-user-input').value = transcript;
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    stopRecording();
+                    alert('Error with speech recognition. Please try again or type your response.');
+                };
+
+                recognition.onend = function() {
+                    stopRecording();
+                    // Add a small delay before sending to ensure the transcript is complete
+                    setTimeout(() => {
+                        const userInput = document.getElementById('ai-user-input');
+                        if (userInput.value.trim()) {
+                            sendMessage();
+                        }
+                    }, 500);
+                };
+            } else {
+                alert('Speech recognition is not supported in your browser. Please use Chrome or Edge.');
+                document.getElementById('voice-input-btn').style.display = 'none';
+            }
+        }
+
+        function toggleVoiceInput() {
+            if (!recognition) {
+                setupVoiceRecognition();
+            }
+
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        function startRecording() {
+            if (recognition) {
+                recognition.start();
+            }
+        }
+
+        function stopRecording() {
+            if (recognition) {
+                recognition.stop();
+                isRecording = false;
+                const micBtn = document.getElementById('voice-input-btn');
+                micBtn.classList.remove('recording');
+                micBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                document.getElementById('ai-user-input').placeholder = 'Type your response here...';
+            }
+        }
+    </script>
+</body>
+</html>

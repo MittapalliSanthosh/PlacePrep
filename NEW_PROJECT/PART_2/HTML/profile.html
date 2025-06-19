@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Theme class added by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile Matrix - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* ======== SHARED THEME VARIABLES (Same as placement_website.html) ======== */
+        
+    
+    :root {
+        --bg-primary: #000000;
+        --bg-secondary: #050505; /* For distinct sections */
+        --bg-card: #101010;    /* Cards */
+        --bg-card-alt: #0D0D0D; /* Slightly different card elements */
+        --bg-navbar: rgba(10, 10, 10, 0.8);
+        --bg-navbar-scrolled: rgba(0,0,0,0.9);
+        --bg-theme-toggle-hover: #222222;
+
+        --text-primary: #E0E0E0;
+        --text-secondary: #B0B0B0;
+        --text-muted: #A0A0A0;
+        --text-headings: #FFFFFF;
+        --text-logo: #FFFFFF;
+        --text-nav-link: #A0A0A0;
+        --text-nav-link-hover: #FFFFFF;
+        --text-theme-toggle: #E0E0E0;
+        --text-accent-glow: var(--accent-cyber-glow); /* For glowing text */
+
+
+        --border-primary: #222222;
+        --border-secondary: #282828;
+        --border-highlight: var(--accent-cyber-glow); /* For accented borders */
+        --border-theme-toggle: #444444;
+
+
+        --accent-primary: #F97316; /* Main Orange */
+        --accent-primary-hover: #EA580C;
+        --accent-secondary: #4ecdc4; /* Teal - for profile elements */
+        --accent-cyber-glow: #00F0FF; /* Neon Cyan for tech glow */
+        --accent-progress: var(--accent-primary);
+
+
+        --gradient-highlight-start: #A755F7; /* Main Purple */
+        --gradient-highlight-end: #5A78F6;   /* Main Blue */
+        --gradient-profile-avatar: linear-gradient(135deg, var(--accent-cyber-glow), var(--accent-secondary));
+
+        --shadow-card: 0 10px 25px rgba(0,0,0,0.4);
+        --shadow-card-hover: 0 15px 35px rgba(0,0,0,0.5);
+        --shadow-text-glow: 0 0 12px rgba(var(--accent-cyber-glow-rgb), 0.7);
+         /* RGB versions for rgba() glows */
+        --accent-primary-rgb: 249,115,22;
+        --accent-secondary-rgb: 78,205,196;
+        --accent-cyber-glow-rgb: 0,240,255;
+    }
+
+    html.light-mode {
+        --bg-primary: #F0F2F5;
+        --bg-secondary: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --bg-card-alt: #F8F9FA;
+        --bg-navbar: rgba(255, 255, 255, 0.85);
+        --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+        --bg-theme-toggle-hover: #E9ECEF;
+
+        --text-primary: #1A202C;
+        --text-secondary: #475569;
+        --text-muted: #6B7280;
+        --text-headings: #0F172A;
+        --text-logo: var(--accent-primary);
+        --text-nav-link: #495057;
+        --text-nav-link-hover: var(--accent-primary);
+        --text-theme-toggle: #495057;
+        --text-accent-glow: var(--accent-cyber-glow);
+
+        --border-primary: #E2E8F0;
+        --border-secondary: #CBD5E1;
+        --border-highlight: var(--accent-cyber-glow);
+        --border-theme-toggle: #CED4DA;
+        
+        --accent-cyber-glow: #0891B2; /* Darker Cyan for light mode */
+        --accent-secondary: #00796b;
+        --gradient-profile-avatar: linear-gradient(135deg, var(--accent-cyber-glow), var(--accent-secondary));
+
+
+        --shadow-card: 0 8px 20px rgba(100, 116, 139, 0.1);
+        --shadow-card-hover: 0 12px 30px rgba(100, 116, 139, 0.15);
+        --shadow-text-glow: 0 0 10px rgba(var(--accent-cyber-glow-rgb), 0.5);
+        --accent-cyber-glow-rgb: 8,145,178;
+    }
+
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Outfit', sans-serif; 
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        line-height: 1.65;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Navbar (Using Shared Variables) */
+    .navbar {
+        position: sticky; /* Sticky for profile page */
+        top: 0; width: 100%;
+        background: var(--bg-navbar); backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border-primary);
+        z-index: 1000; padding: 1rem 0;
+        transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+    }
+    html[data-page-scrolled="true"] .navbar { background: var(--bg-navbar-scrolled); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+    .logo { font-size: 2.2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; transition: color 0.3s ease;}
+    html.light-mode .logo { color: var(--accent-primary); }
+    .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle-btn {
+        background: transparent; color: var(--text-theme-toggle); border: 1.5px solid var(--border-theme-toggle);
+        padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
+    }
+    .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); }
+
+    /* Main Content Layout */
+    .main-content-profile { /* Changed class name for clarity */
+        padding: 2.5rem 0; 
+    }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; } /* Narrower container for profile focus */
+
+
+    /* Profile Command Center Header */
+    .profile-command-center {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2.5rem;
+        border: 1px solid var(--border-secondary);
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .profile-command-center::before { /* Subtle background pattern */
+        content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+        background-image: radial-gradient(var(--border-primary) 0.5px, transparent 0.5px);
+        background-size: 15px 15px; opacity: 0.2; z-index: 0;
+    }
+
+
+    .profile-avatar {
+        width: 140px; height: 140px;
+        border-radius: 50%;
+        background: var(--gradient-profile-avatar);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 4.5rem; color: white; font-weight: 700;
+        font-family: 'Orbitron', sans-serif;
+        border: 4px solid var(--bg-card); /* Avatar "pops out" */
+        box-shadow: 0 0 25px rgba(var(--accent-secondary-rgb), 0.4), var(--shadow-card);
+        position: relative; z-index: 1;
+        transition: transform 0.3s ease;
+    }
+    .profile-avatar:hover { transform: scale(1.05); }
+    .profile-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+
+
+    .user-identity h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.2rem; font-weight: 700;
+        color: var(--text-headings); margin-bottom: 0.25rem;
+        letter-spacing: 1px;
+         position: relative; z-index: 1;
+    }
+    .user-identity .department-tag {
+        display: inline-block;
+        background: var(--bg-secondary);
+        color: var(--text-accent-glow);
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        border: 1px solid var(--border-highlight);
+        margin-bottom: 0.75rem;
+        text-shadow: var(--shadow-text-glow);
+        position: relative; z-index: 1;
+    }
+     .user-identity .user-email {
+        color: var(--text-secondary);
+        font-size: 1rem;
+         position: relative; z-index: 1;
+    }
+
+    .edit-profile-fab { /* Floating Action Button style for edit */
+        background: var(--accent-primary);
+        color: white;
+        border: none;
+        width: 50px; height: 50px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex; align-items: center; justify-content: center;
+        margin-top: 1rem;
+        position: relative; z-index: 1;
+    }
+    .edit-profile-fab:hover {
+        background: var(--accent-primary-hover);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 15px rgba(var(--accent-primary-rgb), 0.5);
+    }
+
+    /* Stats Grid Section */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    .stat-pod { /* is a .card-base */
+        padding: 1.5rem;
+        text-align: center;
+    }
+    .stat-pod .stat-icon {
+        font-size: 2rem;
+        color: var(--icon-accent);
+        margin-bottom: 0.75rem;
+        height: 40px; /* Ensure consistent height for icons */
+    }
+    .stat-pod .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        font-family: 'Orbitron', sans-serif; /* Techy font for numbers */
+        color: var(--text-headings);
+        line-height: 1;
+        margin-bottom: 0.4rem;
+    }
+    .stat-pod .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+
+    /* Profile Details Pods */
+    .details-section-container {
+        background: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--shadow-card);
+    }
+    .details-section { margin-bottom: 2rem; }
+    .details-section:last-child { margin-bottom: 0; }
+    .details-section h2 {
+        font-size: 1.4rem; font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--text-headings);
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-secondary);
+        display: flex; align-items: center; gap: 0.5rem;
+    }
+    .details-section h2 i { color: var(--icon-accent); font-size: 0.9em;}
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    .detail-item {
+        background: var(--bg-card-alt);
+        border: 1px solid var(--border-secondary);
+        border-radius: 8px;
+        padding: 1rem 1.2rem;
+        transition: background-color 0.2s ease;
+    }
+    .detail-item:hover { background-color: var(--bg-card-hover); }
+    .detail-label {
+        color: var(--text-muted); font-size: 0.8rem;
+        margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .detail-value {
+        color: var(--text-primary); font-size: 1.05rem; font-weight: 500;
+        word-break: break-all; /* For long emails */
+    }
+
+    /* Buttons for sections if needed */
+    .section-action-btn {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.7rem 1.5rem;
+        background-color: var(--accent-primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .section-action-btn:hover {
+        background-color: var(--accent-primary-hover);
+        transform: translateY(-2px);
+    }
+    
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @media (max-width: 768px) {
+        .container { padding: 0 1rem; }
+        .profile-command-center { padding: 2rem 1.5rem; gap:1rem; }
+        .profile-avatar { width: 100px; height: 100px; font-size: 3.5rem; border-width: 3px;}
+        .user-identity h1 { font-size: 1.8rem; }
+        .user-identity .department-tag { font-size: 0.8rem; }
+        .user-identity .user-email { font-size: 0.9rem; }
+        .edit-profile-fab { width: 45px; height: 45px; font-size: 1rem; }
+        .stats-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+        .stat-pod .stat-value { font-size: 1.8rem; }
+        .details-section h2 { font-size: 1.2rem; }
+    }
+    @media (max-width: 480px) {
+        .stats-grid { grid-template-columns: 1fr; } /* Stack stats on very small screens */
+        .detail-value {font-size: 1rem;}
+    }
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <div class="nav-right-controls">
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i> <!-- JS will set correct icon -->
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+<div class="main-content-profile">
+    <div class="container">
+        <!-- Profile Command Center Header -->
+        <div class="profile-command-center" data-aos="fade-down">
+            <div class="profile-avatar" id="profileAvatar">
+                <!-- JS will fill this or use <img> below -->
+                 <i class="fas fa-user-astronaut"></i> <!-- Placeholder -->
+                <!-- <img src="path/to/user-image.jpg" alt="User Profile"> -->
+            </div>
+            <div class="user-identity">
+                <h1 id="profileUserName">User FullName</h1>
+                <div class="department-tag" id="profileUserDepartment">Department Field</div>
+                <p class="user-email" id="profileUserEmail">user.email@example.com</p>
+            </div>
+             <button class="edit-profile-fab" onclick="editProfile()" aria-label="Edit Profile">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+        </div>
+
+        <!-- Profile Stats Grid -->
+        <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-pod card-base">
+                <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+                <div class="stat-value" id="overallProgressStat">0%</div>
+                <div class="stat-label">Overall Progress</div>
+            </div>
+            <div class="stat-pod card-base">
+                <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                <div class="stat-value" id="topicsCompletedStat">0</div>
+                <div class="stat-label">Topics Mastered</div>
+            </div>
+            <div class="stat-pod card-base">
+                 <div class="stat-icon"><i class="fas fa-diagnoses"></i></div>
+                <div class="stat-value" id="testsTakenStat">0</div>
+                <div class="stat-label">Assessments Taken</div>
+            </div>
+            <div class="stat-pod card-base">
+                 <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                <div class="stat-value" id="avgScoreStat">N/A</div>
+                <div class="stat-label">Average Score</div>
+            </div>
+        </div>
+
+        <!-- Profile Details Pod -->
+        <div class="details-section-container" data-aos="fade-up" data-aos-delay="200">
+            <div class="details-section">
+                <h2><i class="fas fa-id-card"></i> Personal Information</h2>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">First Name</div>
+                        <div class="detail-value" id="infoFirstName">Loading...</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Last Name</div>
+                        <div class="detail-value" id="infoLastName">Loading...</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Registered Email</div>
+                        <div class="detail-value" id="infoEmail">Loading...</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Primary Department</div>
+                        <div class="detail-value" id="infoDepartment">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-section">
+                <h2><i class="fas fa-chart-line"></i> Academic & Preparation Snapshot</h2>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">Total Topics Covered</div>
+                        <div class="detail-value" id="infoTopicsCovered">0/0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Recent Test Performance</div>
+                        <div class="detail-value" id="infoTestPerformance">N/A</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Mock Interviews Completed</div>
+                        <div class="detail-value" id="infoInterviewsDone">0</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Last Logged In</div>
+                        <div class="detail-value" id="infoLastActive">Loading...</div>
+                    </div>
+                </div>
+            </div>
+            <!-- You can add more sections like "Achievements", "Saved Resources" etc. -->
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Theme Toggle ---
+        const themeToggleButton = document.getElementById('theme-toggle-btn');
+        const htmlElement = document.documentElement;
+        let currentIcon = themeToggleButton ? themeToggleButton.querySelector('i') : null;
+
+        function setTheme(theme) {
+            const isLight = theme === 'light';
+            htmlElement.classList.toggle('light-mode', isLight);
+            if (currentIcon) currentIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', theme);
+        }
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        setTheme(savedTheme);
+         if (themeToggleButton) {
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+        }
+        
+        // --- Navbar Scroll Effect ---
+        const navbar = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            document.documentElement.setAttribute('data-page-scrolled', window.scrollY > 20);
+        });
+
+
+        // --- Load User Data ---
+        const userData = JSON.parse(localStorage.getItem('user')) || {}; // From login
+        const firstName = localStorage.getItem('firstName') || userData.firstName || "User"; // Prioritize direct firstName
+
+        // Simulated progress data - replace with actual fetched data
+        const mockTestData = JSON.parse(localStorage.getItem('mockTestProgress')) || { testsCompleted: 5, averageScore: 78, totalTests: 10 };
+        const topicsProgress = JSON.parse(localStorage.getItem('cseDepartmentProgress')) || { // Example from CSE page
+            'dsa': { topics: [{completed:true},{completed:true},{completed:false}]},
+            'system-design': { topics: [{completed:true},{completed:false}]}
+        }; // This would be an aggregation of all department progresses
+        const interviewProgress = JSON.parse(localStorage.getItem('interviewProgress')) || { completed: 2, score: 80 };
+
+
+        // Calculate total topics and completed topics from potentially multiple department progresses
+        let totalTopicsOverall = 0;
+        let completedTopicsOverall = 0;
+        // Example: If you have separate progress for each department
+        // const cseProgress = JSON.parse(localStorage.getItem('cseDepartmentProgress')) || {};
+        // const chemProgress = JSON.parse(localStorage.getItem('chemicalPageProgress')) || {};
+        // ... and so on for other departments. Then aggregate them.
+        // For this demo, using the structure from CSE example:
+        for (const catKey in topicsProgress) {
+            if (topicsProgress[catKey] && topicsProgress[catKey].topics) {
+                totalTopicsOverall += topicsProgress[catKey].topics.length;
+                completedTopicsOverall += topicsProgress[catKey].topics.filter(t => t.completed).length;
+            }
+        }
+        // If your topicsProgress structure is simpler (like your original profile page logic):
+        // const completedTopicsOverall = JSON.parse(localStorage.getItem('topicsProgress'))?.completed || 15;
+        // const totalTopicsOverall = JSON.parse(localStorage.getItem('topicsProgress'))?.total || 25;
+
+
+        const overallProgress = calculateOverallProgress(
+            mockTestData.averageScore || 0, 
+            totalTopicsOverall > 0 ? (completedTopicsOverall / totalTopicsOverall) * 100 : 0, 
+            interviewProgress.completed > 0 ? interviewProgress.score : 0 // Assuming score is a percentage
+        );
+
+        // Update Profile Header
+        const profileAvatar = document.getElementById('profileAvatar');
+        if (firstName) { // Display initial if no image
+            profileAvatar.innerHTML = firstName.charAt(0).toUpperCase();
+        }
+        // if (userData.profilePictureUrl) { // If you have a profile picture URL
+        //    profileAvatar.innerHTML = `<img src="${userData.profilePictureUrl}" alt="${firstName}'s profile">`;
+        // }
+        document.getElementById('profileUserName').textContent = `${firstName} ${userData.lastName || ''}`.trim();
+        document.getElementById('profileUserDepartment').textContent = userData.department || 'Aspiring Developer';
+        document.getElementById('profileUserEmail').textContent = userData.email || 'N/A';
+
+        // Update Stats Grid
+        document.getElementById('overallProgressStat').textContent = `${Math.round(overallProgress)}%`;
+        document.getElementById('topicsCompletedStat').textContent = completedTopicsOverall;
+        document.getElementById('testsTakenStat').textContent = mockTestData.testsCompleted || 0;
+        document.getElementById('avgScoreStat').textContent = mockTestData.averageScore ? `${mockTestData.averageScore.toFixed(1)}%` : 'N/A';
+
+        // Update Personal Information Details
+        document.getElementById('infoFirstName').textContent = firstName || 'Not Set';
+        document.getElementById('infoLastName').textContent = userData.lastName || 'Not Set';
+        document.getElementById('infoEmail').textContent = userData.email || 'Not Set';
+        document.getElementById('infoDepartment').textContent = userData.department || 'Not Set';
+
+        // Update Academic Progress Details
+        document.getElementById('infoTopicsCovered').textContent = `${completedTopicsOverall} / ${totalTopicsOverall || 'N/A'}`;
+        document.getElementById('infoTestPerformance').textContent = mockTestData.averageScore ? `${mockTestData.averageScore.toFixed(1)}% Avg.` : 'N/A';
+        document.getElementById('infoInterviewsDone').textContent = `${interviewProgress.completed || 0} Completed`;
+        const lastActive = localStorage.getItem('lastLoginDate') || new Date().toISOString(); // Simulate last login
+        document.getElementById('infoLastActive').textContent = formatLastActive(lastActive);
+         localStorage.setItem('lastLoginDate', new Date().toISOString()); // Update for next visit
+    });
+
+    function calculateOverallProgress(testScorePercent, topicsCompletePercent, interviewScorePercent) {
+        // Ensure inputs are numbers between 0 and 100
+        testScorePercent = Math.max(0, Math.min(100, Number(testScorePercent) || 0));
+        topicsCompletePercent = Math.max(0, Math.min(100, Number(topicsCompletePercent) || 0));
+        interviewScorePercent = Math.max(0, Math.min(100, Number(interviewScorePercent) || 0));
+
+        const testWeight = 0.35;    
+        const topicsWeight = 0.45;    
+        const interviewWeight = 0.20; 
+
+        return (
+            (testScorePercent * testWeight) +
+            (topicsCompletePercent * topicsWeight) +
+            (interviewScorePercent * interviewWeight)
+        );
+    }
+
+    function formatLastActive(isoString) {
+        const date = new Date(isoString);
+        const now = new Date();
+        const diffTime = Math.abs(now - date);
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+        if (isNaN(date.getTime())) return 'N/A';
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays < 7) return `${diffDays} days ago`;
+        return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function editProfile() {
+        // More sophisticated edit would involve a modal or separate page.
+        // This is a simplified version using prompts.
+        const currentFirstName = localStorage.getItem('firstName') || '';
+        const currentUserData = JSON.parse(localStorage.getItem('user')) || {};
+
+        const newFirstName = prompt('Update First Name:', currentFirstName);
+        const newLastName = prompt('Update Last Name:', currentUserData.lastName || '');
+        // Email usually not editable by user directly or needs verification.
+        const newDepartment = prompt('Update Department:', currentUserData.department || '');
+
+        if (newFirstName !== null) localStorage.setItem('firstName', newFirstName);
+        
+        const updatedUserData = {
+            ...currentUserData,
+            firstName: newFirstName !== null ? newFirstName : currentFirstName,
+            lastName: newLastName !== null ? newLastName : (currentUserData.lastName || ''),
+            department: newDepartment !== null ? newDepartment : (currentUserData.department || '')
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUserData));
+        
+        // Simple way to refresh display for demo
+        location.reload(); 
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Tests - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-primary);
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-primary);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 100px auto 0;
+            padding: 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            color: var(--accent-primary);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .module-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+            border-color: var(--accent-primary);
+        }
+
+        .module-title {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .module-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .module-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .difficulty {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .difficulty.easy {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .difficulty.medium {
+            background: rgba(234, 179, 8, 0.1);
+            color: #eab308;
+        }
+
+        .difficulty.hard {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        @media (max-width: 1200px) {
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .section-card {
+                padding: 1.5rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="apptitude.html">Aptitude</a></li>
+                <li><a href="mocktest.html" class="active">Mock Tests</a></li>
+                <li><a href="interview.html">Interview Prep</a></li>
+                <li><a href="notes.html">Notes</a></li>
+            </ul>
+            <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Mock Tests</h1>
+            <p>Practice with our comprehensive mock tests covering aptitude, technical, HR, and coding sections. Each section contains 7 modules with 20 questions each to help you prepare thoroughly.</p>
+        </div>
+
+        <div class="sections-grid" id="sections-container">
+            <!-- Sections will be dynamically populated here -->
+        </div>
+    </div>
+
+    <!-- Test Modal -->
+    <div id="testModal" class="modal">
+        <div class="modal-content">
+            <div id="test-content">
+                <!-- Test content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/mocktest_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+        });
+
+        // Function to create difficulty badge
+        function createDifficultyBadge(difficulty) {
+            return `<span class="difficulty ${difficulty.toLowerCase()}">${difficulty}</span>`;
+        }
+
+        // Function to create module card
+        function createModuleCard(moduleNumber, section) {
+            const moduleId = `${section}_${moduleNumber}`;
+            // Convert moduleId to a more readable format
+            const displayName = moduleId
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            
+            return `
+                <div class="module-card" onclick="handleModuleClick('${moduleId}')">
+                    <h3 class="module-title">${displayName}</h3>
+                    <div class="module-meta">
+                        <span><i class="fas fa-clock"></i> 30 mins</span>
+                        <span><i class="fas fa-question-circle"></i> 20 Questions</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to create section card
+        function createSectionCard(section) {
+            return `
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="${section.icon} section-icon"></i>
+                        <div>
+                            <h2 class="section-title">${section.title}</h2>
+                            <p class="section-description">${section.description}</p>
+                        </div>
+                    </div>
+                    <div class="modules-grid">
+                        ${section.modules.map(module => createModuleCard(module.id, section.id)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to start a test
+        function startTest(moduleId) {
+            // Save the selected module ID to localStorage
+            localStorage.setItem('selectedModuleId', moduleId);
+            // Redirect to the test page
+            window.location.href = 'test.html';
+        }
+
+        // Populate sections when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const sectionsContainer = document.getElementById('sections-container');
+            sectionsContainer.innerHTML = mockTestData.sections.map(section => createSectionCard(section)).join('');
+        });
+
+        function getCurrentTest() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            const testId = parseInt(urlParams.get('testId'));
+            
+            if (!category || !testId) return null;
+            
+            return mockTestData[category]?.find(t => t.id === testId);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('testModal');
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('testModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Function to handle module card clicks
+        function handleModuleClick(moduleId) {
+            window.location.href = `module.html?moduleId=${moduleId}`;
+        }
+
+        // Function to initialize the sections
+        function initializeSections() {
+            const sections = [
+                { 
+                    id: 'aptitude', 
+                    title: 'Aptitude', 
+                    icon: 'fa-brain', 
+                    modules: [
+                        { id: 'aptitude_advanced_quantitative_aptitude', title: 'Advanced Quantitative Aptitude' },
+                        { id: 'com_1', title: 'Complex Logical Reasoning' },
+                        { id: 'dat_1', title: 'Data Sufficiency & Interpretation' },
+                        { id: 'pro_1', title: 'Probability & Statistics' },
+                        { id: 'per_1', title: 'Permutations & Combinations' },
+                        { id: 'tim_1', title: 'Time, Work & Optimizations' },
+                        { id: 'pip_1', title: 'Pipes, Cisterns, Boats & Streams' }
+                    ]
+                },
+                { 
+                    id: 'tech', 
+                    title: 'Technical', 
+                    icon: 'fa-code',
+                    modules: [
+                        { id: 'tech_1', title: 'Data Structures & Algorithms' },
+                        { id: 'tech_2', title: 'Database Management Systems' },
+                        { id: 'tech_3', title: 'Operating Systems' },
+                        { id: 'tech_4', title: 'Computer Networks' },
+                        { id: 'tech_5', title: 'Object-Oriented Programming' },
+                        { id: 'tech_6', title: 'System Design' },
+                        { id: 'tech_7', title: 'Software Engineering' }
+                    ]
+                },
+                
+            ];
+
+            const sectionsGrid = document.querySelector('.sections-grid');
+            sectionsGrid.innerHTML = sections.map(section => `
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas ${section.icon} section-icon"></i>
+                        <h2 class="section-title">${section.title}</h2>
+                    </div>
+                    <p class="section-description">Practice ${section.title.toLowerCase()} questions to enhance your skills.</p>
+                    <div class="modules-grid">
+                        ${section.modules.map(module => `
+                            <div class="module-card" onclick="handleModuleClick('${module.id}')">
+                                <h3 class="module-title">${module.title}</h3>
+                                <div class="module-meta">
+                                    <span><i class="fas fa-clock"></i> 30 mins</span>
+                                    <span><i class="fas fa-question-circle"></i> 20 Questions</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', initializeSections);
+
+        // Theme toggle functionality
+        const themeToggleBtn = document.querySelector('.theme-toggle-btn');
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('light-mode');
+            const isDark = !document.documentElement.classList.contains('light-mode');
+            themeToggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <style>
+        :root {
+            --primary-color: #FF4B2B; /* Main accent color (red-orange) */
+            --secondary-color: #FF416C; /* Gradient partner */
+            --white-color: #FFFFFF;
+            --light-gray-bg: #F6F5F7; /* Background for the form side */
+            --form-input-bg: #EEEEEE;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --social-icon-border: #DDDDDD;
+            --container-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-gray-bg); /* Overall page background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .auth-container {
+            background-color: var(--white-color);
+            border-radius: 10px;
+            box-shadow: var(--container-shadow);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 780px; /* Max width of the entire container */
+            min-height: 500px; /* Min height to keep structure */
+            display: flex; /* To arrange panels side by side */
+        }
+
+        .form-panel {
+            flex: 1; /* Each panel takes half the space */
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .form-panel h1 {
+            font-weight: 700;
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .social-login {
+            margin: 1rem 0;
+        }
+
+        .social-icon {
+            border: 1px solid var(--social-icon-border);
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0.4rem;
+            height: 40px;
+            width: 40px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .social-icon:hover {
+            background-color: var(--light-gray-bg);
+            color: var(--primary-color);
+        }
+
+        .form-panel span {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .form-group input {
+            background-color: var(--form-input-bg);
+            border: none;
+            padding: 0.9rem 1rem;
+            margin: 0.5rem 0;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .form-group input:focus {
+            outline: 1px solid var(--primary-color);
+        }
+
+        .forgot-password {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin: 1rem 0 1.5rem;
+            display: inline-block;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .auth-button {
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.8rem 2.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in, background-color 0.2s ease;
+            cursor: pointer;
+        }
+        .auth-button:active {
+            transform: scale(0.95);
+        }
+        .auth-button:focus {
+            outline: none;
+        }
+        .auth-button.ghost { /* For the "Sign Up" button on the overlay */
+            background-color: transparent;
+            border-color: var(--white-color);
+        }
+         .auth-button.ghost:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+
+        .overlay-panel {
+            flex: 1; /* Each panel takes half the space */
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            color: var(--white-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2.5rem;
+        }
+        .overlay-panel h1 {
+            font-weight: bold;
+            margin: 0;
+            font-size: 2rem;
+        }
+        .overlay-panel p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+            margin: 1.5rem 0 2rem;
+        }
+
+        /* Error and Success Message Styling */
+        .message-display {
+            width: 100%;
+            text-align: center;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: none; /* Hidden by default */
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Google Sign-In Button Styling */
+        .google-signin-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--social-icon-border);
+            border-radius: 4px;
+            background-color: var(--white-color);
+            color: var(--text-dark);
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            margin: 1rem 0;
+            width: auto;
+            min-width: 220px;
+        }
+
+        .google-signin-btn:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .google-signin-btn img {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 400px; /* Stack vertically on smaller screens */
+                min-height: auto;
+            }
+            .form-panel, .overlay-panel {
+                min-height: 300px; /* Give some min height to panels */
+            }
+            .overlay-panel {
+                /* On smaller screens, if you have separate sign-in and sign-up pages,
+                   you might hide one panel or adjust logic.
+                   For this combined view, we might keep it or give sign up more prominence.
+                   The current design will stack them. */
+                 border-radius: 0 0 10px 10px; /* If it stacks on bottom */
+            }
+            .form-panel {
+                 border-radius: 10px 10px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="form-panel sign-in-panel">
+            <h1>Sign in</h1>
+            <div class="social-login">
+                <button id="google-signin-btn" class="google-signin-btn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
+                    Sign in with Google
+                </button>
+            </div>
+            <span>or use your account</span>
+            <div class="error-message message-display" id="errorMessage"></div>
+            <div class="success-message message-display" id="successMessage"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required />
+                </div>
+                <a href="#" class="forgot-password">Forgot your password?</a>
+                <button type="submit" class="auth-button">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-panel">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start your journey with us</p>
+            <button class="auth-button ghost" onclick="redirectToSignup()">Sign Up</button>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLE5yGRbCUI5Lj3EbFiCG3qpFu3WTjSNY",
+            authDomain: "placeprep-6c25b.firebaseapp.com",
+            projectId: "placeprep-6c25b",
+            storageBucket: "placeprep-6c25b.firebasestorage.app",
+            messagingSenderId: "693893910606",
+            appId: "1:693893910606:web:cbf6a5bab251565ea8331f",
+            measurementId: "G-FSDGEDFDRB"
+        };
+
+        // Initialize Firebase with error handling
+        try {
+            firebase.initializeApp(firebaseConfig);
+            console.log('Firebase initialized successfully');
+        } catch (error) {
+            console.error('Firebase initialization error:', error);
+            showError('Failed to initialize authentication. Please try again.');
+        }
+
+        // Regular email/password login handler
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const errorMessageEl = document.getElementById('errorMessage');
+            const successMessageEl = document.getElementById('successMessage');
+            errorMessageEl.style.display = 'none';
+            successMessageEl.textContent = '';
+            successMessageEl.style.display = 'none';
+            successMessageEl.textContent = '';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/login', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed. Please check credentials.');
+                }
+
+                handleSuccessfulLogin(data);
+
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        // Google Sign-In handler
+        async function handleGoogleSignIn() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('profile');
+            provider.addScope('email');
+
+            try {
+                // Clear any existing messages
+                const errorMessageEl = document.getElementById('errorMessage');
+                const successMessageEl = document.getElementById('successMessage');
+                errorMessageEl.style.display = 'none';
+                successMessageEl.style.display = 'none';
+
+                console.log('Starting Google Sign-In process...');
+                const result = await firebase.auth().signInWithPopup(provider);
+                console.log('Google Sign-In successful:', result.user.email);
+                
+                const user = result.user;
+                
+                // Get the user's ID token
+                const idToken = await user.getIdToken();
+                console.log('Got ID token');
+
+                // Send to your backend
+                const response = await fetch('/api/auth/firebase', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: idToken,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Firebase authentication failed on server');
+                }
+
+                handleSuccessfulLogin(data);
+
+            } catch (error) {
+                console.error('Firebase Google Sign-In Error:', error);
+                let errorMessage = 'Failed to sign in with Google. Please try again.';
+                
+                // More specific error messages
+                if (error.code === 'auth/configuration-not-found') {
+                    errorMessage = 'Google Sign-In is not properly configured. Please try again later.';
+                } else if (error.code === 'auth/popup-blocked') {
+                    errorMessage = 'Please enable popups for this website to sign in with Google.';
+                } else if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = 'Sign-in was cancelled. Please try again.';
+                }
+                
+                showError(errorMessage);
+            }
+        }
+
+        // Helper function to handle successful login
+        function handleSuccessfulLogin(data) {
+            const successMessageEl = document.getElementById('successMessage');
+            successMessageEl.textContent = 'Login successful! Redirecting to your dashboard...';
+            successMessageEl.style.display = 'block';
+
+            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('firstName', data.user.firstName || data.user.displayName);
+
+            setTimeout(() => {
+                window.location.href = 'placement_website.html';
+            }, 1500);
+        }
+
+        // Helper function to show error messages
+        function showError(message) {
+            const errorMessageEl = document.getElementById('errorMessage');
+            errorMessageEl.textContent = message;
+            errorMessageEl.style.display = 'block';
+        }
+
+        // Event Listeners
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        document.getElementById('google-signin-btn').addEventListener('click', handleGoogleSignIn);
+
+        function redirectToSignup() {
+            window.location.href = 'signup.html';
+        }
+    </script>
+</body>
+</html>

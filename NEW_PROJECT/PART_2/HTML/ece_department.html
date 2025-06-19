@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- The 'light-mode' class will be added here by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics & Communication - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet" id="prism-theme-link">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ======== SHARED THEME VARIABLES (Same as placement_website.html & cse_department.html) ======== */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --bg-card-alt: #0D0D0D;
+            --bg-footer: #0A0A0A; 
+            --bg-theme-toggle-hover: #222222;
+            --bg-tab-active: var(--accent-primary); 
+            --bg-tab-inactive: #181818;
+            --bg-modal: rgba(16, 16, 16, 0.95); 
+            --bg-code-editor: #1E1E1E; 
+            --bg-code-output: #0D1117;
+            --bg-code-output-content: #161B22;
+            /* --prism-theme-path: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css'; /* Path managed by JS */
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-headings: #FFFFFF;
+            --text-logo: #FFFFFF; 
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-btn: #E0E0E0;
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+            --text-tab-active: #FFFFFF;
+            --text-tab-inactive: #A0A0A0;
+            --text-code: #D4D4D4; 
+            --text-accent-gradient-end: #5A78F6; 
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn: #444444;
+            --border-btn-accent: var(--accent-primary);
+            --border-theme-toggle: #444444;
+            --border-tab: #282828;
+            --border-modal: #303030;
+            --border-code-editor: #303030;
+
+            --accent-primary: #F97316; 
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #4ecdc4; 
+            --accent-secondary-hover: #44a08d;
+            --accent-progress: var(--accent-primary);
+
+            --gradient-highlight-start: #A755F7; 
+            --gradient-highlight-end: var(--text-accent-gradient-end); 
+
+            --icon-default: #A0A0A0;
+            --icon-accent: var(--accent-secondary); 
+            
+            --shadow-card: 0 6px 12px rgba(0,0,0,0.25); 
+            --shadow-card-hover: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --bg-card-alt: #F8F9FA;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+            --bg-tab-active: var(--accent-primary);
+            --bg-tab-inactive: #FFFFFF;
+            --bg-modal: rgba(248, 249, 250, 0.98); 
+            --bg-code-editor: #F8F9FA; 
+            --bg-code-output: #E9ECEF;
+            --bg-code-output-content: #FFFFFF;
+            /* --prism-theme-path: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css'; /* Path managed by JS */
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-headings: #212529;
+            --text-logo: var(--accent-primary); 
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-btn: var(--accent-primary);
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #495057;
+            --text-tab-active: #FFFFFF;
+            --text-tab-inactive: #495057;
+            --text-code: #333333; 
+            --text-accent-gradient-end: #4A62D6;
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn: var(--accent-primary);
+            --border-btn-accent: var(--accent-primary);
+            --border-theme-toggle: #CED4DA;
+            --border-tab: #CED4DA;
+            --border-modal: #CED4DA;
+            --border-code-editor: #DEE2E6;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #00796b; 
+            --accent-secondary-hover: #004d40;
+            --accent-progress: var(--accent-primary);
+
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: var(--text-accent-gradient-end);   
+
+            --icon-default: #6C757D;
+            --icon-accent: var(--accent-secondary);
+
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.07);
+            --shadow-card-hover: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif; 
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.65;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000; padding: 1rem 0;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        html[data-page-scrolled="true"] .navbar { background: var(--bg-navbar-scrolled); }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; transition: color 0.3s ease; }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a {
+            color: var(--text-nav-link); text-decoration: none; font-weight: 500;
+            transition: color 0.3s ease; position: relative; padding-bottom: 5px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-nav-link-hover); }
+        .nav-links a.active::after {
+            content: ''; position: absolute; width: 100%; height: 2px; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+        }
+         .nav-links a:not(.active):hover::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            transition: width 0.3s ease; width: 100%;
+        }
+        .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
+        .theme-toggle-btn {
+            background: transparent; color: var(--text-theme-toggle); border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); }
+        .user-profile { display: flex; align-items: center; gap: 0.75rem; color: var(--text-nav-link); font-size: 0.9rem;}
+        .profile-pic {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; color: white; font-size: 0.9rem;
+        }
+
+        .main-content { margin-top: 80px; padding: 2.5rem 0; } 
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        .dept-header {
+            text-align: center; margin-bottom: 3rem; padding: 2.5rem 1rem;
+            background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-primary);
+            box-shadow: var(--shadow-card);
+        }
+        .dept-header h1 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-headings); }
+        .dept-header h1 i { margin-right: 0.5rem; color: var(--icon-accent); }
+        .dept-header p { font-size: 1.1rem; color: var(--text-secondary); }
+
+        .card-base {
+            background: var(--bg-card); border: 1px solid var(--border-secondary);
+            border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-base:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+        
+        .section-heading {
+            font-size: 1.8rem; color: var(--text-headings); margin-bottom: 1.5rem;
+            text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-primary);
+        }
+
+        .progress-section { margin-bottom: 2.5rem; padding: 2rem; background-color: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-primary);}
+        .progress-header { text-align: center; margin-bottom: 2rem; }
+        .progress-header h2 { font-size: 1.6rem; color: var(--text-headings); margin-bottom: 0.4rem; }
+        .progress-header p { color: var(--text-secondary); font-size: 1rem; }
+        .progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+        .progress-item { text-align: center; background: var(--bg-card-alt); padding:1.5rem; border-radius: 8px; border:1px solid var(--border-primary); }
+        .progress-circle {
+            width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 1rem; position: relative;
+            display: grid; place-items: center;
+            background: conic-gradient(var(--accent-progress) var(--progress, 0deg), var(--border-primary) var(--progress, 0deg));
+        }
+        .progress-circle::before { content: ''; position: absolute; width: 70px; height: 70px; background: var(--bg-card-alt); border-radius: 50%; }
+        .progress-value { font-size: 1.4rem; font-weight: 600; color: var(--text-headings); z-index: 1; }
+        .progress-item h3 { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.3rem; }
+        .progress-item p { color: var(--text-muted); font-size: 0.85rem; }
+
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .category-card {
+            text-align: center; cursor: pointer; background: var(--bg-card);
+            border: 1px solid var(--border-secondary); border-radius: 12px; padding: 2rem; box-shadow: var(--shadow-card);
+        }
+        .category-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); border-color: var(--icon-accent); }
+        .category-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--icon-accent); }
+        .category-card h3 { font-size: 1.4rem; margin-bottom: 0.75rem; color: var(--text-headings); }
+        .category-card > p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .category-stats { display: flex; justify-content: space-around; margin-top: 1rem; font-size: 0.85rem; border-top: 1px solid var(--border-primary); padding-top: 1rem;}
+        .stat { text-align: center; color: var(--text-muted);}
+        .stat-number { font-weight: 600; color: var(--text-primary); display:block; font-size: 1.1rem; }
+
+        .content-section { 
+            display: none; padding: 2rem; background-color: var(--bg-secondary); 
+            border: 1px solid var(--border-primary); border-radius: 12px; margin-bottom: 2.5rem; box-shadow: var(--shadow-card);
+        }
+        .content-section.active { display: block; animation: fadeInUp 0.4s ease-out; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;}
+        .section-title { font-size: 1.8rem; color: var(--text-headings); margin-bottom: 0.25rem;}
+        .section-subtitle { color: var(--text-secondary); font-size: 1rem; }
+
+        .filter-tabs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .filter-tab {
+            padding: 0.6rem 1.2rem; background: var(--bg-card-alt); border: 1px solid var(--border-secondary);
+            border-radius: 20px; color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem;
+        }
+        .filter-tab.active, .filter-tab:hover { background: var(--accent-secondary); border-color: var(--accent-secondary-hover); color: white; }
+        html.light-mode .filter-tab.active, html.light-mode .filter-tab:hover { color: white; } 
+
+        .questions-list { display: grid; gap: 1rem; }
+        .question-item { padding: 1.25rem; cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-secondary); border-radius: 10px; }
+        .question-item:hover { border-color: var(--accent-secondary); transform: translateX(3px); }
+        .question-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+        .question-title { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.3rem;}
+        .question-difficulty { padding: 0.25rem 0.7rem; border-radius: 15px; font-size: 0.75rem; font-weight: 500; border: 1px solid;}
+        .difficulty-easy { background-color: rgba(46, 213, 115, 0.1); color: #2ecc71; border-color: #2ecc71;}
+        .difficulty-medium { background-color: rgba(255, 165, 0, 0.1); color: #ffa500; border-color: #ffa500;}
+        .difficulty-hard { background-color: rgba(231, 76, 60, 0.1); color: #e74c3c; border-color: #e74c3c;}
+        
+        .question-content { margin-top: 0.5rem; }
+        .notes-btn { margin-bottom: 0.5rem; font-size: 0.8rem; padding: 0.4rem 0.8rem; color: var(--text-btn); border-color: var(--border-btn);}
+        .notes-content {
+            background: var(--bg-card-alt); padding: 1rem; border-radius: 6px;
+            border: 1px solid var(--border-secondary); font-size: 0.9rem; color: var(--text-secondary);
+        }
+        .notes-content h4 { color: var(--text-primary); margin-bottom: 0.5rem; }
+        .notes-content ul, .notes-content ol { margin-left: 1.2rem; margin-bottom: 0.5rem; }
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--bg-modal); border: 1px solid var(--border-modal); border-radius: 12px; padding: 2rem;
+            width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-secondary);
+        }
+        #modalTitle { color: var(--text-headings); font-size: 1.5rem;}
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.8rem; cursor: pointer; transition: color 0.3s ease; }
+        .close-modal:hover { color: var(--accent-secondary); }
+
+        .code-editor { background: var(--bg-code-editor); border-radius: 8px; margin: 1.5rem 0; overflow: hidden; border: 1px solid var(--border-code-editor); }
+        .editor-header { background: var(--bg-card-alt); padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-code-editor); }
+        .editor-tabs { display: flex; gap: 0.5rem; }
+        .editor-tab {
+            padding: 0.4rem 0.8rem; background: var(--bg-card); border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.3s ease; color: var(--text-secondary); border: 1px solid var(--border-secondary);
+        }
+        .editor-tab.active, .editor-tab:hover { background: var(--accent-secondary); color: white; border-color: var(--accent-secondary-hover); }
+        .run-button {
+            background: var(--accent-primary); color: white; border: none; padding: 0.6rem 1.2rem;
+            border-radius: 6px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 0.9rem;
+        }
+        .run-button:hover { background: var(--accent-primary-hover); transform: translateY(-1px); }
+        .editor-content { padding: 0; background: var(--bg-code-editor); } 
+        .code-editor pre[class*="language-"] {
+            background: transparent !important; border: none; padding: 1em; margin:0; color: var(--text-code);
+            border-radius: 0 0 7px 7px; font-size: 14px; line-height: 1.5;
+        }
+        
+        .output-section { background: var(--bg-code-output); padding: 1rem; border-top: 1px solid var(--border-code-editor); }
+        .output-header { font-weight: 600; margin-bottom: 0.5rem; color: var(--accent-secondary); }
+        .output-content {
+            background: var(--bg-code-output-content); padding: 1rem; border-radius: 5px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.9rem; white-space: pre-wrap; min-height: 60px; color: var(--text-secondary);
+        }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-right-controls { gap: 0.5rem; } 
+            .container { padding: 0 1rem; }
+            .dept-header h1 { font-size: 2rem; }
+            .dept-header p { font-size: 1rem; }
+            .categories, .progress-stats { grid-template-columns: 1fr; }
+            .filter-tabs, .question-stats { justify-content: center; }
+            .section-heading, .section-title {font-size: 1.5rem;}
+            .question-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .modal-content { width: 95%; padding: 1.5rem; }
+            .editor-header {flex-direction: column; gap: 0.5rem;}
+        }
+
+        .topics-list { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .topic-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topic-item:hover { 
+            transform: translateY(-4px); 
+            box-shadow: var(--shadow-card-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .topic-header {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic-header h3 { 
+            font-size: 1.2rem; 
+            color: var(--text-headings); 
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .topic-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border-primary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .topic-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            min-width: 100px;
+        }
+
+        .topic-status.completed { 
+            color: #2ecc71; /* Green color for completed status */
+        }
+
+        .topic-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .topic-content h4 { 
+            color: var(--text-headings); 
+            margin: 1rem 0 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .topic-content ul, .topic-content ol { 
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .topic-content li { 
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--border-btn);
+            color: var(--text-btn);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn:hover { 
+            background: var(--bg-card-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .btn.completed {
+            background: #2ecc71; /* Green background for completed button */
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .btn.completed:hover { 
+            background: #27ae60; /* Darker green on hover */
+        }
+
+        /* Topic item when completed */
+        .topic-item.completed {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        .topic-item.completed .topic-header h3 {
+            color: #2ecc71;
+        }
+
+        .topic-item.completed .progress-fill {
+            background: #2ecc71;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .topics-list {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-header {
+                text-align: center;
+            }
+
+            .topic-progress {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .progress-bar {
+                width: 100%;
+            }
+
+            .topic-status {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="#" class="active">Electronics & Comm.</a></li>
+                <li><a href="#progress">Progress</a></li>
+                <li><a href="#digital-content">Topics</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="dept-header">
+                <h1><i class="fas fa-microchip"></i> Electronics & Communication</h1>
+                <p>Master Digital Electronics, Signal Processing, Communication Systems, and VLSI Design</p>
+            </div>
+
+            <div id="progress" class="progress-section">
+                <div class="progress-header">
+                    <h2>Your Learning Progress</h2>
+                    <p>Track your journey across different ECE topics</p>
+                </div>
+                <div class="progress-stats">
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 180deg;"><div class="progress-value">50%</div></div>
+                        <h3>Digital Electronics</h3><p>30/60 Topics Covered</p>
+                    </div>
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 216deg;"><div class="progress-value">60%</div></div>
+                        <h3>Signal Processing</h3><p>24/40 Topics Covered</p>
+                    </div>
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 144deg;"><div class="progress-value">40%</div></div>
+                        <h3>Communication</h3><p>16/40 Topics Covered</p>
+                    </div>
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 252deg;"><div class="progress-value">70%</div></div>
+                        <h3>VLSI Design</h3><p>35/50 Topics Covered</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-heading">Explore ECE Domains</h2>
+            <div class="categories">
+                <div class="category-card card-base" onclick="showContent('digital')">
+                    <div class="category-icon"><i class="fas fa-digital-tachograph"></i></div>
+                    <h3>Digital Electronics</h3><p>Logic Gates, Circuits, Digital Design</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">300+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">30</div>Completed</div>
+                    </div>
+                </div>
+                <div class="category-card card-base" onclick="showContent('signals')">
+                    <div class="category-icon"><i class="fas fa-wave-square"></i></div>
+                    <h3>Signal Processing</h3><p>Fourier Analysis, Filters, DSP</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">250+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">24</div>Completed</div>
+                    </div>
+                </div>
+                 <div class="category-card card-base" onclick="showContent('communication')">
+                    <div class="category-icon"><i class="fas fa-broadcast-tower"></i></div>
+                    <h3>Communication Systems</h3><p>Analog/Digital Comm, Modulation</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">200+</div>Topics</div>
+                        <div class="stat"><div class="stat-number">16</div>Completed</div>
+                    </div>
+                </div>
+                <div class="category-card card-base" onclick="showContent('vlsi')">
+                    <div class="category-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>VLSI Design</h3><p>IC Design, Layout, Verification</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">150+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">35</div>Completed</div>
+                    </div>
+                </div>
+                 <div class="category-card card-base" onclick="showContent('embedded')">
+                    <div class="category-icon"><i class="fas fa-memory"></i></div>
+                    <h3>Embedded Systems</h3><p>Microcontrollers, IoT, RTOS</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">180+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">20</div>Completed</div>
+                    </div>
+                </div>
+                <div class="category-card card-base" onclick="showContent('interview')">
+                    <div class="category-icon"><i class="fas fa-comments"></i></div>
+                    <h3>Interview Prep</h3><p>Technical Q&A, Core Concepts</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">200+</div>Questions</div>
+                        <div class="stat"><div class="stat-number">45</div>Practiced</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="digital-content" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Digital Electronics</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                </div>
+                <div class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <div id="signals-content" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Signal Processing</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                </div>
+                <div class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <div id="communication-content" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Communication Systems</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                        </div>
+                <div class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                            </div>
+            </div>
+
+            <div id="vlsi-content" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">VLSI Design</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                </div>
+                <div class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                        </div>
+                    </div>
+
+            <div id="embedded-content" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Embedded Systems</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                        </div>
+                <div class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                            </div>
+                        </div>
+
+            <div id="interview-content" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Interview Preparation</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                    </div>
+                <div class="topics-list">
+                    <!-- Topics will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalTitle"></h2><button class="close-modal" onclick="closeModal()">×</button></div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-verilog.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
+
+    <!-- Include the external JavaScript file -->
+    <script src="js/ece_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            // Function to set theme
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                    themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else {
+                setTheme('dark'); // Default to dark theme
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+            
+            // Initialize the page
+            initializePage();
+        });
+
+        function initializePage() {
+            loadProgress();
+            initializeCategoriesAndContent();
+            // Show digital content by default
+            showContent('digital'); 
+        }
+
+        function showContent(category) {
+            // Hide all content sections first
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const contentSection = document.getElementById(`${category}-content`);
+            if (!contentSection) return;
+
+            // Show the selected content section
+            contentSection.style.display = 'block';
+
+            // Get the category data
+            const categoryData = eceTopicsData[category];
+            if (!categoryData) return;
+
+            // Update the section header
+            const sectionHeader = contentSection.querySelector('.section-header');
+            if (sectionHeader) {
+                sectionHeader.innerHTML = `
+                    <h2 class="section-title">${categoryData.title}</h2>
+                    <p class="section-subtitle">Master key concepts and practice questions</p>
+                `;
+            }
+
+            // Update the topics list
+            const topicsList = contentSection.querySelector('.topics-list');
+            if (topicsList) {
+                let topicsHTML = '';
+                categoryData.topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item ${topic.completed ? 'completed' : ''}" data-id="${topic.id}">
+                            <div class="topic-header">
+                                <h3>${topic.name}</h3>
+                                <div class="topic-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${topic.completed ? '100%' : '0%'}"></div>
+                                    </div>
+                                    <div class="topic-status ${topic.completed ? 'completed' : ''}">
+                                        <i class="${topic.completed ? 'fas fa-check-circle' : 'fas fa-circle'}"></i>
+                                        <span>${topic.completed ? 'Completed' : 'In Progress'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topic-content">
+                                ${topic.notes}
+                            </div>
+                            <button class="btn ${topic.completed ? 'completed' : ''}" 
+                                    onclick="toggleComplete('${category}', '${topic.id}')">
+                                ${topic.completed ? '✓ Completed' : 'Mark as Complete'}
+                            </button>
+                        </div>
+                    `;
+                });
+                topicsList.innerHTML = topicsHTML;
+            }
+
+            // Scroll to the content section
+            contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleComplete(category, topicId) {
+            const topic = eceTopicsData[category].topics.find(t => t.id === topicId);
+            if (topic) {
+                topic.completed = !topic.completed;
+                saveProgress();
+                
+                // Update UI
+                const topicElement = document.querySelector(`[data-id="${topicId}"]`);
+                if (topicElement) {
+                    topicElement.classList.toggle('completed');
+                    
+                    // Update button
+                    const button = topicElement.querySelector('.btn');
+                    button.classList.toggle('completed');
+                    button.textContent = topic.completed ? '✓ Completed' : 'Mark as Complete';
+                    
+                    // Update progress bar and status
+                    const progressFill = topicElement.querySelector('.progress-fill');
+                    progressFill.style.width = topic.completed ? '100%' : '0%';
+                    
+                    const statusDiv = topicElement.querySelector('.topic-status');
+                    statusDiv.classList.toggle('completed');
+                    statusDiv.querySelector('i').className = topic.completed ? 'fas fa-check-circle' : 'fas fa-circle';
+                    statusDiv.querySelector('span').textContent = topic.completed ? 'Completed' : 'In Progress';
+                }
+                
+                // Update overall progress
+                initializeCategoriesAndContent();
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('eceProgress');
+            if (savedProgress) {
+                try {
+                    const progress = JSON.parse(savedProgress);
+                    for (const category in progress) {
+                        if (eceTopicsData[category]) {
+                            eceTopicsData[category].topics.forEach(topic => {
+                                const savedTopic = progress[category].topics.find(t => t.id === topic.id);
+                                if (savedTopic) {
+                                    topic.completed = savedTopic.completed;
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading progress:', e);
+                }
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('eceProgress', JSON.stringify(eceTopicsData));
+        }
+
+        function initializeCategoriesAndContent() {
+            const progressStats = document.querySelector('.progress-stats');
+            const categories = document.querySelector('.categories');
+
+            // Clear existing content
+            progressStats.innerHTML = '';
+            categories.innerHTML = '';
+
+            // Initialize progress stats
+            for (const [key, category] of Object.entries(eceTopicsData)) {
+                const completedTopics = category.topics.filter(topic => topic.completed).length;
+                const totalTopics = category.topics.length;
+                const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
+                progressStats.innerHTML += `
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: ${progressPercentage * 3.6}deg;">
+                            <div class="progress-value">${progressPercentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>${completedTopics}/${totalTopics} Topics Covered</p>
+                    </div>
+                `;
+
+                // Add category cards
+                categories.innerHTML += `
+                    <div class="category-card" onclick="showContent('${key}')">
+                        <div class="category-icon">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>Master key concepts and practice questions</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${totalTopics}</div>
+                                <div>Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${completedTopics}</div>
+                                <div>Completed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${progressPercentage}%</div>
+                                <div>Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function filterQuestions(tabElement, category, contentSectionId) {
+            const contentSection = document.getElementById(contentSectionId);
+            if (!contentSection) return;
+            if (tabElement) { 
+                contentSection.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+                tabElement.classList.add('active');
+            }
+            const questionsList = contentSection.querySelectorAll('.question-item');
+            questionsList.forEach(question => {
+                const questionCategory = question.dataset.category;
+                const display = (category === 'all' || (questionCategory && questionCategory.includes(category)));
+                question.style.display = display ? 'block' : 'none';
+                if (display) question.style.animation = 'slideIn 0.3s ease-out forwards';
+            });
+        }
+
+        let currentEditorLanguage = 'verilog'; 
+
+        function openQuestion(questionId) {
+            const modal = document.getElementById('questionModal');
+            const titleEl = document.getElementById('modalTitle');
+            const bodyEl = document.getElementById('modalBody');
+            const question = questionsData[questionId];
+            if (!question) return;
+
+            titleEl.textContent = question.title;
+            currentEditorLanguage = Object.keys(question.code)[0] || 'verilog'; 
+
+            let examplesHTML = question.examples.map(ex => `
+                <div class="example card-base">
+                    <p><strong>Input:</strong><pre><code class="language-text">${escapeHtml(ex.input)}</code></pre></p>
+                    <p><strong>Output:</strong><pre><code class="language-text">${escapeHtml(ex.output)}</code></pre></p>
+                    ${ex.explanation ? `<p><strong>Explanation:</strong> ${escapeHtml(ex.explanation)}</p>` : ''}
+                </div>`).join('');
+
+            let languageTabsHTML = Object.keys(question.code).map(lang => 
+                `<div class="editor-tab ${lang === currentEditorLanguage ? 'active' : ''}" onclick="switchLanguage(this, '${questionId}', '${lang}')">${lang.charAt(0).toUpperCase() + lang.slice(1)}</div>`
+            ).join('');
+
+            bodyEl.innerHTML = `
+                <div class="question-description"><p>${escapeHtml(question.description)}</p></div>
+                ${question.tags ? `<div class="question-tags" style="margin:1rem 0;">${question.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+                <div class="question-examples"><h3>Examples</h3>${examplesHTML}</div>
+                <div class="code-editor">
+                    <div class="editor-header"><div class="editor-tabs">${languageTabsHTML}</div><button class="run-button" onclick="runCode('${questionId}')">Run Simulation</button></div>
+                    <div class="editor-content"><pre id="codeBlock" class="language-${currentEditorLanguage} line-numbers"><code class="language-${currentEditorLanguage}">${escapeHtml(question.code[currentEditorLanguage] || '')}</code></pre></div>
+                    <div class="output-section"><div class="output-header">Simulation Output</div><div class="output-content" id="codeOutput">// Output will appear here</div></div>
+                </div>`;
+            
+            modal.style.display = 'flex';
+            Prism.highlightAllUnder(bodyEl);
+        }
+        
+        function switchLanguage(tabElement, questionId, lang) {
+            currentEditorLanguage = lang;
+            const question = questionsData[questionId];
+            if (!question || !question.code[lang]) return;
+            const editorTabsContainer = tabElement.parentElement;
+            editorTabsContainer.querySelectorAll('.editor-tab').forEach(tab => tab.classList.remove('active'));
+            tabElement.classList.add('active');
+            const codeBlock = document.getElementById('codeBlock');
+            if (codeBlock) {
+                codeBlock.className = `language-${lang} line-numbers`; 
+                codeBlock.innerHTML = `<code class="language-${lang}">${escapeHtml(question.code[lang])}</code>`;
+                Prism.highlightElement(codeBlock.querySelector('code'));
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function closeModal() { document.getElementById('questionModal').style.display = 'none'; }
+        
+        function runCode(questionId) {
+            const output = document.getElementById('codeOutput');
+            output.innerHTML = `// Simulating ${currentEditorLanguage} for: ${questionsData[questionId]?.title || 'Unknown'}\n// (Actual simulation logic not part of this demo.)`;
+            setTimeout(() => { output.innerHTML += '\n// Simulation finished.'; }, 1000);
+        }
+
+        function toggleNotes(notesId, buttonElement) { 
+            event.stopPropagation(); 
+            const notesElement = document.getElementById(notesId);
+            if (notesElement.style.display === 'none' || notesElement.style.display === '') {
+                notesElement.style.display = 'block';
+                buttonElement.textContent = 'Hide Notes';
+            } else {
+                notesElement.style.display = 'none';
+                buttonElement.textContent = 'View Notes';
+            }
+        }
+
+        window.onclick = function(event) { if (event.target == document.getElementById('questionModal')) closeModal(); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Notes - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWGXqbVyZQHxoqXXVYGFCXUJ6YKxoXAIc",
+            authDomain: "placeprep-2024.firebaseapp.com",
+            projectId: "placeprep-2024",
+            storageBucket: "placeprep-2024.appspot.com",
+            messagingSenderId: "1039482732454",
+            appId: "1:1039482732454:web:5f5e6d45ce7b7777537e89"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-primary);
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-primary);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .note-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .note-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        .note-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .key-points {
+            margin-bottom: 1.5rem;
+        }
+
+        .key-points h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+
+        .key-points li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .key-points li:before {
+            content: "•";
+            color: var(--accent-primary);
+            position: absolute;
+            left: -1rem;
+        }
+
+        .example-section {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .example-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .example-problem {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: var(--bg-card);
+            border-radius: 6px;
+        }
+
+        .example-solution {
+            color: var(--text-muted);
+            white-space: pre-line;
+        }
+
+        .formulas {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .formulas h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .formulas ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .formulas li {
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .add-note-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-note-btn:hover {
+            background: var(--accent-primary-hover);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--accent-primary-hover);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .note-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .custom-note-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-note-btn:hover {
+            background: var(--accent-primary-hover);
+        }
+
+        #custom-notes-section {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="apptitude.html">Aptitude</a></li>
+                <li><a href="mocktest.html">Mock Tests</a></li>
+                <li><a href="interview.html">Interview Prep</a></li>
+                <li><a href="notes.html" class="active">Notes</a></li>
+            </ul>
+            <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="header-actions">
+            <h1 class="section-title">Study Notes</h1>
+            <div class="note-buttons">
+                <button id="add-note-btn" class="add-note-btn">
+                    <i class="fas fa-plus"></i> Add Note
+                </button>
+                <button id="custom-note-btn" class="custom-note-btn">
+                    <i class="fas fa-sticky-note"></i> My Notes
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Note Modal -->
+        <div id="add-note-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add New Note</h2>
+                <form id="add-note-form">
+                    <div class="form-group">
+                        <label for="note-title">Title</label>
+                        <input type="text" id="note-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-description">Description</label>
+                        <textarea id="note-description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-category">Category</label>
+                        <select id="note-category" required>
+                            <option value="logical-basic">Logical Reasoning - Basic</option>
+                            <option value="logical-advanced">Logical Reasoning - Advanced</option>
+                            <option value="quant-basic">Quantitative Aptitude - Basic</option>
+                            <option value="quant-advanced">Quantitative Aptitude - Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="key-points">Key Points (one per line)</label>
+                        <textarea id="key-points" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Save Note</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Custom Notes Section -->
+        <div id="custom-notes-section" style="display: none;">
+            <h2 style="margin-bottom: 2rem; color: var(--text-secondary);">My Custom Notes</h2>
+            <div class="notes-grid" id="custom-notes"></div>
+        </div>
+
+        <h2 style="margin-bottom: 2rem; color: var(--text-secondary);">Logical Reasoning</h2>
+        <h3 style="margin-bottom: 1rem; color: var(--text-secondary);">Basic Concepts</h3>
+        <div class="notes-grid" id="logical-basic-notes"></div>
+
+        <h3 style="margin: 2rem 0 1rem; color: var(--text-secondary);">Advanced Concepts</h3>
+        <div class="notes-grid" id="logical-advanced-notes"></div>
+
+        <h2 style="margin: 3rem 0 2rem; color: var(--text-secondary);">Quantitative Aptitude</h2>
+        <h3 style="margin-bottom: 1rem; color: var(--text-secondary);">Basic Concepts</h3>
+        <div class="notes-grid" id="quant-basic-notes"></div>
+
+        <h3 style="margin: 2rem 0 1rem; color: var(--text-secondary);">Advanced Concepts</h3>
+        <div class="notes-grid" id="quant-advanced-notes"></div>
+    </div>
+
+    <script src="js/notes_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleBtn.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+
+            // Render Notes
+            function renderNotes(notes, containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                // Clear existing notes in the container
+                container.innerHTML = '';
+
+                notes.forEach(note => {
+                    const noteCard = document.createElement('div');
+                    noteCard.className = 'note-card';
+                    
+                    // Check if it's a custom note or default note
+                    if (note.examples && note.formulas) {
+                        // Default note from notes_data.js
+                        noteCard.innerHTML = `
+                            <h3 class="note-title">${note.title}</h3>
+                            <p class="note-description">${note.description}</p>
+                            
+                            <div class="key-points">
+                                <h4>Key Points</h4>
+                                <ul>
+                                    ${note.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                                </ul>
+                            </div>
+
+                            <div class="example-section">
+                                <h4>Example</h4>
+                                <div class="example-problem">${note.examples[0].problem}</div>
+                                <div class="example-solution">${note.examples[0].solution}</div>
+                            </div>
+
+                            <div class="formulas">
+                                <h4>Important Formulas</h4>
+                                <ul>
+                                    ${note.formulas.map(formula => `<li>${formula}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        // Custom note from database
+                        noteCard.innerHTML = `
+                            <h3 class="note-title">${note.title}</h3>
+                            <p class="note-description">${note.description}</p>
+                            
+                            <div class="key-points">
+                                <h4>Key Points</h4>
+                                <ul>
+                                    ${note.keyPoints.map(point => `<li>${point}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="note-actions">
+                                <button class="edit-note-btn" data-note-id="${note._id}">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="delete-note-btn" data-note-id="${note._id}">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        `;
+                    }
+                    container.appendChild(noteCard);
+                });
+
+                // Add event listeners for edit and delete buttons
+                container.querySelectorAll('.edit-note-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const noteId = e.target.closest('button').dataset.noteId;
+                        editNote(noteId);
+                    });
+                });
+
+                container.querySelectorAll('.delete-note-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const noteId = e.target.closest('button').dataset.noteId;
+                        deleteNote(noteId);
+                    });
+                });
+            }
+
+            // Function to edit a note
+            async function editNote(noteId) {
+                try {
+                    const user = firebase.auth().currentUser;
+                    if (!user) {
+                        alert('Please log in to edit notes');
+                        return;
+                    }
+
+                    const idToken = await user.getIdToken();
+                    const response = await fetch(`/api/notes/${noteId}`, {
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const note = await response.json();
+                        // Populate the form with note data
+                        document.getElementById('note-title').value = note.title;
+                        document.getElementById('note-description').value = note.description;
+                        document.getElementById('note-category').value = note.category;
+                        document.getElementById('key-points').value = note.keyPoints.join('\n');
+                        
+                        // Show the modal
+                        modal.style.display = 'block';
+                        
+                        // Update form submission to handle edit
+                        addNoteForm.onsubmit = async (e) => {
+                            e.preventDefault();
+                            await updateNote(noteId);
+                        };
+                    }
+                } catch (error) {
+                    console.error('Error fetching note:', error);
+                    alert('Failed to fetch note for editing');
+                }
+            }
+
+            // Function to update a note
+            async function updateNote(noteId) {
+                try {
+                    const user = firebase.auth().currentUser;
+                    const idToken = await user.getIdToken();
+                    
+                    const formData = {
+                        title: document.getElementById('note-title').value,
+                        description: document.getElementById('note-description').value,
+                        category: document.getElementById('note-category').value,
+                        keyPoints: document.getElementById('key-points').value.split('\n').filter(point => point.trim()),
+                    };
+
+                    const response = await fetch(`/api/notes/${noteId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${idToken}`
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (response.ok) {
+                        // Refresh notes
+                        fetchUserNotes();
+                        // Reset form and close modal
+                        addNoteForm.reset();
+                        modal.style.display = 'none';
+                        alert('Note updated successfully!');
+                    } else {
+                        throw new Error('Failed to update note');
+                    }
+                } catch (error) {
+                    console.error('Error updating note:', error);
+                    alert('Failed to update note');
+                }
+            }
+
+            // Function to delete a note
+            async function deleteNote(noteId) {
+                if (!confirm('Are you sure you want to delete this note?')) return;
+
+                try {
+                    const user = firebase.auth().currentUser;
+                    const idToken = await user.getIdToken();
+                    
+                    const response = await fetch(`/api/notes/${noteId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Refresh notes
+                        fetchUserNotes();
+                        alert('Note deleted successfully!');
+                    } else {
+                        throw new Error('Failed to delete note');
+                    }
+                } catch (error) {
+                    console.error('Error deleting note:', error);
+                    alert('Failed to delete note');
+                }
+            }
+
+            // Add styles for note actions
+            const style = document.createElement('style');
+            style.textContent = `
+                .note-actions {
+                    display: flex;
+                    gap: 1rem;
+                    margin-top: 1rem;
+                }
+
+                .edit-note-btn,
+                .delete-note-btn {
+                    padding: 0.5rem 1rem;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 0.9rem;
+                    transition: all 0.3s ease;
+                }
+
+                .edit-note-btn {
+                    background: var(--accent-primary);
+                    color: white;
+                }
+
+                .delete-note-btn {
+                    background: #dc3545;
+                    color: white;
+                }
+
+                .edit-note-btn:hover {
+                    background: var(--accent-primary-hover);
+                }
+
+                .delete-note-btn:hover {
+                    background: #c82333;
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Render Logical Reasoning Notes
+            renderNotes(notesData.logicalReasoning.basic, 'logical-basic-notes');
+            renderNotes(notesData.logicalReasoning.advanced, 'logical-advanced-notes');
+
+            // Render Quantitative Aptitude Notes
+            renderNotes(notesData.quantitativeAptitude.basic, 'quant-basic-notes');
+            renderNotes(notesData.quantitativeAptitude.advanced, 'quant-advanced-notes');
+
+            // Modal functionality
+            const modal = document.getElementById('add-note-modal');
+            const addNoteBtn = document.getElementById('add-note-btn');
+            const closeBtn = document.querySelector('.close');
+            const addNoteForm = document.getElementById('add-note-form');
+
+            addNoteBtn.onclick = () => {
+                modal.style.display = 'block';
+            };
+
+            closeBtn.onclick = () => {
+                modal.style.display = 'none';
+            };
+
+            window.onclick = (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            };
+
+            // Custom Notes Button Functionality
+            const customNoteBtn = document.getElementById('custom-note-btn');
+            const customNotesSection = document.getElementById('custom-notes-section');
+            const defaultNotesSection = document.querySelector('.main-content');
+
+            customNoteBtn.addEventListener('click', () => {
+                if (customNotesSection.style.display === 'none') {
+                    customNotesSection.style.display = 'block';
+                    defaultNotesSection.style.display = 'none';
+                    customNoteBtn.innerHTML = '<i class="fas fa-book"></i> Default Notes';
+                    fetchUserNotes(); // Fetch user's custom notes
+                } else {
+                    customNotesSection.style.display = 'none';
+                    defaultNotesSection.style.display = 'block';
+                    customNoteBtn.innerHTML = '<i class="fas fa-sticky-note"></i> My Notes';
+                }
+            });
+
+            // Function to fetch user's notes from MongoDB
+            async function fetchUserNotes() {
+                try {
+                    const user = firebase.auth().currentUser;
+                    if (!user) {
+                        console.log('User not logged in');
+                        return;
+                    }
+
+                    const idToken = await user.getIdToken();
+                    const response = await fetch('/api/notes', {
+                        headers: {
+                            'Authorization': `Bearer ${idToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const userNotes = await response.json();
+                        console.log('Fetched notes:', userNotes);
+                        
+                        // Clear existing notes
+                        const customNotesContainer = document.getElementById('custom-notes');
+                        customNotesContainer.innerHTML = '';
+                        
+                        if (userNotes.length === 0) {
+                            customNotesContainer.innerHTML = `
+                                <div class="no-notes-message">
+                                    <p>You haven't created any notes yet.</p>
+                                    <button class="add-note-btn" onclick="document.getElementById('add-note-modal').style.display='block'">
+                                        <i class="fas fa-plus"></i> Create Your First Note
+                                    </button>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        // Render all user notes in the custom notes section
+                        renderNotes(userNotes, 'custom-notes');
+                    } else {
+                        const errorData = await response.json();
+                        console.error('Error fetching notes:', errorData.message);
+                    }
+                } catch (error) {
+                    console.error('Error fetching notes:', error);
+                }
+            }
+
+            // Initialize Firebase Auth listener
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    // User is signed in
+                    const addNoteBtn = document.getElementById('add-note-btn');
+                    const customNoteBtn = document.getElementById('custom-note-btn');
+                    
+                    if (addNoteBtn) addNoteBtn.style.display = 'flex';
+                    if (customNoteBtn) customNoteBtn.style.display = 'flex';
+                    
+                    // Fetch user's notes
+                    fetchUserNotes();
+                } else {
+                    // User is signed out
+                    const addNoteBtn = document.getElementById('add-note-btn');
+                    const customNoteBtn = document.getElementById('custom-note-btn');
+                    
+                    if (addNoteBtn) addNoteBtn.style.display = 'none';
+                    if (customNoteBtn) customNoteBtn.style.display = 'none';
+                    
+                    // Clear custom notes section
+                    const customNotesContainer = document.getElementById('custom-notes');
+                    if (customNotesContainer) customNotesContainer.innerHTML = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

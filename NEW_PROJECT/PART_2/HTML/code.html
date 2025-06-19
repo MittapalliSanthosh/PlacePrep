@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Theme class added by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Practice Topics - PlacePrep</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ======== SHARED THEME VARIABLES (Same as placement_website.html) ======== */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card: #101010;
+            --bg-card-hover: #1C1C1C; /* Slightly more noticeable hover for cards */
+            --bg-theme-toggle-hover: #222222;
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-headings: #FFFFFF;
+            --text-logo: #FFFFFF;
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+            --text-link-leetcode: #FFA116; /* LeetCode-like orange for links */
+
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444; /* Keep for general hover indication */
+            --border-theme-toggle: #444444;
+            --border-card-leetcode: var(--accent-primary); /* Orange border for LeetCode cards */
+
+
+            --accent-primary: #F97316; /* Main Orange */
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #4ecdc4; /* Teal for icons or secondary highlights */
+            
+            --gradient-highlight-start: #A755F7; 
+            --gradient-highlight-end: #5A78F6;   
+
+            --icon-accent: var(--accent-secondary); 
+            
+            --shadow-card: 0 8px 20px rgba(0,0,0,0.35);
+            --shadow-card-hover: 0 12px 28px rgba(0,0,0,0.45);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F5F9; /* Slightly cooler hover for light cards */
+            --bg-theme-toggle-hover: #E9ECEF;
+
+            --text-primary: #1A202C;
+            --text-secondary: #4A5568;
+            --text-muted: #718096;
+            --text-headings: #1A202C;
+            --text-logo: var(--accent-primary);
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-theme-toggle: #495057;
+            --text-link-leetcode: #D97706; /* Darker Orange for links on light bg */
+
+            --border-primary: #E2E8F0;
+            --border-secondary: #CBD5E0;
+            --border-hover: #A0AEC0;
+            --border-theme-toggle: #CED4DA;
+            --border-card-leetcode: var(--accent-primary);
+            
+            --accent-primary: #F97316;
+            --accent-primary-hover: #DD6B20;
+            --accent-secondary: #00796b; 
+            
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: #4A62D6;   
+
+            --icon-accent: var(--accent-secondary);
+
+            --shadow-card: 0 6px 15px rgba(100, 116, 139, 0.1);
+            --shadow-card-hover: 0 10px 25px rgba(100, 116, 139, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.65;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            position: sticky; top: 0; width: 100%;
+            background: var(--bg-navbar); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000; padding: 1rem 0;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        html[data-page-scrolled="true"] .navbar { background: var(--bg-navbar-scrolled); }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; transition: color 0.3s ease; }
+        html.light-mode .logo { color: var(--accent-primary); }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a {
+            color: var(--text-nav-link); text-decoration: none; font-weight: 500;
+            transition: color 0.3s ease; position: relative; padding-bottom: 5px;
+             display: inline-flex; align-items: center; gap: 0.5em;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-nav-link-hover); }
+        .nav-links a.active::after {
+            content: ''; position: absolute; width: 100%; height: 2px; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+        }
+         .nav-links a:not(.active):hover::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0;
+            left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            transition: width 0.3s ease; width: 100%;
+        }
+        .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
+        .theme-toggle-btn {
+            background: transparent; color: var(--text-theme-toggle); border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); }
+        
+        .main-content { padding: 2.5rem 0; } 
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        .page-header { text-align: center; margin-bottom: 3rem; }
+        .page-header h1 { font-size: 2.5rem; margin-bottom: 0.75rem; color: var(--text-headings); }
+        .page-header h1 i { margin-right: 0.75rem; color: var(--accent-primary); }
+        .page-header p { font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto;}
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .topic-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-secondary);
+            border-left: 5px solid var(--accent-primary); /* Accent border on the left */
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: var(--shadow-card-hover);
+            border-left-color: var(--accent-secondary);
+        }
+
+        .topic-icon {
+            font-size: 2.5rem;
+            color: var(--icon-accent);
+            margin-bottom: 1rem;
+        }
+
+        .topic-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-headings);
+            margin-bottom: 0.75rem;
+        }
+
+        .topic-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .redirect-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--accent-primary);
+            color: var(--text-on-accent, #FFFFFF);
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            align-self: flex-start; /* Align to left if card content doesn't push it down */
+        }
+        .redirect-button:hover {
+            background-color: var(--accent-primary-hover);
+            transform: translateY(-2px);
+        }
+        .redirect-button i {
+            font-size: 0.9em;
+        }
+
+
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .page-header h1 { font-size: 2rem; }
+            .page-header p { font-size: 1rem; }
+            .topics-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                 <li><a href="placement_website.html"><i class="fas fa-home"></i> Home</a></li>
+                 <li><a href="index.html#features"><i class="fas fa-star"></i> Features</a></li>
+                 <li><a href="index.html#departments"><i class="fas fa-building"></i> Departments</a></li>
+                 <li><a href="mocktest.html"><i class="fas fa-file-alt"></i> Mock Tests</a></li>
+                 <li><a href="interview.html"><i class="fas fa-microphone-alt"></i> Interview Prep</a></li>
+                 <li><a href="code.html" class="active"><i class="fas fa-code"></i> Code Practice</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i> <!-- Icon updated by JS -->
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h1><i class="fas fa-keyboard"></i> Coding Practice Topics</h1>
+                <p>Select a topic to practice questions directly on LeetCode.</p>
+            </div>
+
+            <div class="topics-grid" id="codingTopicsGrid">
+                <!-- Topic cards will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 700, once: true, offset: 30 });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Theme Toggle Logic ---
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const htmlElement = document.documentElement;
+            if (themeToggleButton) {
+                let currentIcon = themeToggleButton.querySelector('i');
+                function setTheme(theme) {
+                    const isLight = theme === 'light';
+                    htmlElement.classList.toggle('light-mode', isLight);
+                    if (currentIcon) currentIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                    localStorage.setItem('theme', theme);
+                }
+                const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                setTheme(savedTheme);
+                themeToggleButton.addEventListener('click', () => {
+                    setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+                });
+            } else {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'light') htmlElement.classList.add('light-mode');
+                else htmlElement.classList.remove('light-mode');
+            }
+
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                document.documentElement.setAttribute('data-page-scrolled', window.scrollY > 20);
+            });
+
+            // --- Coding Topics Data and Population ---
+            const codingTopics = [
+                { name: 'Arrays', description: 'Master array manipulations, traversals, and common patterns.', icon: 'fas fa-grip-horizontal', leetcodeTag: 'array' },
+                { name: 'Strings', description: 'Practice string operations, searching, and algorithmic challenges.', icon: 'fas fa-font', leetcodeTag: 'string' },
+                { name: 'Linked Lists', description: 'Explore singly, doubly, and circular linked list problems.', icon: 'fas fa-link', leetcodeTag: 'linked-list' },
+                { name: 'Trees', description: 'Binary trees, BSTs, N-ary trees, traversals, and tree algorithms.', icon: 'fas fa-network-wired', leetcodeTag: 'tree' }, // or fas fa-sitemap
+                { name: 'Graphs', description: 'BFS, DFS, shortest path, MST, and other graph algorithms.', icon: 'fas fa-project-diagram', leetcodeTag: 'graph' },
+                { name: 'Dynamic Programming', description: 'Solve complex problems using memoization and tabulation.', icon: 'fas fa-drafting-compass', leetcodeTag: 'dynamic-programming' },
+                { name: 'Sorting & Searching', description: 'Implement and analyze various sorting and searching techniques.', icon: 'fas fa-sort-amount-down', leetcodeTag: 'sorting' }, // also consider 'binary-search'
+                { name: 'Hashing', description: 'Utilize hash tables for efficient data storage and retrieval.', icon: 'fas fa-hashtag', leetcodeTag: 'hash-table' },
+                { name: 'Heaps (Priority Queues)', description: 'Work with min-heaps, max-heaps, and priority queue applications.', icon: 'fas fa-stream', leetcodeTag: 'heap-priority-queue' },
+                { name: 'Recursion & Backtracking', description: 'Understand recursive solutions and backtracking algorithms.', icon: 'fas fa-undo-alt', leetcodeTag: 'recursion' }, // backtracking is also a tag
+                { name: 'Bit Manipulation', description: 'Solve problems using bitwise operations for efficiency.', icon: 'fas fa-microchip', leetcodeTag: 'bit-manipulation' },
+                { name: 'Databases', description: 'Practice SQL queries and database design problems.', icon: 'fas fa-database', leetcodeTag: 'database' },
+                // Add more topics and ensure the 'leetcodeTag' is accurate
+                // For example, LeetCode often uses hyphenated tags like "dynamic-programming"
+            ];
+
+            const topicsGrid = document.getElementById('codingTopicsGrid');
+            if (topicsGrid) {
+                topicsGrid.innerHTML = ''; // Clear any placeholders
+                codingTopics.forEach(topic => {
+                    const card = document.createElement('div');
+                    card.className = 'topic-card';
+                    card.setAttribute('data-aos', 'fade-up');
+                    card.innerHTML = `
+                        <div class="topic-icon"><i class="${topic.icon}"></i></div>
+                        <h3>${topic.name}</h3>
+                        <p>${topic.description}</p>
+                        <a href="https://leetcode.com/tag/${topic.leetcodeTag}/" target="_blank" class="redirect-button">
+                            Practice on LeetCode <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    `;
+                    topicsGrid.appendChild(card);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

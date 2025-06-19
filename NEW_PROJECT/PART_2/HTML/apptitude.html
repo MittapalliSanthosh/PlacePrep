@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Preparation - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        /* ======== THEME VARIABLES ======== */
+        /* --- DEFAULT DARK THEME (Applied if no .light-mode class on <html>) --- */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card-dark: #101010;
+            --bg-card-dark-hover: #151515;
+            --bg-footer: #0A0A0A;
+            --bg-theme-toggle-hover: #222222;
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-logo: #FFFFFF;
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-btn-login: #E0E0E0;
+            --text-btn-signup: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-footer: #888888;
+            --text-hero-h1: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn-login: #444444;
+            --border-btn-primary-cta: var(--accent-primary);
+            --border-btn-secondary-cta: #444444;
+            --border-footer-top: #1A1A1A;
+            --border-theme-toggle: #444444;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-sparkle: #FFA500;
+
+            --gradient-highlight-start: #A755F7;
+            --gradient-highlight-end: #5A78F6;
+            
+            --aura-primary: var(--gradient-highlight-start); 
+            --aura-secondary: var(--gradient-highlight-end); 
+            --aura-opacity: 0.15;
+
+            --icon-dept-default: #888888;
+            --icon-dept-hover: var(--gradient-highlight-start);
+
+            --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- LIGHT THEME (Applied when .light-mode class is on <html>) --- */
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card-dark: #FFFFFF;
+            --bg-card-dark-hover: #F1F3F5;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-logo: var(--accent-primary);
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-btn-login: var(--accent-primary);
+            --text-btn-signup: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-footer: #6C757D;
+            --text-hero-h1: #212529;
+            --text-theme-toggle: #495057;
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn-login: var(--accent-primary);
+            --border-btn-primary-cta: var(--accent-primary);
+            --border-btn-secondary-cta: #6C757D;
+            --border-footer-top: #CED4DA;
+            --border-theme-toggle: #CED4DA;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-sparkle: #F97316;
+
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: #4A62D6;
+            
+            --aura-primary: #E0D0FF;
+            --aura-secondary: #D0E0FF;
+            --aura-opacity: 0.25;
+
+            --icon-dept-default: #6C757D;
+            --icon-dept-hover: var(--accent-primary);
+            
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navigation - Using Theme Vars */
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000; padding: 1rem 0;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        html[data-scrolled="true"] .navbar {
+            background: var(--bg-navbar-scrolled);
+        }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem; font-weight: 800;
+            color: var(--text-logo); text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-nav-link); text-decoration: none;
+            font-weight: 500; transition: color 0.3s ease;
+            position: relative; padding-bottom: 5px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-nav-link-hover); }
+        .nav-links a.active::after {
+            content: ''; position: absolute; width: 100%; height: 2px;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+        }
+        .nav-links a:not(.active):hover::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            transition: width 0.3s ease; width: 100%;
+        }
+
+        .nav-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: var(--bg-card-dark-hover);
+            border-color: var(--border-hover);
+        }
+
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-profile span {
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-theme-toggle);
+            border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-theme-toggle-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Main Content */
+        .main-content { padding-top: 90px; padding-bottom: 3rem; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Department Header */
+        .dept-header {
+            text-align: left;
+            margin-bottom: 2.5rem;
+            padding: 2.5rem 0;
+            border-bottom: 2px solid var(--accent-primary);
+        }
+        .dept-header h1 {
+            font-size: 2.8rem; font-weight: 800;
+            color: var(--text-headings); margin-bottom: 0.5rem;
+        }
+        .dept-header p {
+            font-size: 1.2rem; color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* Shared Card Styling */
+        .card-base {
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-base:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin-bottom: 3rem;
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .progress-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            padding: 0.5rem;
+        }
+
+        .progress-item {
+            background: var(--bg-card-dark-hover);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .progress-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(
+                var(--accent-primary) var(--progress),
+                var(--border-primary) var(--progress)
+            );
+            box-shadow: 0 0 20px rgba(var(--accent-primary-rgb), 0.2);
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: var(--bg-card-dark-hover);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 1;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-item h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .progress-item p span {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        /* Categories */
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .category-card {
+            text-align: center; cursor: pointer;
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+        .category-icon { font-size: 2.2rem; margin-bottom: 1rem; color: var(--icon-dept-hover); }
+        .category-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .category-card > p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .category-stats { display: flex; justify-content: space-around; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary); }
+        .category-stats .stat { font-size: 0.8rem; color: var(--text-muted); }
+        .category-stats .stat-number { display: block; font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.1rem; }
+
+        /* Questions List */
+        .questions-list { display: grid; gap: 1rem; }
+        .question-item {
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .question-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(var(--accent-primary-rgb), 0.1);
+            color: var(--accent-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(var(--accent-primary-rgb), 0.2);
+        }
+
+        .question-difficulty {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy {
+            background: rgba(46, 213, 115, 0.1);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.2);
+        }
+
+        .difficulty-medium {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+        }
+
+        .difficulty-hard {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--bg-card-dark);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Code Editor */
+        .code-editor {
+            background: var(--bg-card-dark);
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+            border: 1px solid var(--border-secondary);
+        }
+
+        .editor-header {
+            background: var(--bg-card-dark-hover);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .editor-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .editor-tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card-dark);
+            border-radius: 5px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .editor-tab.active {
+            background: var(--accent-primary);
+            color: var(--text-on-accent);
+        }
+
+        .run-button {
+            background: var(--accent-primary);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            color: var(--text-on-accent);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .run-button:hover {
+            background: var(--accent-primary-hover);
+        }
+
+        .code-textarea {
+            width: 100%;
+            min-height: 200px;
+            background: var(--bg-card-dark);
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 1rem;
+            resize: vertical;
+        }
+
+        .output-section {
+            background: var(--bg-card-dark-hover);
+            padding: 1rem;
+            border-top: 1px solid var(--border-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .main-content { padding-top: 80px; }
+            .dept-header h1 { font-size: 2.2rem; }
+            .dept-header p { font-size: 1rem; }
+            .categories, .progress-stats { grid-template-columns: 1fr; }
+            .question-header { flex-direction: column; }
+            .modal-content { width: 95%; padding: 1rem; }
+            .progress-section {
+                padding: 1.5rem;
+            }
+            .progress-header {
+                margin-bottom: 2rem;
+                padding-bottom: 1rem;
+            }
+            .progress-header h2 {
+                font-size: 1.5rem;
+            }
+            .progress-header p {
+                font-size: 1rem;
+            }
+            .progress-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .progress-circle {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 1rem;
+            }
+            .progress-circle::before {
+                width: 75px;
+                height: 75px;
+            }
+            .progress-value {
+                font-size: 1.5rem;
+            }
+            .progress-item h3 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+            .progress-item p {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Content Sections Styling */
+        .content-section {
+            display: none;
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .topic-item {
+            background: var(--bg-card-dark-hover);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .topic-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .topic-header h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .topic-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 6px;
+            background: var(--border-primary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .topic-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-content h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .topic-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .topic-content li {
+            margin-bottom: 0.3rem;
+        }
+
+        /* Complete Button Styling */
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: var(--accent-primary);
+            color: var(--text-on-accent);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn.completed {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn.completed:hover {
+            background: #dc2626;
+        }
+
+        .btn.completed:hover::before {
+            content: "Undo ";
+        }
+
+        /* Topic Actions */
+        .topic-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .topic-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .topic-status i {
+            font-size: 1rem;
+        }
+
+        .topic-status.completed {
+            color: #22c55e;
+        }
+
+        /* Undo Animation */
+        @keyframes undoAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        .topic-item.undo {
+            animation: undoAnimation 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="apptitude.html" class="active">Aptitude</a></li>
+                <li><a href="interview.html">Interview Prep</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="community.html">Community</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Department Header -->
+            <div class="dept-header">
+                <h1><i class="fas fa-brain"></i> Aptitude Preparation</h1>
+                <p>Master Quantitative Aptitude and Logical Reasoning for Placement Success</p>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <h2>Your Progress</h2>
+                    <p>Track your learning journey across different topics</p>
+                </div>
+                <div class="progress-stats">
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 180deg;">
+                            <div class="progress-value">50%</div>
+                        </div>
+                        <h3>Quantitative Aptitude</h3>
+                        <p>30/60 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 216deg;">
+                            <div class="progress-value">60%</div>
+                        </div>
+                        <h3>Logical Reasoning</h3>
+                        <p>24/40 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 144deg;">
+                            <div class="progress-value">40%</div>
+                        </div>
+                        <h3>Practice Tests</h3>
+                        <p>16/40 Tests Completed</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 252deg;">
+                            <div class="progress-value">70%</div>
+                        </div>
+                        <h3>Mock Interviews</h3>
+                        <p>7/10 Sessions Done</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories">
+                <!-- Quantitative Aptitude Section -->
+                <div class="category-card" onclick="showContent('numbers')">
+                    <div class="category-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Number System</h3>
+                    <p>Master numbers, HCF & LCM, and divisibility rules</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">100+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">30</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.5/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('arithmetic')">
+                    <div class="category-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <h3>Commercial Mathematics</h3>
+                    <p>Percentages, Profit & Loss, Simple & Compound Interest</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">150+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">45</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">7.8/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('speed-time')">
+                    <div class="category-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>Time & Speed</h3>
+                    <p>Time, Speed & Distance, Time & Work, Averages</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">120+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">35</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.2/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logical Reasoning Section -->
+                <div class="category-card" onclick="showContent('series')">
+                    <div class="category-icon">
+                        <i class="fas fa-sort-numeric-up"></i>
+                    </div>
+                    <h3>Series & Patterns</h3>
+                    <p>Number & Letter Series, Coding-Decoding</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">80+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">25</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.0/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('logical')">
+                    <div class="category-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Logical Deduction</h3>
+                    <p>Blood Relations, Direction Sense, Syllogisms</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">90+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">40</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.7/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('arrangements')">
+                    <div class="category-icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <h3>Arrangements</h3>
+                    <p>Seating Arrangements, Puzzles, Venn Diagrams</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">100+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">30</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">7.5/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="numbers-content" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Number System</h2>
+                        <p class="section-subtitle">Master the fundamentals of numbers and their properties</p>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-tab active" onclick="filterQuestions('all')">All</div>
+                    <div class="filter-tab" onclick="filterQuestions('number-system')">Number System</div>
+                    <div class="filter-tab" onclick="filterQuestions('hcf-lcm')">HCF & LCM</div>
+                    <div class="filter-tab" onclick="filterQuestions('divisibility')">Divisibility</div>
+                </div>
+
+                <div class="questions-list">
+                    <div class="question-item" data-category="hcf-lcm" onclick="openQuestion('hcf-problem')">
+                        <div class="question-header">
+                            <div>
+                                <div class="question-title">HCF and LCM Problem</div>
+                                <div class="question-tags">
+                                    <span class="tag">HCF</span>
+                                    <span class="tag">LCM</span>
+                                </div>
+                            </div>
+                            <div class="question-difficulty difficulty-medium">Medium</div>
+                        </div>
+                        <div class="question-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>456</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span>32</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>82% Solved</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item" data-category="divisibility" onclick="openQuestion('divisibility-rules')">
+                        <div class="question-header">
+                            <div>
+                                <div class="question-title">Divisibility Rules Application</div>
+                                <div class="question-tags">
+                                    <span class="tag">Divisibility</span>
+                                    <span class="tag">Number System</span>
+                                </div>
+                            </div>
+                            <div class="question-difficulty difficulty-hard">Hard</div>
+                        </div>
+                        <div class="question-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>623</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span>89</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>68% Solved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Question Title</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody">
+                <!-- Question content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the external JavaScript file -->
+    <script src="js/aptitude_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            // Update user profile from login data
+            function updateUserProfile() {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                if (userData) {
+                    const profilePic = document.querySelector('.profile-pic');
+                    const profileName = document.querySelector('.user-profile span');
+                    
+                    // Update profile name
+                    if (profileName) {
+                        profileName.textContent = userData.name || 'Guest User';
+                    }
+                    
+                    // Update profile picture initials
+                    if (profilePic && userData.name) {
+                        const initials = userData.name.split(' ')
+                            .map(word => word[0])
+                            .join('')
+                            .toUpperCase()
+                            .slice(0, 2);
+                        profilePic.textContent = initials;
+                    }
+                }
+            }
+
+            // Function to set theme
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else {
+                setTheme('dark'); // Default to dark theme
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+
+            // Initialize the page
+            updateUserProfile();
+            initializePage();
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 30) {
+                    document.documentElement.setAttribute('data-scrolled', 'true');
+                } else {
+                    document.documentElement.removeAttribute('data-scrolled');
+                }
+            });
+        });
+
+        function initializePage() {
+            loadProgress();
+            initializeCategoriesAndContent();
+        }
+
+        function initializeCategoriesAndContent() {
+            const progressStats = document.querySelector('.progress-stats');
+            const categories = document.querySelector('.categories');
+
+            // Clear existing content
+            progressStats.innerHTML = '';
+            categories.innerHTML = '';
+
+            // Initialize progress stats
+            for (const [key, category] of Object.entries(aptitudeTopicsData)) {
+                const completedTopics = category.topics.filter(topic => topic.completed).length;
+                const totalTopics = category.topics.length;
+                const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
+                progressStats.innerHTML += `
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: ${progressPercentage * 3.6}deg;">
+                            <div class="progress-value">${progressPercentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>${completedTopics}/${totalTopics} Topics Covered</p>
+                    </div>
+                `;
+
+                // Add category cards
+                categories.innerHTML += `
+                    <div class="category-card" onclick="showContent('${key}')">
+                        <div class="category-icon">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>Master key concepts and practice questions</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${totalTopics}</div>
+                                <div>Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${completedTopics}</div>
+                                <div>Completed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${progressPercentage}%</div>
+                                <div>Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('aptitudeProgress');
+            if (savedProgress) {
+                try {
+                    const progress = JSON.parse(savedProgress);
+                    for (const category in progress) {
+                        if (aptitudeTopicsData[category]) {
+                            aptitudeTopicsData[category].topics.forEach(topic => {
+                                const savedTopic = progress[category].topics.find(t => t.id === topic.id);
+                                if (savedTopic) {
+                                    topic.completed = savedTopic.completed;
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading progress:', e);
+                }
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('aptitudeProgress', JSON.stringify(aptitudeTopicsData));
+        }
+
+        function showContent(category) {
+            const contentSection = document.getElementById(`${category}-content`);
+            if (!contentSection) {
+                // Create content section if it doesn't exist
+                const categoryData = aptitudeTopicsData[category];
+                const container = document.createElement('div');
+                container.id = `${category}-content`;
+                container.className = 'content-section';
+                
+                let topicsHTML = '';
+                categoryData.topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item ${topic.completed ? 'completed' : ''}" data-id="${topic.id}">
+                            <div class="topic-header">
+                                <h3>${topic.name}</h3>
+                                <div class="topic-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${topic.completed ? '100%' : '0%'}"></div>
+                                    </div>
+                                    <div class="topic-status ${topic.completed ? 'completed' : ''}">
+                                        <i class="${topic.completed ? 'fas fa-check-circle' : 'fas fa-circle'}"></i>
+                                        <span>${topic.completed ? 'Completed' : 'In Progress'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topic-content">
+                                ${topic.notes}
+                            </div>
+                            <button class="btn ${topic.completed ? 'completed' : ''}" 
+                                    onclick="toggleComplete('${category}', '${topic.id}')">
+                                ${topic.completed ? '✓ Completed' : 'Mark as Complete'}
+                            </button>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = `
+                    <div class="section-header">
+                        <h2>${categoryData.title}</h2>
+                        <p>Master these topics to excel in your preparation</p>
+                    </div>
+                    <div class="topics-list">
+                        ${topicsHTML}
+                    </div>
+                `;
+
+                document.querySelector('.container').appendChild(container);
+            }
+
+            // Hide all content sections and show the selected one
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            contentSection.style.display = 'block';
+            
+            // Scroll to the content section
+            contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleComplete(category, topicId) {
+            const topic = aptitudeTopicsData[category].topics.find(t => t.id === topicId);
+            if (topic) {
+                topic.completed = !topic.completed; // Toggle completion status
+                saveProgress();
+                
+                // Update UI
+                const topicElement = document.querySelector(`[data-id="${topicId}"]`);
+                if (topicElement) {
+                    // Toggle completed class
+                    topicElement.classList.toggle('completed');
+                    if (!topic.completed) {
+                        topicElement.classList.add('undo');
+                        setTimeout(() => topicElement.classList.remove('undo'), 500);
+                    }
+
+                    // Update button
+                    const button = topicElement.querySelector('.btn');
+                    button.classList.toggle('completed');
+                    button.textContent = topic.completed ? '✓ Completed' : 'Mark as Complete';
+                    
+                    // Update progress bar
+                    const progressFill = topicElement.querySelector('.progress-fill');
+                    progressFill.style.width = topic.completed ? '100%' : '0%';
+                    
+                    // Update status
+                    const statusDiv = topicElement.querySelector('.topic-status');
+                    statusDiv.classList.toggle('completed');
+                    statusDiv.querySelector('i').className = topic.completed ? 'fas fa-check-circle' : 'fas fa-circle';
+                    statusDiv.querySelector('span').textContent = topic.completed ? 'Completed' : 'In Progress';
+                }
+                
+                // Update overall progress
+                initializeCategoriesAndContent();
+            }
+        }
+
+        // Question data
+        const questions = {
+            'hcf-problem': {
+                title: 'HCF and LCM Problem',
+                description: 'Find the HCF and LCM of three numbers: 48, 72, and 96. Also, verify the relationship between HCF × LCM and the product of the numbers.',
+                difficulty: 'Medium',
+                examples: [
+                    {
+                        input: 'Numbers: 48, 72, 96',
+                        output: 'HCF = 24, LCM = 144',
+                        explanation: 'Using prime factorization method to find HCF and LCM'
+                    }
+                ],
+                code: `// HCF and LCM calculation
+function calculateHCFLCM(numbers) {
+    // Your solution here
+}`
+            },
+            'divisibility-rules': {
+                title: 'Divisibility Rules Application',
+                description: 'Check if a given number is divisible by 2, 3, 4, 5, 6, 8, 9, and 11 using divisibility rules. Explain the process for each divisor.',
+                difficulty: 'Hard',
+                examples: [
+                    {
+                        input: 'Number: 23562',
+                        output: 'Divisible by: 2, 3, 6',
+                        explanation: 'Using divisibility rules for each number'
+                    }
+                ],
+                code: `// Divisibility checker
+function checkDivisibility(number) {
+    // Your solution here
+}`
+            }
+        };
+
+        // Filter questions
+        function filterQuestions(category) {
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const questions = document.querySelectorAll('.question-item');
+            questions.forEach(question => {
+                if (category === 'all' || question.dataset.category === category) {
+                    question.style.display = 'block';
+                    question.style.animation = 'slideIn 0.3s ease-out';
+                } else {
+                    question.style.display = 'none';
+                }
+            });
+        }
+
+        // Open question modal
+        function openQuestion(questionId) {
+            const modal = document.getElementById('questionModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            const question = questions[questionId];
+            if (!question) return;
+
+            title.textContent = question.title;
+            
+            let bodyContent = `
+                <div class="question-content">
+                    <div class="question-description">
+                        <h3>Problem Description</h3>
+                        <p>${question.description}</p>
+                    </div>
+                    
+                    <div class="question-examples">
+                        <h3>Examples</h3>
+                        ${question.examples.map(example => `
+                            <div class="example">
+                                <p><strong>Input:</strong> ${example.input}</p>
+                                <p><strong>Output:</strong> ${example.output}</p>
+                                <p><strong>Explanation:</strong> ${example.explanation}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="editor-tabs">
+                                <div class="editor-tab active">Solution</div>
+                                <div class="editor-tab">Test Cases</div>
+                            </div>
+                            <button class="run-button" onclick="runCode()">Run Code</button>
+                        </div>
+                        <div class="editor-content">
+                            <textarea class="code-textarea" spellcheck="false">${question.code}</textarea>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">Output</div>
+                            <div class="output-content" id="codeOutput">// Code output will appear here</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            body.innerHTML = bodyContent;
+            modal.style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('questionModal').style.display = 'none';
+        }
+
+        // Run code (mock implementation)
+        function runCode() {
+            const output = document.getElementById('codeOutput');
+            output.innerHTML = '// Running code...\n// This is a mock implementation.\n// In a real application, this would compile and run your Verilog code.';
+            
+            setTimeout(() => {
+                output.innerHTML += '\n// Code execution completed!';
+            }, 1500);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('questionModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FF4B2B; /* Main accent color (red-orange) */
+            --secondary-color: #FF416C; /* Gradient partner */
+            --white-color: #FFFFFF;
+            --light-gray-bg: #F6F5F7; /* Background for the form side */
+            --form-input-bg: #EEEEEE;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --social-icon-border: #DDDDDD;
+            --container-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--light-gray-bg); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .auth-container {
+            background-color: var(--white-color);
+            border-radius: 10px;
+            box-shadow: var(--container-shadow);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 780px; 
+            min-height: 520px; /* Adjusted min height for more fields */
+            display: flex; 
+        }
+
+        .form-panel { /* This will be the right panel for Sign Up */
+            flex: 1; 
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            /* By default, form panel is on right for signup, overlay on left */
+        }
+
+        .overlay-panel { /* This will be the left panel for "Welcome Back" */
+            flex: 1; 
+            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
+            color: var(--white-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2.5rem;
+        }
+
+
+        .form-panel h1, .overlay-panel h1 {
+            font-weight: 700;
+            font-size: 2.2rem; /* Standardized for both */
+            margin-bottom: 1rem;
+        }
+        .form-panel h1 { color: var(--text-dark); }
+        .overlay-panel h1 { color: var(--white-color); }
+
+
+        .social-login {
+            margin: 1rem 0;
+        }
+
+        .social-icon {
+            border: 1px solid var(--social-icon-border);
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 0.4rem;
+            height: 40px;
+            width: 40px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .social-icon:hover {
+            background-color: var(--light-gray-bg);
+            color: var(--primary-color);
+        }
+
+        .form-panel > span { /* "or use your email for registration" */
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+         .overlay-panel p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.5;
+            letter-spacing: 0.5px;
+            margin: 1.5rem 0 2rem;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .form-group input {
+            background-color: var(--form-input-bg);
+            border: none;
+            padding: 0.9rem 1rem;
+            margin: 0.4rem 0; /* Slightly less margin than login */
+            width: 100%;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        .form-group input:focus {
+            outline: 1px solid var(--primary-color);
+        }
+         /* Select field for Department */
+        .form-group select {
+            background-color: var(--form-input-bg);
+            border: none;
+            padding: 0.9rem 1rem;
+            margin: 0.4rem 0;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light); /* To show placeholder-like text */
+            appearance: none; /* Remove default arrow */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 0.65em auto;
+             color: var(--text-dark); /* For selected option text */
+        }
+        .form-group select:focus {
+             outline: 1px solid var(--primary-color);
+        }
+        .form-group select option[value=""] {
+            color: var(--text-light);
+        }
+
+        .auth-button {
+            border-radius: 20px;
+            border: 1px solid var(--primary-color);
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.8rem 2.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in, background-color 0.2s ease;
+            cursor: pointer;
+            margin-top: 1rem; /* Added margin for Sign Up button */
+        }
+        .auth-button:active {
+            transform: scale(0.95);
+        }
+        .auth-button:focus {
+            outline: none;
+        }
+        .auth-button.ghost { 
+            background-color: transparent;
+            border-color: var(--white-color);
+        }
+         .auth-button.ghost:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+
+        /* Error and Success Message Styling */
+        .message-display {
+            width: 100%;
+            text-align: center;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: none; 
+        }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 400px;
+                min-height: auto;
+            }
+            .form-panel, .overlay-panel {
+                min-height: 300px; 
+            }
+             .form-panel { /* On mobile, signup form panel is on top */
+                order: 1;
+                 border-radius: 10px 10px 0 0;
+            }
+            .overlay-panel { /* Overlay (link to sign in) stacks below */
+                order: 2;
+                 border-radius: 0 0 10px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="overlay-panel"> <!-- Left panel on desktop, bottom on mobile -->
+            <h1>Welcome Back!</h1>
+            <p>To keep connected with us please login with your personal info</p>
+            <button class="auth-button ghost" onclick="redirectToLogin()">Sign In</button>
+        </div>
+        <div class="form-panel sign-up-panel"> <!-- Right panel on desktop, top on mobile -->
+            <h1>Create Account</h1>
+            <div class="social-login">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your email for registration</span>
+
+            <div class="error-message message-display" id="errorMessage"></div>
+            <div class="success-message message-display" id="successMessage"></div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <input type="text" id="firstName" placeholder="First Name" required />
+                </div>
+                <div class="form-group">
+                    <input type="text" id="lastName" placeholder="Last Name" required />
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Email" required />
+                </div>
+                 <div class="form-group">
+                    <select id="department" name="department" required>
+                        <option value="">Select Department</option>
+                        <option value="Computer Science">Computer Science Engineering</option>
+                        <option value="Electronics & Communication">Electronics & Communication</option>
+                        <option value="Mechanical">Mechanical Engineering</option>
+                        <option value="Civil">Civil Engineering</option>
+                        <option value="Electrical">Electrical Engineering</option>
+                        <option value="Chemical">Chemical Engineering</option>
+                        <option value="Aptitude">Aptitude Only</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Password" required />
+                </div>
+                <button type="submit" class="auth-button">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function handleSignup(event) {
+            event.preventDefault();
+
+            const errorMessageEl = document.getElementById('errorMessage');
+            const successMessageEl = document.getElementById('successMessage');
+            errorMessageEl.style.display = 'none';
+            errorMessageEl.textContent = '';
+            successMessageEl.style.display = 'none';
+            successMessageEl.textContent = '';
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const department = document.getElementById('department').value;
+            const password = document.getElementById('password').value;
+
+            if (!firstName || !lastName || !email || !department || !password) {
+                 errorMessageEl.textContent = "Please fill in all fields.";
+                 errorMessageEl.style.display = 'block';
+                 return;
+            }
+            if (password.length < 6) { // Example validation
+                 errorMessageEl.textContent = "Password must be at least 6 characters long.";
+                 errorMessageEl.style.display = 'block';
+                 return;
+            }
+
+
+            try {
+                // Replace with your actual API endpoint for signup
+                const response = await fetch('/api/signup', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ firstName, lastName, email, department, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Sign up failed. Please try again.');
+                }
+
+                successMessageEl.textContent = 'Account created successfully! Redirecting to login...';
+                successMessageEl.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'login.html'; // Redirect to login page after successful signup
+                }, 2000);
+
+            } catch (error) {
+                errorMessageEl.textContent = error.message;
+                errorMessageEl.style.display = 'block';
+            }
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', handleSignup);
+
+        function redirectToLogin() {
+            window.location.href = 'login.html'; 
+        }
+    </script>
+</body>
+</html>

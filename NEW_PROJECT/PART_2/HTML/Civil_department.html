@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civil Engineering - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        /* ======== THEME VARIABLES ======== */
+        /* --- DEFAULT DARK THEME (Applied if no .light-mode class on <html>) --- */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --bg-card-alt: #0D0D0D;
+            --bg-footer: #0A0A0A;
+            --bg-theme-toggle-hover: #222222;
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-logo: #4ecdc4;
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #4ecdc4;
+            --text-btn: #E0E0E0;
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn: #444444;
+            --border-theme-toggle: #444444;
+
+            --accent-primary: #4ecdc4;
+            --accent-primary-hover: #44a08d;
+            --accent-secondary: #ff6b6b;
+            --accent-secondary-hover: #ee5253;
+
+            --gradient-highlight-start: #4ecdc4;
+            --gradient-highlight-end: #44a08d;
+
+            --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- LIGHT THEME (Applied when .light-mode class is on <html>) --- */
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --bg-card-alt: #F8F9FA;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-logo: #4ecdc4;
+            --text-nav-link: #495057;
+            --text-nav-link-hover: #4ecdc4;
+            --text-btn: var(--accent-primary);
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #495057;
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn: var(--accent-primary);
+            --border-theme-toggle: #CED4DA;
+
+            --accent-primary: #4ecdc4;
+            --accent-primary-hover: #44a08d;
+            --accent-secondary: #ff6b6b;
+            --accent-secondary-hover: #ee5253;
+
+            --gradient-highlight-start: #4ecdc4;
+            --gradient-highlight-end: #44a08d;
+
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-logo);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-nav-link);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-nav-link-hover);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-primary);
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--accent-primary), var(--accent-primary-hover));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--text-on-accent);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Department Header */
+        .dept-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border-primary);
+            box-shadow: var(--card-shadow);
+        }
+
+        .dept-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dept-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-primary);
+            box-shadow: var(--card-shadow);
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .progress-item {
+            text-align: center;
+            background: var(--bg-card-alt);
+            padding: 1.8rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .progress-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-primary) var(--progress), var(--border-primary) var(--progress));
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: var(--bg-card-alt);
+            border-radius: 50%;
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 1;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .progress-item h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-secondary);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+            transition: color 0.3s ease;
+        }
+
+        .category-card:hover .category-icon {
+            color: var(--accent-primary-hover);
+        }
+
+        .category-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .category-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--border-primary);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .category-stats .stat {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .category-stats .stat-number {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-primary);
+            display: none;
+            box-shadow: var(--card-shadow);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.7rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-secondary);
+            border-radius: 25px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-tab.active,
+        .filter-tab:hover {
+            background: var(--accent-primary);
+            color: var(--text-on-accent);
+            border-color: var(--accent-primary);
+        }
+
+        /* Questions List */
+        .questions-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .question-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-secondary);
+            border-radius: 15px;
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+        }
+
+        .question-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--accent-primary);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: rgba(78, 205, 196, 0.1);
+            color: var(--accent-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(78, 205, 196, 0.3);
+        }
+
+        .question-difficulty {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy {
+            background: rgba(46, 213, 115, 0.1);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        html.light-mode .difficulty-easy {
+            background: #D4EDDA;
+            color: #155724;
+            border-color: #C3E6CB;
+        }
+
+        .difficulty-medium {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        html.light-mode .difficulty-medium {
+            background: #FFF3CD;
+            color: #856404;
+            border-color: #FFEEBA;
+        }
+
+        .difficulty-hard {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        html.light-mode .difficulty-hard {
+            background: #F8D7DA;
+            color: #721C24;
+            border-color: #F5C6CB;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-theme-toggle);
+            border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-theme-toggle-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                justify-content: center;
+            }
+
+            .question-header {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1rem;
+            }
+        }
+
+        /* Enhanced Topics List Styling */
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .topic-item {
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topic-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        .topic-item.completed {
+            border-color: #22c55e;
+            background: var(--bg-card-dark);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .topic-header h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            flex: 1;
+        }
+
+        .topic-item.completed .topic-header h3 {
+            color: #22c55e;
+        }
+
+        .topic-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 120px;
+        }
+
+        .progress-bar {
+            width: 60px;
+            height: 6px;
+            background: var(--border-primary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .topic-item.completed .progress-fill {
+            background: #22c55e;
+        }
+
+        .topic-status {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .topic-status.completed {
+            color: #22c55e;
+        }
+
+        .topic-content {
+            flex: 1;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-content h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin: 1rem 0 0.5rem;
+            font-weight: 600;
+        }
+
+        .topic-content ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0.5rem 0;
+        }
+
+        .topic-content li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .topic-content li:before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .topic-item.completed .topic-content li:before {
+            color: #22c55e;
+        }
+
+        /* Enhanced Button Styling */
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: var(--accent-primary);
+            color: var(--text-on-accent);
+            margin-top: auto;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn.completed {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn.completed:hover {
+            background: #dc2626;
+        }
+
+        .btn.completed:hover::before {
+            content: "Undo ";
+        }
+
+        /* Topic Animation */
+        @keyframes completeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .topic-item.completed {
+            animation: completeAnimation 0.5s ease;
+        }
+
+        /* Section Header Enhancement */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-card-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border-secondary);
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Content Section Enhancement */
+        .content-section {
+            animation: fadeIn 0.3s ease-out;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-primary);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .topics-list {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-header {
+                flex-direction: column;
+            }
+
+            .topic-progress {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .progress-bar {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="#" class="active">Civil Department</a></li>
+                <li><a href="#progressSectionAnchor">Progress</a></li>
+                <li><a href="#coding-questions">Practice</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            <div class="user-profile">
+                <div class="profile-pic">SK</div>
+                <span>Santhosh Kumar</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Department Header -->
+            <div class="dept-header">
+                <h1>Civil Engineering</h1>
+                <p>Your hub for mastering structural analysis, construction management, and advanced civil engineering concepts for top placements.</p>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section" id="progressSectionAnchor">
+                <div class="progress-header">
+                    <h2>Your Civil Engineering Dashboard</h2>
+                    <p>Track your overall progress across key Civil Engineering domains.</p>
+                </div>
+                <div class="progress-stats">
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 252deg;">
+                            <div class="progress-value">70%</div>
+                        </div>
+                        <h3>Structural</h3>
+                        <p>42/60 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 180deg;">
+                            <div class="progress-value">50%</div>
+                        </div>
+                        <h3>Construction</h3>
+                        <p>25/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 144deg;">
+                            <div class="progress-value">40%</div>
+                        </div>
+                        <h3>Geotechnical</h3>
+                        <p>20/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 216deg;">
+                            <div class="progress-value">60%</div>
+                        </div>
+                        <h3>Transportation</h3>
+                        <p>24/40 Topics Covered</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories">
+                <div class="category-card" onclick="showContent('structural')">
+                    <div class="category-icon">
+                        <i class="fas fa-archway"></i>
+                    </div>
+                    <h3>Structural Engineering</h3>
+                    <p>Analysis, Design, Steel Structures, RCC, and Advanced Mechanics</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">250+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">42</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.5/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('construction')">
+                    <div class="category-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h3>Construction Management</h3>
+                    <p>Project Planning, Cost Estimation, Scheduling, and Quality Control</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">180+</div>
+                            <div>Topics</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">25</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">7.9/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('geotechnical')">
+                    <div class="category-icon">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h3>Geotechnical Engineering</h3>
+                    <p>Soil Mechanics, Foundation Design, Earth Structures</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">200+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">20</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.2/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('transportation')">
+                    <div class="category-icon">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h3>Transportation Engineering</h3>
+                    <p>Highway Design, Traffic Analysis, Transportation Planning</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">150+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">24</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.0/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('environmental')">
+                    <div class="category-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Environmental Engineering</h3>
+                    <p>Water Treatment, Waste Management, Environmental Impact</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">120+</div>
+                            <div>Topics</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">18</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.4/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('interview')">
+                    <div class="category-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Interview Preparation</h3>
+                    <p>Technical interviews, Core concepts, and Company-specific questions</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">200+</div>
+                            <div>Questions</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">35</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.3/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="structural-content" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Structural Engineering</h2>
+                        <p class="section-subtitle">Master the fundamentals of structural analysis and design</p>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-tab active" onclick="filterQuestions('all')">All</div>
+                    <div class="filter-tab" onclick="filterQuestions('analysis')">Analysis</div>
+                    <div class="filter-tab" onclick="filterQuestions('steel')">Steel Design</div>
+                    <div class="filter-tab" onclick="filterQuestions('concrete')">RCC Design</div>
+                    <div class="filter-tab" onclick="filterQuestions('dynamics')">Structural Dynamics</div>
+                </div>
+
+                <div class="questions-list">
+                    <div class="question-item" data-category="analysis" onclick="openQuestion('beam-analysis')">
+                        <div class="question-header">
+                            <div>
+                                <div class="question-title">Continuous Beam Analysis</div>
+                                <div class="question-tags">
+                                    <span class="tag">Structural Analysis</span>
+                                    <span class="tag">Moment Distribution</span>
+                                </div>
+                            </div>
+                            <div class="question-difficulty difficulty-medium">Medium</div>
+                        </div>
+                        <div class="question-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>945</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span>52</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>82% Solved</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item" data-category="concrete" onclick="openQuestion('column-design')">
+                        <div class="question-header">
+                            <div>
+                                <div class="question-title">RCC Column Design</div>
+                                <div class="question-tags">
+                                    <span class="tag">RCC Design</span>
+                                    <span class="tag">IS 456</span>
+                                </div>
+                            </div>
+                            <div class="question-difficulty difficulty-hard">Hard</div>
+                        </div>
+                        <div class="question-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>834</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span>76</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>68% Solved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Question Title</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody">
+                <!-- Question content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the external JavaScript file -->
+    <script src="js/civil_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            // Function to set theme
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else {
+                setTheme('dark'); // Default to dark theme
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+
+            // Initialize the page
+            initializePage();
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                document.documentElement.setAttribute('data-scrolled', window.scrollY > 30 ? 'true' : 'false');
+            });
+        });
+
+        function initializePage() {
+            loadProgress();
+            initializeCategoriesAndContent();
+        }
+
+        function initializeCategoriesAndContent() {
+            const progressStats = document.querySelector('.progress-stats');
+            const categories = document.querySelector('.categories');
+
+            // Clear existing content
+            progressStats.innerHTML = '';
+            categories.innerHTML = '';
+
+            // Initialize progress stats
+            for (const [key, category] of Object.entries(civilTopicsData)) {
+                const completedTopics = category.topics.filter(topic => topic.completed).length;
+                const totalTopics = category.topics.length;
+                const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
+                progressStats.innerHTML += `
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: ${progressPercentage * 3.6}deg;">
+                            <div class="progress-value">${progressPercentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>${completedTopics}/${totalTopics} Topics Covered</p>
+                    </div>
+                `;
+
+                // Add category cards
+                categories.innerHTML += `
+                    <div class="category-card" onclick="showContent('${key}')">
+                        <div class="category-icon">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>Master key concepts and practice questions</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${totalTopics}</div>
+                                <div>Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${completedTopics}</div>
+                                <div>Completed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${progressPercentage}%</div>
+                                <div>Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('civilProgress');
+            if (savedProgress) {
+                try {
+                    const progress = JSON.parse(savedProgress);
+                    for (const category in progress) {
+                        if (civilTopicsData[category]) {
+                            civilTopicsData[category].topics.forEach(topic => {
+                                const savedTopic = progress[category].topics.find(t => t.id === topic.id);
+                                if (savedTopic) {
+                                    topic.completed = savedTopic.completed;
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading progress:', e);
+                }
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('civilProgress', JSON.stringify(civilTopicsData));
+        }
+
+        function showContent(category) {
+            const contentSection = document.getElementById(`${category}-content`);
+            if (!contentSection) {
+                // Create content section if it doesn't exist
+                const categoryData = civilTopicsData[category];
+                const container = document.createElement('div');
+                container.id = `${category}-content`;
+                container.className = 'content-section';
+                
+                let topicsHTML = '';
+                categoryData.topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item ${topic.completed ? 'completed' : ''}" data-id="${topic.id}">
+                            <div class="topic-header">
+                                <h3>${topic.name}</h3>
+                                <div class="topic-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${topic.completed ? '100%' : '0%'}"></div>
+                                    </div>
+                                    <div class="topic-status ${topic.completed ? 'completed' : ''}">
+                                        <i class="${topic.completed ? 'fas fa-check-circle' : 'fas fa-circle'}"></i>
+                                        <span>${topic.completed ? 'Completed' : 'In Progress'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topic-content">
+                                ${topic.notes}
+                            </div>
+                            <button class="btn ${topic.completed ? 'completed' : ''}" 
+                                    onclick="toggleComplete('${category}', '${topic.id}')">
+                                ${topic.completed ? '✓ Completed' : 'Mark as Complete'}
+                            </button>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = `
+                    <div class="section-header">
+                        <h2>${categoryData.title}</h2>
+                        <p>Master these topics to excel in your preparation</p>
+                    </div>
+                    <div class="topics-list">
+                        ${topicsHTML}
+                    </div>
+                `;
+
+                document.querySelector('.container').appendChild(container);
+            }
+
+            // Hide all content sections and show the selected one
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            contentSection.style.display = 'block';
+            
+            // Scroll to the content section
+            contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleComplete(category, topicId) {
+            const topic = civilTopicsData[category].topics.find(t => t.id === topicId);
+            if (topic) {
+                topic.completed = !topic.completed; // Toggle completion status
+                saveProgress();
+                
+                // Update UI
+                const topicElement = document.querySelector(`[data-id="${topicId}"]`);
+                if (topicElement) {
+                    // Toggle completed class
+                    topicElement.classList.toggle('completed');
+                    if (!topic.completed) {
+                        topicElement.classList.add('undo');
+                        setTimeout(() => topicElement.classList.remove('undo'), 500);
+                    }
+
+                    // Update button
+                    const button = topicElement.querySelector('.btn');
+                    button.classList.toggle('completed');
+                    button.textContent = topic.completed ? '✓ Completed' : 'Mark as Complete';
+                    
+                    // Update progress bar
+                    const progressFill = topicElement.querySelector('.progress-fill');
+                    progressFill.style.width = topic.completed ? '100%' : '0%';
+                    
+                    // Update status
+                    const statusDiv = topicElement.querySelector('.topic-status');
+                    statusDiv.classList.toggle('completed');
+                    statusDiv.querySelector('i').className = topic.completed ? 'fas fa-check-circle' : 'fas fa-circle';
+                    statusDiv.querySelector('span').textContent = topic.completed ? 'Completed' : 'In Progress';
+                }
+                
+                // Update overall progress
+                initializeCategoriesAndContent();
+            }
+        }
+
+        // Filter questions
+        function filterQuestions(category) {
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filter questions
+            const questions = document.querySelectorAll('.question-item');
+            questions.forEach(question => {
+                if (category === 'all' || question.dataset.category === category) {
+                    question.style.display = 'block';
+                    question.style.animation = 'slideIn 0.3s ease-out';
+                } else {
+                    question.style.display = 'none';
+                }
+            });
+        }
+
+        // Open question modal
+        function openQuestion(questionId) {
+            const modal = document.getElementById('questionModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            // Get question data
+            const question = questions[questionId];
+            if (!question) return;
+
+            // Update modal content
+            title.textContent = question.title;
+            
+            // Create modal body content
+            let bodyContent = `
+                <div class="question-content">
+                    <div class="question-description">
+                        <h3>Problem Description</h3>
+                        <p>${question.description}</p>
+                    </div>
+                    
+                    <div class="question-examples">
+                        <h3>Examples</h3>
+                        ${question.examples.map(example => `
+                            <div class="example">
+                                <p><strong>Input:</strong> ${example.input}</p>
+                                <p><strong>Output:</strong> ${example.output}</p>
+                                <p><strong>Explanation:</strong> ${example.explanation}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="editor-tabs">
+                                <div class="editor-tab active">Solution</div>
+                                <div class="editor-tab">Test Cases</div>
+                            </div>
+                            <button class="run-button" onclick="runCode()">Run Code</button>
+                        </div>
+                        <div class="editor-content">
+                            <textarea class="code-textarea" spellcheck="false">${question.code}</textarea>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">Output</div>
+                            <div class="output-content" id="codeOutput">// Code output will appear here</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            body.innerHTML = bodyContent;
+            modal.style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('questionModal').style.display = 'none';
+        }
+
+        // Run code (mock implementation)
+        function runCode() {
+            const output = document.getElementById('codeOutput');
+            output.innerHTML = '// Running code...\n// This is a mock implementation.\n// In a real application, this would compile and run your code.';
+            
+            // Simulate code execution
+            setTimeout(() => {
+                output.innerHTML += '\n// Code execution completed!';
+            }, 1500);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('questionModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
+    
+    

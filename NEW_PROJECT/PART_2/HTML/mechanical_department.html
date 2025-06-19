@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanical Engineering - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ======== THEME VARIABLES ======== */
+        /* --- DEFAULT DARK THEME (Applied if no .light-mode class on <html>) --- */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --bg-card-alt: #0D0D0D;
+            --bg-footer: #0A0A0A;
+            --bg-theme-toggle-hover: #222222;
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-logo: #FFFFFF;
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-btn: #E0E0E0;
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn: #444444;
+            --border-theme-toggle: #444444;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #4ecdc4;
+            --accent-secondary-hover: #44a08d;
+
+            --gradient-highlight-start: #A755F7;
+            --gradient-highlight-end: #5A78F6;
+
+            --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- LIGHT THEME (Applied when .light-mode class is on <html>) --- */
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --bg-card-alt: #F8F9FA;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-logo: var(--accent-primary);
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-btn: var(--accent-primary);
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #495057;
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn: var(--accent-primary);
+            --border-theme-toggle: #CED4DA;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #00796b;
+            --accent-secondary-hover: #004d40;
+
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: #4A62D6;
+
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-logo);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-nav-link);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-nav-link-hover);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #fdbb2d, #b21f1f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-theme-toggle);
+            border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-theme-toggle-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .dept-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dept-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fdbb2d, #b21f1f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dept-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-primary);
+            box-shadow: var(--card-shadow);
+        }
+
+        .progress-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .progress-item {
+            text-align: center;
+            background: var(--bg-card-alt);
+            padding: 1.8rem;
+            border-radius: 15px;
+            border: 1px solid var(--border-secondary);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .progress-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-primary) var(--progress), var(--border-primary) var(--progress));
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: var(--bg-card-alt);
+            border-radius: 50%;
+        }
+
+        .progress-value {
+            position: relative;
+            z-index: 1;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        .progress-item h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: #fdbb2d;
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fdbb2d;
+        }
+
+        .category-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card p {
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #fdbb2d;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active,
+        .filter-tab:hover {
+            background: linear-gradient(45deg, #fdbb2d, #b21f1f);
+            border-color: transparent;
+        }
+
+        /* Questions List */
+        .questions-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .question-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .question-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #fdbb2d;
+            transform: translateX(5px);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(253, 187, 45, 0.2);
+            color: #fdbb2d;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(253, 187, 45, 0.3);
+        }
+
+        .question-difficulty {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .difficulty-easy {
+            background: rgba(46, 213, 115, 0.2);
+            color: #2ed573;
+            border: 1px solid #2ed573;
+        }
+
+        .difficulty-medium {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .difficulty-hard {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: rgba(26, 42, 108, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: #fdbb2d;
+        }
+
+        /* Code Editor */
+        .code-editor {
+            background: #1e1e1e;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .editor-header {
+            background: #2d2d2d;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .editor-tab {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .editor-tab.active {
+            background: #fdbb2d;
+            color: #1e1e1e;
+        }
+
+        .run-button {
+            background: linear-gradient(45deg, #fdbb2d, #b21f1f);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .code-textarea {
+            width: 100%;
+            min-height: 200px;
+            background: #1e1e1e;
+            border: none;
+            color: white;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 1rem;
+            resize: vertical;
+        }
+
+        .output-section {
+            background: #2d2d2d;
+            padding: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .filter-tabs {
+                justify-content: center;
+            }
+
+            .question-header {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1rem;
+            }
+            
+            .progress-circle {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .progress-circle::before {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .progress-value {
+                font-size: 1.5rem;
+            }
+            
+            .progress-item h3 {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Add or update these styles in the <style> section */
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 1.5rem;
+        }
+
+        .topic-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-secondary);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--card-shadow);
+        }
+
+        .topic-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .topic-item.completed {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        .topic-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .topic-header h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .topic-item.completed .topic-header h3 {
+            color: #2ecc71;
+        }
+
+        .topic-progress {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--border-primary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            width: 0;
+            transition: width 0.5s ease;
+        }
+
+        .topic-item.completed .progress-fill {
+            background: #2ecc71;
+            width: 100%;
+        }
+
+        .topic-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            min-width: 120px;
+            transition: color 0.3s ease;
+        }
+
+        .topic-status.completed {
+            color: #2ecc71;
+        }
+
+        .topic-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .topic-content h4 {
+            color: var(--text-primary);
+            margin: 1.2rem 0 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .topic-content ul {
+            list-style: none;
+            padding-left: 1.2rem;
+            margin: 0.8rem 0;
+        }
+
+        .topic-content li {
+            position: relative;
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+            padding-left: 1rem;
+        }
+
+        .topic-content li:before {
+            content: "•";
+            color: var(--accent-primary);
+            position: absolute;
+            left: -1rem;
+            transition: color 0.3s ease;
+        }
+
+        .topic-item.completed .topic-content li:before {
+            color: #2ecc71;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--border-secondary);
+            color: var(--text-primary);
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: auto;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn.completed {
+            background: #2ecc71;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .btn.completed:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .topics-list {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .topic-item {
+                padding: 1.5rem;
+            }
+
+            .topic-header h3 {
+                font-size: 1.2rem;
+            }
+
+            .topic-content {
+                font-size: 0.9rem;
+            }
+
+            .btn {
+                padding: 0.8rem;
+            }
+        }
+
+        /* Add animation for completion transition */
+        @keyframes completeAnimation {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .topic-item.completed {
+            animation: completeAnimation 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="#" class="active">Mechanical Engineering</a></li>
+                <li><a href="#progress">Progress</a></li>
+                <li><a href="#tests">Tests</a></li>
+                <li><a href="#community">Community</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Department Header -->
+            <div class="dept-header">
+                <h1><i class="fas fa-cogs"></i> Mechanical Engineering</h1>
+                <p>Master Thermodynamics, Machine Design, Manufacturing Processes, and Industrial Engineering</p>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <h2>Your Progress</h2>
+                    <p>Track your learning journey across different topics</p>
+                </div>
+                <div class="progress-stats">
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 216deg;">
+                            <div class="progress-value">60%</div>
+                        </div>
+                        <h3>Thermodynamics</h3>
+                        <p>36/60 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 180deg;">
+                            <div class="progress-value">50%</div>
+                        </div>
+                        <h3>Machine Design</h3>
+                        <p>25/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 252deg;">
+                            <div class="progress-value">70%</div>
+                        </div>
+                        <h3>Manufacturing</h3>
+                        <p>35/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: 144deg;">
+                            <div class="progress-value">40%</div>
+                        </div>
+                        <h3>Industrial Engg</h3>
+                        <p>16/40 Topics Covered</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories">
+                <div class="category-card" onclick="showContent('thermo')">
+                    <div class="category-icon">
+                        <i class="fas fa-temperature-high"></i>
+                    </div>
+                    <h3>Thermodynamics</h3>
+                    <p>Laws of Thermodynamics, Heat Transfer, Power Cycles, and Fluid Mechanics</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">250+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">36</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.5/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('machine-design')">
+                    <div class="category-icon">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <h3>Machine Design</h3>
+                    <p>Mechanical Elements, CAD, Stress Analysis, and Mechanisms</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">200+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">25</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">7.9/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('manufacturing')">
+                    <div class="category-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <h3>Manufacturing Processes</h3>
+                    <p>Machining, Casting, Welding, and Advanced Manufacturing</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">180+</div>
+                            <div>Topics</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">35</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.8/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('industrial')">
+                    <div class="category-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Industrial Engineering</h3>
+                    <p>Production Planning, Quality Control, Operations Research</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">150+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">16</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">7.8/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('automation')">
+                    <div class="category-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Automation & Robotics</h3>
+                    <p>Industrial Automation, Robotics, CNC Programming</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">120+</div>
+                            <div>Problems</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">18</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.2/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card" onclick="showContent('interview')">
+                    <div class="category-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Interview Preparation</h3>
+                    <p>Technical interviews, Core concepts, and Company-specific questions</p>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-number">200+</div>
+                            <div>Questions</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">42</div>
+                            <div>Completed</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">8.4/10</div>
+                            <div>Avg Score</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="thermo-content" class="content-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Thermodynamics</h2>
+                        <p class="section-subtitle">Master the fundamentals of thermal systems and energy conversion</p>
+                    </div>
+                </div>
+                
+                <div class="filter-tabs">
+                    <div class="filter-tab active" onclick="filterQuestions('all')">All</div>
+                    <div class="filter-tab" onclick="filterQuestions('heat-transfer')">Heat Transfer</div>
+                    <div class="filter-tab" onclick="filterQuestions('power-cycles')">Power Cycles</div>
+                    <div class="filter-tab" onclick="filterQuestions('fluid-mechanics')">Fluid Mechanics</div>
+                    <div class="filter-tab" onclick="filterQuestions('refrigeration')">Refrigeration</div>
+                </div>
+
+                <div class="topics-list">
+                    <div class="topic-item" data-category="power-cycles" onclick="openQuestion('rankine-cycle')">
+                        <div class="topic-header">
+                            <h3>Rankine Cycle Analysis</h3>
+                            <div class="topic-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 82%;"></div>
+                                </div>
+                                <div class="topic-status">82% Solved</div>
+                            </div>
+                        </div>
+                        <div class="topic-content">
+                            <h4>Thermodynamics</h4>
+                            <p>Thermodynamics is the study of energy and its transformations. It is a fundamental science that has applications in various fields, including engineering, physics, chemistry, and biology.</p>
+                            <p>The Rankine cycle is a thermodynamic cycle that describes the process of converting heat into work. It is used in steam power plants to generate electricity.</p>
+                            <p>Key concepts: Heat, Work, Thermodynamic Systems, and Energy Conversion.</p>
+                            </div>
+                        <button class="btn" onclick="toggleComplete('power-cycles', 'rankine-cycle')">
+                            <i class="fas fa-check"></i>
+                            Mark as Complete
+                        </button>
+                    </div>
+
+                    <div class="topic-item" data-category="heat-transfer" onclick="openQuestion('heat-exchanger')">
+                        <div class="topic-header">
+                            <h3>Heat Exchanger Design</h3>
+                            <div class="topic-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 68%;"></div>
+                                </div>
+                                <div class="topic-status">68% Solved</div>
+                            </div>
+                        </div>
+                        <div class="topic-content">
+                            <h4>Heat Transfer</h4>
+                            <p>Heat transfer is the movement of thermal energy from one object or medium to another. It is a crucial aspect of thermodynamics and has applications in various fields, including engineering, physics, and chemistry.</p>
+                            <p>Heat exchangers are devices used to transfer heat between two fluids. They are widely used in industries such as power generation, chemical processing, and refrigeration.</p>
+                            <p>Key concepts: Heat, Temperature, Thermal Conductivity, Convection, and Conduction.</p>
+                            </div>
+                        <button class="btn" onclick="toggleComplete('heat-transfer', 'heat-exchanger')">
+                            <i class="fas fa-check"></i>
+                            Mark as Complete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Question Title</h2>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody">
+                <!-- Question content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the external JavaScript file -->
+    <script src="js/mechanical_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            // Function to set theme
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else {
+                setTheme('dark'); // Default to dark theme
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+
+            // Initialize the page
+            initializePage();
+        });
+
+        function initializePage() {
+            loadProgress();
+            initializeCategoriesAndContent();
+            // Show thermodynamics content by default
+            showContent('thermo');
+        }
+
+        function showContent(category) {
+            // Hide all content sections first
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const contentSection = document.getElementById(`${category}-content`);
+            if (!contentSection) {
+                // Create content section if it doesn't exist
+                const categoryData = mechanicalTopicsData[category];
+                if (!categoryData) return;
+
+                const container = document.querySelector('.container');
+                const newSection = document.createElement('div');
+                newSection.id = `${category}-content`;
+                newSection.className = 'content-section';
+
+                let topicsHTML = '';
+                categoryData.topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item ${topic.completed ? 'completed' : ''}" data-id="${topic.id}">
+                            <div class="topic-header">
+                                <h3>${topic.name}</h3>
+                                <div class="topic-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${topic.completed ? '100%' : '0%'}"></div>
+                                    </div>
+                                    <div class="topic-status ${topic.completed ? 'completed' : ''}">
+                                        <i class="${topic.completed ? 'fas fa-check-circle' : 'fas fa-circle'}"></i>
+                                        <span>${topic.completed ? 'Completed' : 'In Progress'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topic-content">
+                                ${topic.notes}
+                            </div>
+                            <button class="btn ${topic.completed ? 'completed' : ''}" 
+                                    onclick="toggleComplete('${category}', '${topic.id}')">
+                                ${topic.completed ? '✓ Completed' : 'Mark as Complete'}
+                            </button>
+                        </div>
+                    `;
+                });
+
+                newSection.innerHTML = `
+                    <div class="section-header">
+                        <h2 class="section-title">${categoryData.title}</h2>
+                        <p class="section-subtitle">Master key concepts and practice questions</p>
+                    </div>
+                    <div class="topics-list">
+                        ${topicsHTML}
+                    </div>
+                `;
+
+                container.appendChild(newSection);
+                contentSection = newSection;
+            }
+
+            // Show the selected content section
+            contentSection.style.display = 'block';
+            contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleComplete(category, topicId) {
+            const topic = mechanicalTopicsData[category].topics.find(t => t.id === topicId);
+            if (topic) {
+                topic.completed = !topic.completed;
+                saveProgress();
+                
+                // Update UI
+                const topicElement = document.querySelector(`[data-id="${topicId}"]`);
+                if (topicElement) {
+                    topicElement.classList.toggle('completed');
+                    
+                    // Update button
+                    const button = topicElement.querySelector('.btn');
+                    button.classList.toggle('completed');
+                    button.textContent = topic.completed ? '✓ Completed' : 'Mark as Complete';
+                    
+                    // Update progress bar and status
+                    const progressFill = topicElement.querySelector('.progress-fill');
+                    progressFill.style.width = topic.completed ? '100%' : '0%';
+                    
+                    const statusDiv = topicElement.querySelector('.topic-status');
+                    statusDiv.classList.toggle('completed');
+                    statusDiv.querySelector('i').className = topic.completed ? 'fas fa-check-circle' : 'fas fa-circle';
+                    statusDiv.querySelector('span').textContent = topic.completed ? 'Completed' : 'In Progress';
+                }
+                
+                // Update overall progress
+                initializeCategoriesAndContent();
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('mechanicalProgress');
+            if (savedProgress) {
+                try {
+                    const progress = JSON.parse(savedProgress);
+                    for (const category in progress) {
+                        if (mechanicalTopicsData[category]) {
+                            mechanicalTopicsData[category].topics.forEach(topic => {
+                                const savedTopic = progress[category].topics.find(t => t.id === topic.id);
+                                if (savedTopic) {
+                                    topic.completed = savedTopic.completed;
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading progress:', e);
+                }
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('mechanicalProgress', JSON.stringify(mechanicalTopicsData));
+        }
+
+        function initializeCategoriesAndContent() {
+            const progressStats = document.querySelector('.progress-stats');
+            const categories = document.querySelector('.categories');
+
+            // Clear existing content
+            progressStats.innerHTML = '';
+            categories.innerHTML = '';
+
+            // Initialize progress stats and categories
+            for (const [key, category] of Object.entries(mechanicalTopicsData)) {
+                const completedTopics = category.topics.filter(topic => topic.completed).length;
+                const totalTopics = category.topics.length;
+                const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
+                progressStats.innerHTML += `
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: ${progressPercentage * 3.6}deg;">
+                            <div class="progress-value">${progressPercentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>${completedTopics}/${totalTopics} Topics Covered</p>
+                    </div>
+                `;
+
+                categories.innerHTML += `
+                    <div class="category-card" onclick="showContent('${key}')">
+                        <div class="category-icon">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>Master key concepts and practice questions</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${totalTopics}</div>
+                                <div>Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${completedTopics}</div>
+                                <div>Completed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${progressPercentage}%</div>
+                                <div>Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Filter questions
+        function filterQuestions(category) {
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            const questions = document.querySelectorAll('.question-item');
+            questions.forEach(question => {
+                if (category === 'all' || question.dataset.category === category) {
+                    question.style.display = 'block';
+                    question.style.animation = 'slideIn 0.3s ease-out';
+                } else {
+                    question.style.display = 'none';
+                }
+            });
+        }
+
+        // Open question modal
+        function openQuestion(questionId) {
+            const modal = document.getElementById('questionModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+
+            const question = questionsData[questionId];
+            if (!question) return;
+
+            title.textContent = question.title;
+            
+            let bodyContent = `
+                <div class="question-content">
+                    <div class="question-description">
+                        <h3>Problem Description</h3>
+                        <p>${question.description}</p>
+                    </div>
+                    
+                    <div class="question-examples">
+                        <h3>Examples</h3>
+                        ${question.examples.map(example => `
+                            <div class="example">
+                                <p><strong>Input:</strong> ${example.input}</p>
+                                <p><strong>Output:</strong> ${example.output}</p>
+                                <p><strong>Explanation:</strong> ${example.explanation}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <div class="editor-tabs">
+                                <div class="editor-tab active">Solution</div>
+                                <div class="editor-tab">Test Cases</div>
+                            </div>
+                            <button class="run-button" onclick="runCode()">Run Code</button>
+                        </div>
+                        <div class="editor-content">
+                            <textarea class="code-textarea" spellcheck="false">${question.code}</textarea>
+                        </div>
+                        <div class="output-section">
+                            <div class="output-header">Output</div>
+                            <div class="output-content" id="codeOutput">// Code output will appear here</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            body.innerHTML = bodyContent;
+            modal.style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('questionModal').style.display = 'none';
+        }
+
+        // Run code (mock implementation)
+        function runCode() {
+            const output = document.getElementById('codeOutput');
+            output.innerHTML = '// Running code...\n// This is a mock implementation.\n// In a real application, this would compile and run your code.';
+            
+            setTimeout(() => {
+                output.innerHTML += '\n// Code execution completed!';
+            }, 1500);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('questionModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Add this function for toggling notes
+        function toggleNotes(notesId) {
+            const notesElement = document.getElementById(notesId);
+            if (notesElement.style.display === 'none') {
+                notesElement.style.display = 'block';
+            } else {
+                notesElement.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 

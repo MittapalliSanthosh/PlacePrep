@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- The 'light-mode' class will be added here by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemical Engineering - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet" id="prism-theme-link">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ======== SHARED THEME VARIABLES (Same as placement_website.html) ======== */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card: #101010;
+            --bg-card-hover: #151515;
+            --bg-card-alt: #0D0D0D;
+            --bg-footer: #0A0A0A; 
+            --bg-theme-toggle-hover: #222222;
+            --bg-tab-active: var(--accent-primary); 
+            --bg-tab-inactive: #181818;
+            --bg-modal: rgba(16, 16, 16, 0.95); 
+            --bg-code-editor: #1E1E1E; 
+            --bg-code-output: #0D1117;
+            --bg-code-output-content: #161B22;
+            --prism-theme-path: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css';
+
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-headings: #FFFFFF;
+            --text-logo: #FFFFFF; 
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-btn: #E0E0E0;
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+            --text-tab-active: #FFFFFF;
+            --text-tab-inactive: #A0A0A0;
+            --text-code: #D4D4D4; 
+            --text-accent-gradient-end: #5A78F6; 
+
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn: #444444;
+            --border-btn-accent: var(--accent-primary);
+            --border-theme-toggle: #444444;
+            --border-tab: #282828;
+            --border-modal: #303030;
+            --border-code-editor: #303030;
+
+
+            --accent-primary: #F97316; 
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #4ecdc4; 
+            --accent-secondary-hover: #44a08d;
+            --accent-progress: var(--accent-primary);
+
+
+            --gradient-highlight-start: #A755F7; 
+            --gradient-highlight-end: var(--text-accent-gradient-end); 
+
+            --icon-default: #A0A0A0;
+            --icon-accent: var(--accent-secondary); 
+            
+            --shadow-card: 0 6px 12px rgba(0,0,0,0.25); 
+            --shadow-card-hover: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F1F3F5;
+            --bg-card-alt: #F8F9FA;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+            --bg-tab-active: var(--accent-primary);
+            --bg-tab-inactive: #FFFFFF;
+            --bg-modal: rgba(248, 249, 250, 0.98); 
+            --bg-code-editor: #F8F9FA; /* Light theme for code editor parts */
+            --bg-code-output: #E9ECEF;
+            --bg-code-output-content: #FFFFFF;
+            --prism-theme-path: 'https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css';
+
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-headings: #212529;
+            --text-logo: var(--accent-primary); 
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-btn: var(--accent-primary);
+            --text-btn-accent: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-theme-toggle: #495057;
+            --text-tab-active: #FFFFFF;
+            --text-tab-inactive: #495057;
+            --text-code: #333333; /* Darker code text for light bg */
+            --text-accent-gradient-end: #4A62D6;
+
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn: var(--accent-primary);
+            --border-btn-accent: var(--accent-primary);
+            --border-theme-toggle: #CED4DA;
+            --border-tab: #CED4DA;
+            --border-modal: #CED4DA;
+            --border-code-editor: #DEE2E6;
+
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-secondary: #00796b; 
+            --accent-secondary-hover: #004d40;
+            --accent-progress: var(--accent-primary);
+
+
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: var(--text-accent-gradient-end);   
+
+            --icon-default: #6C757D;
+            --icon-accent: var(--accent-secondary);
+
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.07);
+            --shadow-card-hover: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif; 
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.65;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000; padding: 1rem 0;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        html[data-page-scrolled="true"] .navbar {
+             background: var(--bg-navbar-scrolled);
+        }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+        .logo {
+            font-size: 2.2rem; font-weight: 800;
+            color: var(--text-logo); text-decoration: none;
+            transition: color 0.3s ease; 
+        }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a {
+            color: var(--text-nav-link); text-decoration: none;
+            font-weight: 500; transition: color 0.3s ease;
+            position: relative; padding-bottom: 5px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-nav-link-hover); }
+        .nav-links a.active::after {
+            content: ''; position: absolute; width: 100%; height: 2px;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+        }
+         .nav-links a:not(.active):hover::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            transition: width 0.3s ease; width: 100%;
+        }
+        .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
+        .theme-toggle-btn {
+            background: transparent; color: var(--text-theme-toggle);
+            border: 1.5px solid var(--border-theme-toggle); padding: 0.5rem 0.8rem; 
+            border-radius: 8px; cursor: pointer; font-size: 1rem; 
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); }
+
+        .main-content { margin-top: 80px; padding: 2.5rem 0; } 
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+        .dept-header {
+            text-align: center; margin-bottom: 3rem; padding: 2.5rem 1rem;
+            background: var(--bg-secondary); 
+            border-radius: 12px; border: 1px solid var(--border-primary);
+            box-shadow: var(--shadow-card);
+        }
+        .dept-header h1 {
+            font-size: 2.5rem; margin-bottom: 1rem; 
+            color: var(--text-headings);
+        }
+        .dept-header h1 i { margin-right: 0.5rem; color: var(--icon-accent); }
+        .dept-header p { font-size: 1.1rem; color: var(--text-secondary); opacity: 1; }
+
+        .card-base { 
+            background: var(--bg-card); border: 1px solid var(--border-secondary);
+            border-radius: 12px; padding: 1.5rem;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-base:hover { transform: translateY(-4px); box-shadow: var(--shadow-card-hover); }
+
+        .section-heading {
+            font-size: 1.8rem; color: var(--text-headings); margin-bottom: 1.5rem;
+            text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-primary);
+        }
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .category-card { 
+            text-align: center; cursor: pointer;
+             background: var(--bg-card); border: 1px solid var(--border-secondary);
+             border-radius: 12px; padding: 2rem;
+             box-shadow: var(--shadow-card);
+        }
+         .category-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-card-hover); border-color: var(--icon-accent); }
+        .category-icon { font-size: 2.5rem; margin-bottom: 1rem; color: var(--icon-accent); }
+        .category-card h3 { font-size: 1.4rem; margin-bottom: 0.75rem; color: var(--text-headings); }
+        .category-card p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .category-stats { display: flex; justify-content: space-around; margin-top: 1rem; font-size: 0.85rem; border-top: 1px solid var(--border-primary); padding-top: 1rem;}
+        .stat { text-align: center; color: var(--text-muted);}
+        .stat-number { font-weight: 600; color: var(--text-primary); display:block; font-size: 1.1rem; }
+
+        .progress-section { margin-bottom: 2.5rem; padding: 2rem; background-color: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--border-primary); }
+        .progress-header { text-align: center; margin-bottom: 2rem; }
+        .progress-header h2 { font-size: 1.6rem; color: var(--text-headings); margin-bottom: 0.4rem; }
+        .progress-header p { color: var(--text-secondary); font-size: 1rem; }
+        .progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+        .progress-item { text-align: center; background: var(--bg-card-alt); }
+        .progress-circle {
+            width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; position: relative;
+            display: grid; place-items: center;
+            background: conic-gradient(var(--accent-progress) var(--progress, 0deg), var(--border-primary) var(--progress, 0deg));
+        }
+        .progress-circle::before {
+            content: ''; position: absolute; width: 80px; height: 80px;
+            background: var(--bg-card-alt); border-radius: 50%;
+        }
+        .progress-value { font-size: 1.5rem; font-weight: 600; color: var(--text-headings); z-index: 1; }
+        .progress-item h3 { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.3rem; }
+        .progress-item p { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .content-section { 
+            display: none; padding: 2rem; background-color: var(--bg-secondary); 
+            border: 1px solid var(--border-primary); border-radius: 12px; margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-card);
+        }
+        .content-section.active { display: block; animation: fadeInUp 0.4s ease-out; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap;}
+        .section-title { font-size: 1.8rem; color: var(--text-headings); margin-bottom: 0.25rem;}
+        .section-subtitle { color: var(--text-secondary); font-size: 1rem; }
+
+        .filter-tabs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .filter-tab {
+            padding: 0.6rem 1.2rem; background: var(--bg-card-alt);
+            border: 1px solid var(--border-secondary); border-radius: 20px;
+            color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; font-size: 0.85rem;
+        }
+        .filter-tab.active, .filter-tab:hover { background: var(--accent-secondary); border-color: var(--accent-secondary-hover); color: white; }
+        html.light-mode .filter-tab.active, html.light-mode .filter-tab:hover { color: white; }
+
+        .questions-list { display: grid; gap: 1rem; }
+        .question-item { padding: 1.25rem; cursor: pointer; background: var(--bg-card); border: 1px solid var(--border-secondary); border-radius: 10px; }
+        .question-item:hover { border-color: var(--accent-secondary); transform: translateX(3px); }
+        .question-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+        .question-title { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.3rem;}
+        .question-difficulty { padding: 0.25rem 0.7rem; border-radius: 15px; font-size: 0.75rem; font-weight: 500; border: 1px solid;}
+        .difficulty-easy { background-color: rgba(46, 213, 115, 0.1); color: #2ecc71; border-color: #2ecc71;}
+        .difficulty-medium { background-color: rgba(255, 165, 0, 0.1); color: #ffa500; border-color: #ffa500;}
+        .difficulty-hard { background-color: rgba(231, 76, 60, 0.1); color: #e74c3c; border-color: #e74c3c;}
+        .question-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+        .tag { background: var(--bg-card-alt); color: var(--accent-secondary); padding: 0.25rem 0.6rem; border-radius: 12px; font-size: 0.75rem; border: 1px solid var(--accent-secondary); }
+        .question-stats { display: flex; gap: 1rem; font-size: 0.85rem; color: var(--text-muted); }
+        .stat-item { display: flex; align-items: center; gap: 0.3rem; }
+        .stat-item i {font-size: 0.8rem;}
+
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: var(--bg-modal); border: 1px solid var(--border-modal); border-radius: 12px; padding: 2rem;
+            width: 90%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-secondary);
+        }
+        #modalTitle { color: var(--text-headings); font-size: 1.5rem;}
+        .close-modal { background: none; border: none; color: var(--text-muted); font-size: 1.8rem; cursor: pointer; transition: color 0.3s ease; }
+        .close-modal:hover { color: var(--accent-secondary); }
+
+        .code-editor { background: var(--bg-code-editor); border-radius: 8px; margin: 1.5rem 0; overflow: hidden; border: 1px solid var(--border-code-editor); }
+        .editor-header { background: var(--bg-card-alt); padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-code-editor); }
+        .editor-tabs { display: flex; gap: 0.5rem; }
+        .editor-tab {
+            padding: 0.4rem 0.8rem; background: var(--bg-card); border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.3s ease; color: var(--text-secondary); border: 1px solid var(--border-secondary);
+        }
+        .editor-tab.active, .editor-tab:hover { background: var(--accent-secondary); color: white; border-color: var(--accent-secondary-hover); }
+        .run-button {
+            background: var(--accent-primary); color: white; border: none; padding: 0.6rem 1.2rem;
+            border-radius: 6px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; font-size: 0.9rem;
+        }
+        .run-button:hover { background: var(--accent-primary-hover); transform: translateY(-1px); }
+        .editor-content { padding: 0; background: var(--bg-code-editor); } 
+        .code-editor pre[class*="language-"] {
+            background: transparent !important; border: none; padding: 1em; margin:0; color: var(--text-code);
+            border-radius: 0 0 7px 7px; 
+            font-size: 14px; line-height: 1.5;
+        }
+        .code-textarea { /* Not actively used if Prism takes over <pre> */
+             width: 100%; min-height: 200px; background: transparent; border: none;
+             color: var(--text-code); font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+             font-size: 14px; line-height: 1.5; resize: vertical; outline: none; padding: 1em;
+        }
+
+        .output-section { background: var(--bg-code-output); padding: 1rem; border-top: 1px solid var(--border-code-editor); }
+        .output-header { font-weight: 600; margin-bottom: 0.5rem; color: var(--accent-secondary); }
+        .output-content {
+            background: var(--bg-code-output-content); padding: 1rem; border-radius: 5px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 0.9rem; white-space: pre-wrap; min-height: 60px; color: var(--text-secondary);
+        }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-right-controls { gap: 0.5rem; } 
+            .container { padding: 0 1rem; }
+            .dept-header h1 { font-size: 2rem; }
+            .dept-header h1::after { width: 70px; bottom: -10px; }
+            .dept-header p { font-size: 1rem; }
+            .categories, .progress-stats { grid-template-columns: 1fr; }
+            .filter-tabs, .question-stats { justify-content: center; }
+            .section-heading, .section-title {font-size: 1.5rem;}
+            .question-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .modal-content { width: 95%; padding: 1.5rem; }
+            .editor-header {flex-direction: column; gap: 0.5rem;}
+        }
+
+        /* Enhanced Topics List Styling */
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .topic-item {
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topic-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        .topic-item.completed {
+            border-color: #22c55e;
+            background: var(--bg-card-dark);
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .topic-header h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            flex: 1;
+        }
+
+        .topic-item.completed .topic-header h3 {
+            color: #22c55e;
+        }
+
+        .topic-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 120px;
+        }
+
+        .progress-bar {
+            width: 60px;
+            height: 6px;
+            background: var(--border-primary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-primary);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .topic-item.completed .progress-fill {
+            background: #22c55e;
+        }
+
+        .topic-status {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .topic-status.completed {
+            color: #22c55e;
+        }
+
+        .topic-content {
+            flex: 1;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-content h4 {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            margin: 1rem 0 0.5rem;
+            font-weight: 600;
+        }
+
+        .topic-content ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0.5rem 0;
+        }
+
+        .topic-content li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .topic-content li:before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .topic-item.completed .topic-content li:before {
+            color: #22c55e;
+        }
+
+        /* Enhanced Button Styling */
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: var(--accent-primary);
+            color: var(--text-on-accent);
+            margin-top: auto;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn.completed {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn.completed:hover {
+            background: #dc2626;
+        }
+
+        .btn.completed:hover::before {
+            content: "Undo ";
+        }
+
+        /* Topic Animation */
+        @keyframes completeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .topic-item.completed {
+            animation: completeAnimation 0.5s ease;
+        }
+
+        /* Section Header Enhancement */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-card-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border-secondary);
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Content Section Enhancement */
+        .content-section {
+            animation: fadeIn 0.3s ease-out;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-primary);
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .topics-list {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-header {
+                flex-direction: column;
+            }
+
+            .topic-progress {
+                margin-top: 1rem;
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .progress-bar {
+                width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="#" class="active">Chemical Engineering</a></li>
+                <li><a href="#progress">Progress</a></li>
+                <li><a href="#unit-operations-content">Topics</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="dept-header">
+                <h1><i class="fas fa-flask"></i> Chemical Engineering</h1>
+                <p>Master Process Engineering, Thermodynamics, Reaction Kinetics, and Plant Design</p>
+            </div>
+
+            <div id="progress" class="progress-section">
+                <div class="progress-header">
+                    <h2>Your Learning Progress</h2>
+                    <p>Track your journey across different Chemical Engineering topics</p>
+                </div>
+                <div class="progress-stats">
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 252deg;"><div class="progress-value">70%</div></div>
+                        <h3>Unit Operations</h3><p>35/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 180deg;"><div class="progress-value">50%</div></div>
+                        <h3>Thermodynamics</h3><p>25/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 216deg;"><div class="progress-value">60%</div></div>
+                        <h3>Reaction Engg</h3><p>30/50 Topics Covered</p>
+                    </div>
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: 144deg;"><div class="progress-value">40%</div></div>
+                        <h3>Process Control</h3><p>16/40 Topics Covered</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-heading">Explore Topics</h2>
+            <div class="categories">
+                <div class="category-card" onclick="showContent('unit-operations')">
+                    <div class="category-icon"><i class="fas fa-industry"></i></div>
+                    <h3>Unit Operations</h3><p>Fluid Flow, Heat Transfer, Mass Transfer, Separation Processes</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">250+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">35</div>Completed</div>
+                        <div class="stat"><div class="stat-number">8.5/10</div>Avg Score</div>
+                    </div>
+                </div>
+                <div class="category-card" onclick="showContent('thermodynamics')">
+                    <div class="category-icon"><i class="fas fa-temperature-high"></i></div>
+                    <h3>Chemical Thermodynamics</h3><p>Phase Equilibria, Solution Thermodynamics, Chemical Equilibrium</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">180+</div>Topics</div>
+                        <div class="stat"><div class="stat-number">25</div>Completed</div>
+                        <div class="stat"><div class="stat-number">7.9/10</div>Avg Score</div>
+                    </div>
+                </div>
+                <div class="category-card" onclick="showContent('reaction')">
+                    <div class="category-icon"><i class="fas fa-atom"></i></div>
+                    <h3>Reaction Engineering</h3><p>Kinetics, Reactor Design, Catalysis, Biochemical Reactions</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">200+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">30</div>Completed</div>
+                        <div class="stat"><div class="stat-number">8.2/10</div>Avg Score</div>
+                    </div>
+                </div>
+                <div class="category-card" onclick="showContent('process-control')">
+                    <div class="category-icon"><i class="fas fa-sliders-h"></i></div>
+                    <h3>Process Control</h3><p>Instrumentation, Control Systems, Process Dynamics</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">150+</div>Problems</div>
+                        <div class="stat"><div class="stat-number">16</div>Completed</div>
+                        <div class="stat"><div class="stat-number">8.0/10</div>Avg Score</div>
+                    </div>
+                </div>
+                 <div class="category-card" onclick="showContent('plant-design')">
+                    <div class="category-icon"><i class="fas fa-drafting-compass"></i></div>
+                    <h3>Plant Design & Economics</h3><p>Process Design, Equipment Selection, Safety, Economics Analysis</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">120+</div>Topics</div>
+                        <div class="stat"><div class="stat-number">18</div>Completed</div>
+                        <div class="stat"><div class="stat-number">8.4/10</div>Avg Score</div>
+                    </div>
+                </div>
+                <div class="category-card" onclick="showContent('interview')">
+                    <div class="category-icon"><i class="fas fa-comments"></i></div>
+                    <h3>Interview Hub</h3><p>Technical Q&A, Core Concepts, Company-specific Insights</p>
+                    <div class="category-stats">
+                        <div class="stat"><div class="stat-number">200+</div>Questions</div>
+                        <div class="stat"><div class="stat-number">35</div>Practiced</div>
+                        <div class="stat"><div class="stat-number">8.3/10</div>Avg Rating</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="unit-operations-content" class="content-section">
+                <div class="section-header">
+                    <div><h2 class="section-title">Unit Operations Questions</h2><p class="section-subtitle">Test your knowledge on core unit operations.</p></div>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterQuestions(this, 'all', 'unit-operations-content')">All</button>
+                    <button class="filter-tab" onclick="filterQuestions(this, 'fluid-flow', 'unit-operations-content')">Fluid Flow</button>
+                    <button class="filter-tab" onclick="filterQuestions(this, 'heat-transfer', 'unit-operations-content')">Heat Transfer</button>
+                    <button class="filter-tab" onclick="filterQuestions(this, 'mass-transfer', 'unit-operations-content')">Mass Transfer</button>
+                </div>
+                <div class="questions-list">
+                    <div class="question-item card-base" data-category="heat-transfer" onclick="openQuestion('heat-exchanger')">
+                        <div class="question-header">
+                            <div><div class="question-title">Shell and Tube Heat Exchanger Sizing</div><div class="question-tags"><span class="tag">Heat Transfer</span><span class="tag">Design</span></div></div>
+                            <div class="question-difficulty difficulty-medium">Medium</div>
+                        </div>
+                        <div class="question-stats"><div class="stat-item"><i class="fas fa-thumbs-up"></i> 945</div><div class="stat-item"><i class="fas fa-check-circle"></i> 82% Solved</div></div>
+                    </div>
+                    <div class="question-item card-base" data-category="mass-transfer" onclick="openQuestion('distillation')">
+                        <div class="question-header">
+                            <div><div class="question-title">Binary Distillation Column Analysis</div><div class="question-tags"><span class="tag">Mass Transfer</span><span class="tag">Separation</span></div></div>
+                            <div class="question-difficulty difficulty-hard">Hard</div>
+                        </div>
+                        <div class="question-stats"><div class="stat-item"><i class="fas fa-thumbs-up"></i> 834</div><div class="stat-item"><i class="fas fa-check-circle"></i> 68% Solved</div></div>
+                    </div>
+                </div>
+            </div>
+             <div id="thermodynamics-content" class="content-section">
+                <h2 class="section-title">Chemical Thermodynamics</h2> <p class="section-subtitle">Explore questions related to thermodynamic principles and applications.</p>
+                 <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterQuestions(this, 'all', 'thermodynamics-content')">All</button>
+                    <button class="filter-tab" onclick="filterQuestions(this, 'phase-equilibria', 'thermodynamics-content')">Phase Equilibria</button>
+                </div>
+                 <div class="questions-list">
+                    <div class="question-item card-base" data-category="phase-equilibria" onclick="openQuestion('placeholder-thermo')">
+                        <div class="question-header">
+                            <div><div class="question-title">Vapor-Liquid Equilibrium Calculation</div><div class="question-tags"><span class="tag">Phase Equilibria</span></div></div>
+                            <div class="question-difficulty difficulty-medium">Medium</div>
+                        </div>
+                         <div class="question-stats"><div class="stat-item"><i class="fas fa-thumbs-up"></i> 500</div></div>
+                    </div>
+                </div>
+            </div>
+            <div id="reaction-content" class="content-section"><h2 class="section-title">Reaction Engineering Content</h2><p>Content for Reaction Engineering will appear here.</p></div>
+            <div id="process-control-content" class="content-section"><h2 class="section-title">Process Control Content</h2><p>Content for Process Control will appear here.</p></div>
+            <div id="plant-design-content" class="content-section"><h2 class="section-title">Plant Design & Economics Content</h2><p>Content for Plant Design & Economics will appear here.</p></div>
+            <div id="interview-content" class="content-section"><h2 class="section-title">Interview Hub Content</h2><p>Content for Interview Preparation will appear here.</p></div>
+        </div>
+    </div>
+
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2 id="modalTitle"></h2><button class="close-modal" onclick="closeModal()">×</button></div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-cpp.min.js"></script>
+
+    <!-- Include the external JavaScript file -->
+    <script src="js/chemical_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            // Function to set theme
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else {
+                setTheme('dark'); // Default to dark theme
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+            
+            // Initialize the page
+            initializePage();
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                document.documentElement.setAttribute('data-scrolled', window.scrollY > 30 ? 'true' : 'false');
+            });
+        });
+
+        function initializePage() {
+            loadProgress();
+            initializeCategoriesAndContent();
+        }
+
+        function initializeCategoriesAndContent() {
+            const progressStats = document.querySelector('.progress-stats');
+            const categories = document.querySelector('.categories');
+
+            // Clear existing content
+            progressStats.innerHTML = '';
+            categories.innerHTML = '';
+
+            // Initialize progress stats
+            for (const [key, category] of Object.entries(chemicalTopicsData)) {
+                const completedTopics = category.topics.filter(topic => topic.completed).length;
+                const totalTopics = category.topics.length;
+                const progressPercentage = Math.round((completedTopics / totalTopics) * 100);
+
+                progressStats.innerHTML += `
+                    <div class="progress-item">
+                        <div class="progress-circle" style="--progress: ${progressPercentage * 3.6}deg;">
+                            <div class="progress-value">${progressPercentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>${completedTopics}/${totalTopics} Topics Covered</p>
+                    </div>
+                `;
+
+                // Add category cards
+                categories.innerHTML += `
+                    <div class="category-card" onclick="showContent('${key}')">
+                        <div class="category-icon">
+                            <i class="${category.icon}"></i>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p>Master key concepts and practice questions</p>
+                        <div class="category-stats">
+                            <div class="stat">
+                                <div class="stat-number">${totalTopics}</div>
+                                <div>Topics</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${completedTopics}</div>
+                                <div>Completed</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${progressPercentage}%</div>
+                                <div>Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('chemicalProgress');
+            if (savedProgress) {
+                try {
+                    const progress = JSON.parse(savedProgress);
+                    for (const category in progress) {
+                        if (chemicalTopicsData[category]) {
+                            chemicalTopicsData[category].topics.forEach(topic => {
+                                const savedTopic = progress[category].topics.find(t => t.id === topic.id);
+                                if (savedTopic) {
+                                    topic.completed = savedTopic.completed;
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading progress:', e);
+                }
+            }
+        }
+
+        function saveProgress() {
+            localStorage.setItem('chemicalProgress', JSON.stringify(chemicalTopicsData));
+        }
+
+        function showContent(category) {
+            const contentSection = document.getElementById(`${category}-content`);
+            if (!contentSection) {
+                // Create content section if it doesn't exist
+                const categoryData = chemicalTopicsData[category];
+                const container = document.createElement('div');
+                container.id = `${category}-content`;
+                container.className = 'content-section';
+                
+                let topicsHTML = '';
+                categoryData.topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item ${topic.completed ? 'completed' : ''}" data-id="${topic.id}">
+                            <div class="topic-header">
+                                <h3>${topic.name}</h3>
+                                <div class="topic-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: ${topic.completed ? '100%' : '0%'}"></div>
+                                    </div>
+                                    <div class="topic-status ${topic.completed ? 'completed' : ''}">
+                                        <i class="${topic.completed ? 'fas fa-check-circle' : 'fas fa-circle'}"></i>
+                                        <span>${topic.completed ? 'Completed' : 'In Progress'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="topic-content">
+                                ${topic.notes}
+                            </div>
+                            <button class="btn ${topic.completed ? 'completed' : ''}" 
+                                    onclick="toggleComplete('${category}', '${topic.id}')">
+                                ${topic.completed ? '✓ Completed' : 'Mark as Complete'}
+                            </button>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = `
+                    <div class="section-header">
+                        <h2>${categoryData.title}</h2>
+                        <p>Master these topics to excel in your preparation</p>
+                    </div>
+                    <div class="topics-list">
+                        ${topicsHTML}
+                    </div>
+                `;
+
+                document.querySelector('.container').appendChild(container);
+            }
+
+            // Hide all content sections and show the selected one
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            contentSection.style.display = 'block';
+            
+            // Scroll to the content section
+            contentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function toggleComplete(category, topicId) {
+            const topic = chemicalTopicsData[category].topics.find(t => t.id === topicId);
+            if (topic) {
+                topic.completed = !topic.completed; // Toggle completion status
+                saveProgress();
+                
+                // Update UI
+                const topicElement = document.querySelector(`[data-id="${topicId}"]`);
+                if (topicElement) {
+                    // Toggle completed class
+                    topicElement.classList.toggle('completed');
+                    if (!topic.completed) {
+                        topicElement.classList.add('undo');
+                        setTimeout(() => topicElement.classList.remove('undo'), 500);
+                    }
+
+                    // Update button
+                    const button = topicElement.querySelector('.btn');
+                    button.classList.toggle('completed');
+                    button.textContent = topic.completed ? '✓ Completed' : 'Mark as Complete';
+                    
+                    // Update progress bar
+                    const progressFill = topicElement.querySelector('.progress-fill');
+                    progressFill.style.width = topic.completed ? '100%' : '0%';
+                    
+                    // Update status
+                    const statusDiv = topicElement.querySelector('.topic-status');
+                    statusDiv.classList.toggle('completed');
+                    statusDiv.querySelector('i').className = topic.completed ? 'fas fa-check-circle' : 'fas fa-circle';
+                    statusDiv.querySelector('span').textContent = topic.completed ? 'Completed' : 'In Progress';
+                }
+                
+                // Update overall progress
+                initializeCategoriesAndContent();
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('questionModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

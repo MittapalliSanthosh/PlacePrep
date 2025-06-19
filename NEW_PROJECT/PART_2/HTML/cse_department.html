@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSE Department - PlacePrep</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ======== THEME VARIABLES ======== */
+        /* --- DEFAULT DARK THEME (Applied if no .light-mode class on <html>) --- */
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #050505;
+            --bg-navbar: rgba(10, 10, 10, 0.8);
+            --bg-navbar-scrolled: rgba(0, 0, 0, 0.9);
+            --bg-card-dark: #101010;
+            --bg-card-dark-hover: #151515;
+            --bg-footer: #0A0A0A;
+            --bg-theme-toggle-hover: #222222;
+
+            --text-primary: #E0E0E0;
+            --text-secondary: #B0B0B0;
+            --text-muted: #A0A0A0;
+            --text-logo: #FFFFFF;
+            --text-nav-link: #A0A0A0;
+            --text-nav-link-hover: #FFFFFF;
+            --text-btn-login: #E0E0E0;
+            --text-btn-signup: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-footer: #888888;
+            --text-hero-h1: #FFFFFF;
+            --text-theme-toggle: #E0E0E0;
+
+            --border-primary: #222222;
+            --border-secondary: #282828;
+            --border-hover: #444444;
+            --border-btn-login: #444444;
+            --border-btn-primary-cta: var(--accent-primary);
+            --border-btn-secondary-cta: #444444;
+            --border-footer-top: #1A1A1A;
+            --border-theme-toggle: #444444;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-sparkle: #FFA500;
+
+            --gradient-highlight-start: #A755F7;
+            --gradient-highlight-end: #5A78F6;
+            
+            --aura-primary: var(--gradient-highlight-start); 
+            --aura-secondary: var(--gradient-highlight-end); 
+            --aura-opacity: 0.15;
+
+            --icon-dept-default: #888888;
+            --icon-dept-hover: var(--gradient-highlight-start);
+
+            --card-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            --card-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- LIGHT THEME (Applied when .light-mode class is on <html>) --- */
+        html.light-mode {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8F9FA;
+            --bg-navbar: rgba(255, 255, 255, 0.85);
+            --bg-navbar-scrolled: rgba(248, 249, 250, 0.95);
+            --bg-card-dark: #FFFFFF;
+            --bg-card-dark-hover: #F1F3F5;
+            --bg-footer: #F1F3F5;
+            --bg-theme-toggle-hover: #E9ECEF;
+
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6C757D;
+            --text-logo: var(--accent-primary);
+            --text-nav-link: #495057;
+            --text-nav-link-hover: var(--accent-primary);
+            --text-btn-login: var(--accent-primary);
+            --text-btn-signup: #FFFFFF;
+            --text-on-accent: #FFFFFF;
+            --text-footer: #6C757D;
+            --text-hero-h1: #212529;
+            --text-theme-toggle: #495057;
+
+            --border-primary: #DEE2E6;
+            --border-secondary: #CED4DA;
+            --border-hover: #ADB5BD;
+            --border-btn-login: var(--accent-primary);
+            --border-btn-primary-cta: var(--accent-primary);
+            --border-btn-secondary-cta: #6C757D;
+            --border-footer-top: #CED4DA;
+            --border-theme-toggle: #CED4DA;
+
+            --accent-primary: #F97316;
+            --accent-primary-hover: #EA580C;
+            --accent-sparkle: #F97316;
+
+            --gradient-highlight-start: #7B3FE3;
+            --gradient-highlight-end: #4A62D6;
+            
+            --aura-primary: #E0D0FF;
+            --aura-secondary: #D0E0FF;
+            --aura-opacity: 0.25;
+
+            --icon-dept-default: #6C757D;
+            --icon-dept-hover: var(--accent-primary);
+            
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navigation - Using Theme Vars */
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-primary);
+            z-index: 1000; padding: 1rem 0;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        html[data-scrolled="true"] .navbar { /* Apply scrolled style when html has data-scrolled attribute */
+            background: var(--bg-navbar-scrolled);
+        }
+        
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2.2rem; font-weight: 800;
+            color: var(--text-logo); text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a {
+            color: var(--text-nav-link); text-decoration: none;
+            font-weight: 500; transition: color 0.3s ease;
+            position: relative; padding-bottom: 5px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--text-nav-link-hover); }
+        .nav-links a.active::after {
+            content: ''; position: absolute; width: 100%; height: 2px;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+        }
+        .nav-links a:not(.active):hover::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(90deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            transition: width 0.3s ease; width: 100%;
+        }
+        
+        .nav-right-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-toggle-btn {
+            background: transparent;
+            color: var(--text-theme-toggle);
+            border: 1.5px solid var(--border-theme-toggle);
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--bg-theme-toggle-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Main Content - Adjusted for CSE Page */
+        .main-content { padding-top: 90px; padding-bottom: 3rem; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Distinct Department Header */
+        .dept-header {
+            text-align: left; /* Align left for a different feel */
+            margin-bottom: 2.5rem;
+            padding: 2.5rem 0;
+            border-bottom: 2px solid var(--accent-primary); /* Accent border bottom */
+        }
+        .dept-header h1 {
+            font-size: 2.8rem; font-weight: 800;
+            color: var(--text-headings); margin-bottom: 0.5rem;
+        }
+        .dept-header p {
+            font-size: 1.2rem; color: var(--text-secondary);
+            max-width: 700px; /* Control width for readability */
+        }
+
+        /* Shared Card Styling (Base for progress, category, topic etc.) */
+        .card-base {
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-base:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Progress Section */
+        .progress-section { /* Extends card-base implicitly via its children */
+             margin-bottom: 2.5rem;
+        }
+        .progress-section .card-base { /* Apply to actual progress items */
+            margin-bottom: 0; /* If progress-stats itself is the container of cards */
+        }
+        .progress-header { text-align: center; margin-bottom: 2rem; }
+        .progress-header h2 { font-size: 1.6rem; color: var(--text-headings); margin-bottom: 0.4rem; }
+        .progress-header p { color: var(--text-secondary); font-size: 1rem; }
+        .progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .progress-item { /* Is a .card-base */
+            text-align: center;
+            background: var(--bg-card-dark-hover); /* Differentiate a bit */
+        }
+        .progress-circle {
+            width: 90px; height: 90px; border-radius: 50%;
+            margin: 0 auto 1rem; position: relative; display: grid; place-items: center;
+            background: conic-gradient(var(--accent-primary) var(--progress, 0deg), var(--border-primary) var(--progress, 0deg));
+        }
+        .progress-circle::before {
+            content: ''; position: absolute; width: 70px; height: 70px;
+            background: var(--bg-card-dark-hover); border-radius: 50%;
+        }
+        .progress-value { font-size: 1.3rem; font-weight: 600; color: var(--text-primary); z-index: 1; }
+        .progress-item h3 { font-size: 1rem; color: var(--text-primary); margin-bottom: 0.2rem; }
+        .progress-item p { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Categories */
+        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+        .category-card { /* Is a .card-base */
+            text-align: center; cursor: pointer;
+        }
+        .category-icon { font-size: 2.2rem; margin-bottom: 1rem; color: var(--icon-dept-hover); }
+        .category-card h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .category-card > p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+        .category-stats { display: flex; justify-content: space-around; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-primary); }
+        .category-stats .stat { font-size: 0.8rem; color: var(--text-muted); }
+        .category-stats .stat-number { display: block; font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.1rem; }
+
+        /* Topics Section */
+        .topics-section { /* Extends card-base implicitly via its items */
+            display: none; padding: 1.5rem;
+            background-color: var(--bg-secondary); /* Give section slight distinction */
+            border: 1px solid var(--border-primary);
+            border-radius: 10px; margin-bottom: 2.5rem;
+        }
+        .topics-section.active { display: block; }
+        .topics-section > h2 {
+            font-size: 1.6rem; color: var(--text-headings);
+            margin-bottom: 1.5rem; padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        .topic-item { /* Is a .card-base */
+            padding: 1.2rem; margin-bottom: 1rem;
+        }
+        .topic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+        .topic-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+        .topic-progress { display: flex; align-items: center; gap: 0.5rem; }
+        .progress-bar { width: 80px; height: 6px; background-color: var(--border-primary); border-radius: 3px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background-color: var(--accent-primary); border-radius: 3px; transition: width 0.3s ease; }
+        .progress-text { font-size: 0.8rem; color: var(--text-muted); }
+        .topic-actions { display: flex; gap: 0.8rem; margin-bottom: 0.8rem; }
+        .topic-notes {
+            background: var(--bg-primary); /* Differentiate notes area */
+            border: 1px solid var(--border-primary);
+            border-radius: 6px; padding: 1rem; margin-top: 1rem;
+            font-size: 0.9rem; color: var(--text-secondary); display:none;
+        }
+        .topic-notes.active { display: block; }
+        .topic-notes h5 { color: var(--text-primary); margin-top: 0.5rem; margin-bottom: 0.2rem; font-size: 0.95rem; }
+        .topic-notes ul { list-style-position: inside; padding-left: 0.5rem; }
+        .topic-notes li { margin-bottom: 0.2rem; }
+
+
+        /* General Button Styling for this page */
+        .btn {
+            padding: 0.5rem 1.2rem; border: 1.5px solid var(--border-btn-primary-cta);
+            border-radius: 6px; font-weight: 500; text-decoration: none;
+            transition: all 0.25s ease; cursor: pointer; font-size: 0.85rem;
+            background: transparent; color: var(--text-btn-login);
+        }
+        .btn:hover {
+            background: var(--accent-primary-hover);
+            color: var(--text-on-accent);
+            border-color: var(--border-hover);
+        }
+        /* .btn-notes { /* Specific to this button if needed */ } */
+        .btn-complete { /* Solid Accent Button */
+            background: var(--accent-primary);
+            color: var(--text-on-accent);
+            border-color: var(--border-btn-primary-cta);
+        }
+        .btn-complete:disabled {
+            background: var(--border-secondary); color: var(--text-muted);
+            border-color: var(--border-secondary); cursor: not-allowed;
+        }
+        .solve-btn { /* Consistent with btn-complete */
+             background: var(--accent-primary); color: var(--text-on-accent); border:none;
+             padding: 0.6rem 1.3rem; border-radius: 6px; cursor: pointer; font-weight: 500;
+        }
+        .solve-btn:hover { background: var(--accent-primary-hover); }
+
+
+        /* Coding Section */
+        .coding-section { /* Is a .card-base like Topics section*/
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 10px; padding: 2rem;
+            margin: 2.5rem 0;
+        }
+        .coding-section > h2 {
+            font-size: 1.6rem; color: var(--text-headings);
+            margin-bottom: 1.5rem; padding-bottom: 0.8rem; text-align: center;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        .difficulty-tabs { display: flex; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .tab-btn {
+            padding: 0.6rem 1.3rem; border: 1px solid var(--border-btn-secondary-cta);
+            border-radius: 6px; background: var(--bg-card-dark-hover);
+            color: var(--text-secondary); cursor: pointer; font-weight: 500;
+            transition: all 0.25s ease;
+        }
+        .tab-btn.active {
+            background: var(--accent-primary); color: var(--text-on-accent);
+            border-color: var(--border-btn-primary-cta);
+        }
+        .tab-btn:hover:not(.active) { background: var(--bg-card-dark-hover); border-color: var(--border-hover); }
+        .question-card { /* Is a .card-base */
+             margin-bottom: 1.2rem; padding: 1.2rem;
+        }
+        .question-card h3 { color: var(--text-primary); font-size: 1.15rem; margin-bottom: 0.4rem; }
+        .question-card p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.4rem; }
+        .question-card p.difficulty {
+            display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+            font-size: 0.75rem; font-weight: 500; margin-bottom: 0.6rem;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        /* Difficulty pills using existing colors, maybe adjust specific for CSE theme */
+        .question-card p.difficulty.easy { background-color: #28a74530; color: #6EE7B7; border: 1px solid #28a74580;} /* Minty Green */
+        .question-card p.difficulty.medium { background-color: #ffc10730; color: #FFD369; border: 1px solid #ffc10780;} /* Amber */
+        .question-card p.difficulty.hard { background-color: #dc354530; color: #FF7878; border: 1px solid #dc354580;}   /* Light Red */
+
+        html.light-mode .question-card p.difficulty.easy { background-color: #D4EDDA; color: #155724; border-color: #C3E6CB;}
+        html.light-mode .question-card p.difficulty.medium { background-color: #FFF3CD; color: #856404; border-color: #FFEEBA;}
+        html.light-mode .question-card p.difficulty.hard { background-color: #F8D7DA; color: #721C24; border-color: #F5C6CB;}
+
+
+        .example {
+            background: var(--bg-primary); /* Make it stand out from card-alt */
+            border: 1px solid var(--border-primary); border-radius: 6px;
+            padding: 0.8rem; margin: 0.8rem 0; color: var(--text-secondary);
+        }
+        .example > p { font-weight: 500; color: var(--text-primary); margin-bottom: 0.3rem;}
+        .example pre {
+            color: var(--text-muted); margin-top: 0.3rem;
+            white-space: pre-wrap; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace; /* More dev-friendly font stack */
+            font-size: 0.85em; background-color: var(--bg-card-dark-hover); /* Differentiate pre from example bg */
+            padding: 0.8rem; border-radius: 4px; border: 1px solid var(--border-primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .main-content { padding-top: 80px; }
+            .dept-header h1 { font-size: 2.2rem; }
+            .dept-header p { font-size: 1rem; }
+            .categories, .progress-stats { grid-template-columns: 1fr; }
+            .difficulty-tabs { flex-direction: column; gap: 0.5rem; }
+            .progress-header h2, .topics-section > h2, .coding-section > h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="placement_website.html" class="logo">PlacePrep</a>
+            <ul class="nav-links">
+                <li><a href="placement_website.html">Home</a></li>
+                <li><a href="#" class="active">CSE Department</a></li>
+                <li><a href="#progressSectionAnchor">Progress</a></li>
+                <li><a href="#coding-questions">Practice</a></li>
+            </ul>
+            <div class="nav-right-controls">
+                <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Department Header -->
+            <div class="dept-header">
+                <h1>Computer Science & Engineering</h1>
+                <p>Your hub for mastering core CSE concepts, algorithms, and system design for top placements.</p>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section" id="progressSectionAnchor">
+                <div class="progress-header">
+                    <h2>Your CSE Learning Dashboard</h2>
+                    <p>Track your overall progress across key Computer Science domains.</p>
+                </div>
+                <div class="progress-stats" id="progressStats">
+                    <!-- Progress items dynamically added by JS -->
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <h2 style="font-size: 1.8rem; color: var(--text-headings); margin-bottom: 1.5rem; text-align: center; border-bottom: 1px solid var(--border-primary); padding-bottom: 0.8rem;">Explore Topics</h2>
+            <div class="categories" id="categories">
+                <!-- Category cards dynamically added by JS -->
+            </div>
+
+            <!-- Topics Sections (hidden by default) -->
+            <div id="topicsSections">
+                <!-- Topics sections dynamically added by JS -->
+            </div>
+        </div>
+    
+        <!-- Coding Questions Section -->
+        <div class="container"> <!-- Separate container for full width feel of this section -->
+            <div class="coding-section" id="coding-questions">
+                <h2>Sharpen Your Coding Skills</h2>
+                <div class="difficulty-tabs">
+                    <button class="tab-btn active" onclick="showQuestions('easy', event)">Easy</button>
+                    <button class="tab-btn" onclick="showQuestions('medium', event)">Medium</button>
+                    <button class="tab-btn" onclick="showQuestions('hard', event)">Hard</button>
+                </div>
+                
+                <div class="questions-container" id="easy-questions">
+                    <!-- Questions will be injected here if needed or kept static -->
+                     <div class="question-card">
+                        <h3>Two Sum</h3>
+                        <p class="difficulty easy">Easy</p>
+                        <p>Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.</p>
+                        <div class="example"><p>Example:</p><pre>Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]</pre></div>
+                        <button class="solve-btn" onclick="showSolution('twoSum')">View Solution</button>
+                    </div>
+                     <div class="question-card">
+                        <h3>Valid Parentheses</h3>
+                        <p class="difficulty easy">Easy</p>
+                        <p>Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.</p>
+                        <div class="example"><p>Example:</p><pre>Input: s = "()[]{}"\nOutput: true</pre></div>
+                        <button class="solve-btn" onclick="showSolution('validParentheses')">View Solution</button>
+                    </div>
+                </div>
+                
+                <div class="questions-container" id="medium-questions" style="display: none;">
+                    <div class="question-card">
+                        <h3>Longest Substring Without Repeating Characters</h3>
+                        <p class="difficulty medium">Medium</p>
+                        <p>Given a string s, find the length of the longest substring without repeating characters.</p>
+                        <div class="example"><p>Example:</p><pre>Input: s = "abcabcbb"\nOutput: 3</pre></div>
+                        <button class="solve-btn" onclick="showSolution('longestSubstring')">View Solution</button>
+                    </div>
+                </div>
+                
+                <div class="questions-container" id="hard-questions" style="display: none;">
+                    <div class="question-card">
+                        <h3>Median of Two Sorted Arrays</h3>
+                        <p class="difficulty hard">Hard</p>
+                        <p>Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.</p>
+                        <div class="example"><p>Example:</p><pre>Input: nums1 = [1,3], nums2 = [2]\nOutput: 2.00000</pre></div>
+                        <button class="solve-btn" onclick="showSolution('medianArrays')">View Solution</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // cse_data.js content will be here (or linked as an external file)
+        const cseTopicsData = {
+            'dsa': {
+                title: 'Data Structures & Algorithms', icon: 'fas fa-code-branch',
+                topics: [
+                    { id: 'dsa-arrays', name: 'Arrays and Strings', notes: '<p>Arrays are fundamental. Strings are sequences of characters.</p><h5>Key Concepts:</h5><ul><li>Time/Space Complexity</li><li>Two Pointers</li><li>Sliding Window</li></ul>', completed: false },
+                    { id: 'dsa-linkedlist', name: 'Linked Lists', notes: '<p>Singly, Doubly, Circular. Operations: insertion, deletion, search, reversal.</p>', completed: false },
+                    { id: 'dsa-trees', name: 'Trees (Binary, BST, Heaps)', notes: '<p>Traversals: Inorder, Preorder, Postorder, Level-order. AVL, Red-Black Trees. Priority Queues with Heaps.</p>', completed: false },
+                    { id: 'dsa-graphs', name: 'Graphs (BFS, DFS, Shortest Path)', notes: '<p>Representations: Adjacency Matrix/List. Algorithms: BFS, DFS, Dijkstra, Bellman-Ford, Floyd-Warshall, Topological Sort, MST (Prim, Kruskal).</p>', completed: false },
+                    { id: 'dsa-dp', name: 'Dynamic Programming', notes: '<p>Optimal substructure & overlapping subproblems. Memoization vs Tabulation. Common patterns.</p>', completed: false },
+                    { id: 'dsa-sorting', name: 'Sorting & Searching Algorithms', notes: '<p>Comparison sorts: Bubble, Insertion, Selection, Merge, Quick, Heap. Non-comparison: Counting, Radix. Searching: Linear, Binary.</p>', completed: false },
+                    { id: 'dsa-recursion', name: 'Recursion & Backtracking', notes: '<p>Divide and conquer. Base cases. Exploring all possibilities systematically.</p>', completed: false },
+                ]
+            },
+            'system-design': {
+                title: 'System Design', icon: 'fas fa-cogs',
+                topics: [
+                    { id: 'sd-basics', name: 'Fundamentals (Scalability, Availability)', notes: '<p>Vertical vs Horizontal Scaling. Fault Tolerance. CAP Theorem. Load Balancing. Consistency models.</p>', completed: false },
+                    { id: 'sd-databases', name: 'Databases (SQL, NoSQL, Caching)', notes: '<p>Relational (ACID). Non-Relational (Key-Value, Document, Graph). Sharding, Replication. Caching strategies (Write-through, Write-back, Read-through).</p>', completed: false },
+                    { id: 'sd-api', name: 'API Design (REST, GraphQL)', notes: '<p>RESTful principles. GraphQL queries & mutations. API Gateway. Versioning. Rate Limiting. Authentication & Authorization (OAuth, JWT).</p>', completed: false },
+                    { id: 'sd-messaging', name: 'Messaging Queues & Event-Driven Arch.', notes: '<p>Kafka, RabbitMQ, SQS. Decoupling services. Asynchronous communication. Pub/Sub model.</p>', completed: false },
+                    { id: 'sd-patterns', name: 'Common Design Patterns', notes: '<p>Microservices vs Monolith. Leader Election. Distributed Transactions (Saga). Idempotency. Circuit Breaker.</p>', completed: false }
+                ]
+            },
+            'core-cs': { // Combined OS, Networks, DBMS
+                title: 'Core CS Subjects', icon: 'fas fa-microchip',
+                topics: [
+                    { id: 'core-os', name: 'Operating Systems Concepts', notes: '<p>Processes, Threads, Scheduling, Memory Management (Paging, Segmentation), File Systems, Deadlocks, Virtualization.</p>', completed: false },
+                    { id: "core-dbms", name: "DBMS & SQL", notes: "<p>Relational Algebra, SQL queries (Joins, Aggregations, Subqueries), Normalization (1NF-BCNF), Indexing, Transactions (ACID).</p>", completed: false },
+                    { id: 'core-cn', name: 'Computer Networks', notes: '<p>OSI & TCP/IP models. Protocols: HTTP, TCP, UDP, IP. DNS, Sockets, Network Security basics.</p>', completed: false },
+                    { id: 'core-security', name: 'Cybersecurity Fundamentals', notes: '<p>Common vulnerabilities (OWASP Top 10), encryption (symmetric/asymmetric), hashing, firewalls, VPNs, secure coding practices.</p>', completed: false },
+                ]
+            },
+             'programming-langs': {
+                title: 'Language Proficiency', icon: 'fas fa-laptop-code',
+                topics: [
+                    { id: 'lang-cpp', name: 'C++ (OOP, STL)', notes: '<p>Classes, Objects, Inheritance, Polymorphism. Pointers. Standard Template Library (vector, map, set, algorithms).</p>', completed: false },
+                    { id: 'lang-java', name: 'Java (Collections, Concurrency)', notes: '<p>JVM, Garbage Collection. Collections Framework. Multithreading basics. Exception Handling.</p>', completed: false },
+                    { id: 'lang-python', name: 'Python (Data Structures, Libraries)', notes: '<p>Lists, Dictionaries, Tuples, Sets. File I/O. Common libraries (NumPy, Pandas - awareness). Generators, Decorators.</p>', completed: false },
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgress();
+            initializeCategoriesAndContent();
+
+            // Theme Toggle Functionality
+            const themeToggleButton = document.getElementById('theme-toggle-btn');
+            const themeIcon = themeToggleButton.querySelector('i');
+            const htmlElement = document.documentElement;
+
+            // Function to set theme
+            function setTheme(theme) {
+                const isLight = theme === 'light';
+                htmlElement.classList.toggle('light-mode', isLight);
+                themeIcon.className = isLight ? 'fas fa-moon' : 'fas fa-sun';
+                localStorage.setItem('theme', theme);
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            } else {
+                setTheme('dark'); // Default to dark theme
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
+            });
+
+            // Navbar scroll effect
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 30) {
+                    document.documentElement.setAttribute('data-scrolled', 'true');
+                } else {
+                    document.documentElement.removeAttribute('data-scrolled');
+                }
+            });
+        });
+        
+        function initializeCategoriesAndContent() {
+            const categoriesContainer = document.getElementById('categories');
+            const progressStatsContainer = document.getElementById('progressStats');
+            const topicsSectionsContainer = document.getElementById('topicsSections');
+
+            categoriesContainer.innerHTML = '';
+            progressStatsContainer.innerHTML = '';
+            topicsSectionsContainer.innerHTML = '';
+
+            for (const [key, category] of Object.entries(cseTopicsData)) {
+                const completedTopicsCount = category.topics.filter(t => t.completed).length;
+                const progressPercentage = category.topics.length > 0 ? Math.round((completedTopicsCount / category.topics.length) * 100) : 0;
+
+                categoriesContainer.innerHTML += `
+                    <div class="category-card card-base" onclick="showTopics('${key}')">
+                        <div class="category-icon"><i class="${category.icon}"></i></div>
+                        <h3>${category.title}</h3>
+                        <p>${category.topics.length} Core Topics</p>
+                        <div class="category-stats">
+                            <div class="stat"><div class="stat-number" id="${key}-card-total">${category.topics.length}</div>Topics</div>
+                            <div class="stat"><div class="stat-number" id="${key}-card-completed">${completedTopicsCount}</div>Done</div>
+                            <div class="stat"><div class="stat-number" id="${key}-card-progress">${progressPercentage}%</div>Progress</div>
+                        </div>
+                    </div>`;
+
+                progressStatsContainer.innerHTML += `
+                    <div class="progress-item card-base">
+                        <div class="progress-circle" style="--progress: ${ (progressPercentage / 100) * 360 }deg;">
+                            <div class="progress-value" id="${key}-progress-value">${progressPercentage}%</div>
+                        </div>
+                        <h3>${category.title}</h3>
+                        <p><span id="${key}-progress-count">${completedTopicsCount}</span> of ${category.topics.length} Covered</p>
+                    </div>`;
+                
+                let topicsHTML = '';
+                category.topics.forEach(topic => {
+                    topicsHTML += `
+                        <div class="topic-item card-base" id="${topic.id}">
+                            <div class="topic-header">
+                                <div class="topic-title">${topic.name}</div>
+                                <div class="topic-progress">
+                                    <div class="progress-bar"><div class="progress-bar-fill" style="width: ${topic.completed ? '100%' : '0%'}"></div></div>
+                                    <span class="progress-text">${topic.completed ? '100%' : '0%'}</span>
+                                </div>
+                            </div>
+                            <div class="topic-actions">
+                                <button class="btn btn-notes" onclick="toggleNotes('${topic.id}', event)">Show Notes</button>
+                                <button class="btn btn-complete" onclick="markTopicComplete('${key}', '${topic.id}')" ${topic.completed ? 'disabled' : ''}>
+                                    ${topic.completed ? 'Completed' : 'Mark Complete'}
+                                </button>
+                            </div>
+                            <div class="topic-notes" id="${topic.id}-notes">${topic.notes}</div>
+                        </div>`;
+                });
+                topicsSectionsContainer.innerHTML += `
+                    <div id="${key}-content" class="topics-section">
+                        <h2>${category.title}</h2>
+                        <div class="topics-list">${topicsHTML}</div>
+                    </div>`;
+            }
+        }
+
+        function showTopics(categoryKey) {
+            document.querySelectorAll('.topics-section').forEach(section => section.classList.remove('active'));
+            const selectedSection = document.getElementById(`${categoryKey}-content`);
+            if (selectedSection) {
+                selectedSection.classList.add('active');
+                selectedSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Changed to 'start'
+            }
+        }
+
+        function toggleNotes(topicId, event) {
+            const notesElement = document.getElementById(`${topicId}-notes`);
+            const button = event.target;
+            notesElement.classList.toggle('active');
+            button.textContent = notesElement.classList.contains('active') ? 'Hide Notes' : 'Show Notes';
+        }
+
+        function markTopicComplete(categoryKey, topicId) {
+            const category = cseTopicsData[categoryKey];
+            if (!category) return;
+            const topic = category.topics.find(t => t.id === topicId);
+            if (topic && !topic.completed) {
+                topic.completed = true;
+                const topicElement = document.getElementById(topicId);
+                if (topicElement) {
+                    topicElement.querySelector('.progress-bar-fill').style.width = '100%';
+                    topicElement.querySelector('.progress-text').textContent = '100%';
+                    const completeButton = topicElement.querySelector('.btn-complete');
+                    completeButton.textContent = 'Completed';
+                    completeButton.disabled = true;
+                }
+                updateSingleCategoryProgressDisplay(categoryKey);
+                saveProgress();
+            }
+        }
+
+        function updateSingleCategoryProgressDisplay(categoryKey) {
+            const category = cseTopicsData[categoryKey];
+            if (!category) return;
+            const completedTopicsCount = category.topics.filter(t => t.completed).length;
+            const progressPercentage = category.topics.length > 0 ? Math.round((completedTopicsCount / category.topics.length) * 100) : 0;
+
+            // Update main progress section item
+            const progressValueEl = document.getElementById(`${categoryKey}-progress-value`);
+            if (progressValueEl) {
+                progressValueEl.textContent = `${progressPercentage}%`;
+                const circleEl = progressValueEl.closest('.progress-circle');
+                if (circleEl) circleEl.style.setProperty('--progress', `${(progressPercentage/100)*360}deg`);
+            }
+            const progressCountEl = document.getElementById(`${categoryKey}-progress-count`);
+            if (progressCountEl) progressCountEl.textContent = completedTopicsCount;
+
+            // Update category card stats
+            const cardCompletedEl = document.getElementById(`${categoryKey}-card-completed`);
+            if (cardCompletedEl) cardCompletedEl.textContent = completedTopicsCount;
+            const cardProgressEl = document.getElementById(`${categoryKey}-card-progress`);
+            if (cardProgressEl) cardProgressEl.textContent = `${progressPercentage}%`;
+        }
+        
+        function saveProgress() {
+            localStorage.setItem('cseDepartmentProgress', JSON.stringify(cseTopicsData));
+        }
+
+        function loadProgress() {
+            const savedProgress = localStorage.getItem('cseDepartmentProgress');
+            if (savedProgress) {
+                try {
+                    const parsedData = JSON.parse(savedProgress);
+                    if (typeof parsedData === 'object' && parsedData !== null) {
+                        for (const categoryKey in parsedData) {
+                            if (cseTopicsData[categoryKey] && parsedData[categoryKey].topics) {
+                                parsedData[categoryKey].topics.forEach(savedTopic => {
+                                    const originalTopic = cseTopicsData[categoryKey].topics.find(t => t.id === savedTopic.id);
+                                    if (originalTopic) {
+                                        originalTopic.completed = savedTopic.completed || false; // Ensure boolean
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } catch (e) { console.error("Error loading CSE progress:", e); }
+            }
+        }
+
+        function showQuestions(difficulty, event) {
+            document.querySelectorAll('.questions-container').forEach(container => container.style.display = 'none');
+            document.getElementById(`${difficulty}-questions`).style.display = 'block';
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+        }
+
+        function showSolution(problemId) {
+            alert(`Solution for ${problemId} can be displayed here.`);
+        }
+    </script>
+</body>
+</html>
