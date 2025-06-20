@@ -226,7 +226,7 @@
             font-size: 1.8rem; color: var(--text-headings); margin-bottom: 1.5rem;
             text-align: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-primary);
         }
-        .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .categories { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-bottom: 3rem; }
         .category-card { 
             text-align: center; cursor: pointer;
              background: var(--bg-card); border: 1px solid var(--border-secondary);
@@ -245,7 +245,7 @@
         .progress-header { text-align: center; margin-bottom: 2rem; }
         .progress-header h2 { font-size: 1.6rem; color: var(--text-headings); margin-bottom: 0.4rem; }
         .progress-header p { color: var(--text-secondary); font-size: 1rem; }
-        .progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+        .progress-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
         .progress-item { text-align: center; background: var(--bg-card-alt); }
         .progress-circle {
             width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; position: relative;
@@ -560,6 +560,12 @@
             border-radius: 12px;
             border: 1px solid var(--border-primary);
             margin-top: 2rem;
+        }
+        @media (max-width: 992px) {
+            .progress-stats,
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {

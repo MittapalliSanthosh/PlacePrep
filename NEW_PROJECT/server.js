@@ -383,7 +383,7 @@ app.post('/api/auth/google', async (req, res) => {
 // Add the Firebase authentication endpoint
 app.post('/api/auth/firebase', async (req, res) => {
     try {
-        const { token, email, displayName } = req.body;
+        const { token, email, displayName, department } = req.body;
 
         if (!token) {
             return res.status(400).json({ message: 'Token is required' });
@@ -416,7 +416,7 @@ app.post('/api/auth/firebase', async (req, res) => {
                 firstName,
                 lastName,
                 email,
-                department: 'Not Set', // Default department
+                department: department || 'Not Set', // Use selected department
                 password: hashedPassword // Random secure password
             });
 
@@ -425,6 +425,13 @@ app.post('/api/auth/firebase', async (req, res) => {
             
             // Send welcome email for new users
             await sendWelcomeEmail(email, firstName);
+        } else {
+            // If user exists, update their department if a new one is provided
+            if (department && user.department !== department) {
+                user.department = department;
+                await user.save();
+                console.log(`Updated department for user ${email} to ${department}`);
+            }
         }
 
         // Return user data

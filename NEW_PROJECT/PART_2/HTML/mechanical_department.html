@@ -244,7 +244,7 @@
 
         .progress-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
         }
 
@@ -305,7 +305,7 @@
         /* Categories */
         .categories {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             margin-bottom: 3rem;
         }
@@ -604,6 +604,13 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 992px) {
+            .progress-stats,
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;

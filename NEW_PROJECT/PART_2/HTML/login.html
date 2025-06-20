@@ -252,6 +252,110 @@
                  border-radius: 10px 10px 0 0;
             }
         }
+
+        /* ======== DEPARTMENT SELECTION MODAL ======== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--white-color);
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: var(--container-shadow);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-header p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .department-select {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background-color: var(--form-input-bg);
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .department-select:focus {
+            outline: 1px solid var(--primary-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 20px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn.primary {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        .modal-btn.primary:hover {
+            background-color: #e63946;
+        }
+
+        .modal-btn.secondary {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--social-icon-border);
+        }
+
+        .modal-btn.secondary:hover {
+            background-color: var(--light-gray-bg);
+        }
     </style>
 </head>
 <body>
@@ -285,6 +389,33 @@
         </div>
     </div>
 
+    <!-- ======== DEPARTMENT SELECTION MODAL ======== -->
+    <div id="departmentModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Your Department</h2>
+                <p>Please choose your department to complete your profile setup</p>
+            </div>
+            <form id="departmentForm">
+                <select id="departmentSelect" class="department-select" required>
+                    <option value="">Select Department</option>
+                    <option value="Computer Science Engineering">Computer Science Engineering</option>
+                    <option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                    <option value="Civil Engineering">Civil Engineering</option>
+                    <option value="Chemical Engineering">Chemical Engineering</option>
+                    
+                    <option value="Other">Other</option>
+                </select>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary" onclick="closeDepartmentModal()">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Firebase configuration
         const firebaseConfig = {
@@ -305,6 +436,9 @@
             console.error('Firebase initialization error:', error);
             showError('Failed to initialize authentication. Please try again.');
         }
+
+        // Store Google user data temporarily
+        let tempGoogleUserData = null;
 
         // Regular email/password login handler
         async function handleLogin(event) {
@@ -382,31 +516,15 @@
                 
                 const user = result.user;
                 
-                // Get the user's ID token
-                const idToken = await user.getIdToken();
-                console.log('Got ID token');
+                // Store Google user data temporarily
+                tempGoogleUserData = {
+                    email: user.email,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL
+                };
 
-                // Send to your backend
-                const response = await fetch('/api/auth/firebase', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        token: idToken,
-                        email: user.email,
-                        displayName: user.displayName,
-                        photoURL: user.photoURL
-                    })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Firebase authentication failed on server');
-                }
-
-                handleSuccessfulLogin(data);
+                // Show department selection modal instead of immediately proceeding
+                showDepartmentModal();
 
             } catch (error) {
                 console.error('Firebase Google Sign-In Error:', error);
@@ -422,6 +540,82 @@
                 }
                 
                 showError(errorMessage);
+            }
+        }
+
+        // Show department selection modal
+        function showDepartmentModal() {
+            const modal = document.getElementById('departmentModal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+        }
+
+        // Close department selection modal
+        function closeDepartmentModal() {
+            const modal = document.getElementById('departmentModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+            // Clear temporary data
+            tempGoogleUserData = null;
+        }
+
+        // Handle department selection and complete Google sign-in
+        async function handleDepartmentSelection(event) {
+            event.preventDefault();
+            
+            const department = document.getElementById('departmentSelect').value;
+            if (!department) {
+                alert('Please select a department');
+                return;
+            }
+
+            if (!tempGoogleUserData) {
+                showError('Google sign-in data not found. Please try again.');
+                closeDepartmentModal();
+                return;
+            }
+
+            try {
+                // Get the user's ID token
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    throw new Error('No authenticated user found');
+                }
+
+                const idToken = await user.getIdToken();
+                console.log('Got ID token');
+
+                // Send to your backend with department information
+                const response = await fetch('/api/auth/firebase', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        token: idToken,
+                        email: tempGoogleUserData.email,
+                        displayName: tempGoogleUserData.displayName,
+                        photoURL: tempGoogleUserData.photoURL,
+                        department: department
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Firebase authentication failed on server');
+                }
+
+                // Close modal and handle successful login
+                closeDepartmentModal();
+                handleSuccessfulLogin(data);
+
+            } catch (error) {
+                console.error('Error completing Google sign-in:', error);
+                showError(error.message);
+                closeDepartmentModal();
             }
         }
 
@@ -451,6 +645,7 @@
         // Event Listeners
         document.getElementById('loginForm').addEventListener('submit', handleLogin);
         document.getElementById('google-signin-btn').addEventListener('click', handleGoogleSignIn);
+        document.getElementById('departmentForm').addEventListener('submit', handleDepartmentSelection);
 
         function redirectToSignup() {
             window.location.href = 'signup.html';
