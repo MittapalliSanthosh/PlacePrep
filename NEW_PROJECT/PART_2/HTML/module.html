@@ -171,6 +171,9 @@
                     <button type="button" class="btn btn-primary" onclick="window.location.href='placement_website.html'">
                         <i class="fas fa-home"></i> Back to Dashboard
                     </button>
+                    <button type="button" class="btn btn-secondary" id="closeResultBtn">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
@@ -364,7 +367,13 @@
             
             // Update navigation button states
             document.getElementById('prevBtn').disabled = index === 0;
-            document.getElementById('nextBtn').disabled = index === questions.length - 1;
+            const nextBtn = document.getElementById('nextBtn');
+            if (index === questions.length - 1) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+            }
             
             console.log('Question displayed successfully');
         }
@@ -515,6 +524,7 @@
                 `;
                 
                 new bootstrap.Modal(document.getElementById('resultModal')).show();
+                window.onbeforeunload = null;
             } catch (error) {
                 console.error('Error submitting test:', error);
                 alert('Failed to submit test: ' + error.message + '. Please try again.');
@@ -695,6 +705,15 @@
         window.onbeforeunload = function() {
             return "Are you sure you want to leave? Your test progress will be lost.";
         };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeResultBtn = document.getElementById('closeResultBtn');
+            if (closeResultBtn) {
+                closeResultBtn.onclick = function() {
+                    window.location.href = 'mocktest.html';
+                };
+            }
+        });
     </script>
 </body>
 </html> 

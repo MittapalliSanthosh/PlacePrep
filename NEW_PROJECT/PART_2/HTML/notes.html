@@ -408,52 +408,6 @@
     <div class="main-content">
         <div class="header-actions">
             <h1 class="section-title">Study Notes</h1>
-            <div class="note-buttons">
-                <button id="add-note-btn" class="add-note-btn">
-                    <i class="fas fa-plus"></i> Add Note
-                </button>
-                <button id="custom-note-btn" class="custom-note-btn">
-                    <i class="fas fa-sticky-note"></i> My Notes
-                </button>
-            </div>
-        </div>
-
-        <!-- Add Note Modal -->
-        <div id="add-note-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2>Add New Note</h2>
-                <form id="add-note-form">
-                    <div class="form-group">
-                        <label for="note-title">Title</label>
-                        <input type="text" id="note-title" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="note-description">Description</label>
-                        <textarea id="note-description" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="note-category">Category</label>
-                        <select id="note-category" required>
-                            <option value="logical-basic">Logical Reasoning - Basic</option>
-                            <option value="logical-advanced">Logical Reasoning - Advanced</option>
-                            <option value="quant-basic">Quantitative Aptitude - Basic</option>
-                            <option value="quant-advanced">Quantitative Aptitude - Advanced</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="key-points">Key Points (one per line)</label>
-                        <textarea id="key-points" required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Save Note</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Custom Notes Section -->
-        <div id="custom-notes-section" style="display: none;">
-            <h2 style="margin-bottom: 2rem; color: var(--text-secondary);">My Custom Notes</h2>
-            <div class="notes-grid" id="custom-notes"></div>
         </div>
 
         <h2 style="margin-bottom: 2rem; color: var(--text-secondary);">Logical Reasoning</h2>
@@ -749,24 +703,6 @@
                     modal.style.display = 'none';
                 }
             };
-
-            // Custom Notes Button Functionality
-            const customNoteBtn = document.getElementById('custom-note-btn');
-            const customNotesSection = document.getElementById('custom-notes-section');
-            const defaultNotesSection = document.querySelector('.main-content');
-
-            customNoteBtn.addEventListener('click', () => {
-                if (customNotesSection.style.display === 'none') {
-                    customNotesSection.style.display = 'block';
-                    defaultNotesSection.style.display = 'none';
-                    customNoteBtn.innerHTML = '<i class="fas fa-book"></i> Default Notes';
-                    fetchUserNotes(); // Fetch user's custom notes
-                } else {
-                    customNotesSection.style.display = 'none';
-                    defaultNotesSection.style.display = 'block';
-                    customNoteBtn.innerHTML = '<i class="fas fa-sticky-note"></i> My Notes';
-                }
-            });
 
             // Function to fetch user's notes from MongoDB
             async function fetchUserNotes() {
