@@ -17,10 +17,18 @@ const MockTestProgress = require('./models/MockTestProgress');
 const Note = require('./models/Note');
 const InterviewFeedback = require('./models/InterviewFeedback');
 
-// Initialize Firebase Admin with service account (optional for now)
+// Initialize Firebase Admin with service account
 let firebaseAdminInitialized = false;
 try {
-    const serviceAccount = require('./serviceAccountKey.json');
+    let serviceAccount;
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+        // In production (e.g., Render), load from environment variable
+        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    } else {
+        // In local development, load from file
+        serviceAccount = require('./serviceAccountKey.json');
+    }
+    
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
     });
