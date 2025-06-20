@@ -459,21 +459,21 @@
                 console.log('Sending answers:', answers.length, 'answers');
                 console.log('Sample answer:', answers[0]);
 
-                const requestBody = {
-                    userId: userId,
+                const payload = {
                     moduleId: moduleId,
                     answers: answers,
-                    timeSpent: 1800 - timeLeft
+                    timeSpent: 1800 - timeLeft,
+                    userId: userId 
                 };
 
-                console.log('Request body:', requestBody);
+                console.log('Request body:', payload);
 
                 const response = await fetch('/api/submit-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify(payload)
                 });
 
                 console.log('Response status:', response.status);

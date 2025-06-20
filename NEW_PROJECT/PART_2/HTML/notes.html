@@ -408,6 +408,29 @@
     <div class="main-content">
         <div class="header-actions">
             <h1 class="section-title">Study Notes</h1>
+            <div style="display: flex; gap: 1rem;">
+                <button class="add-note-btn" id="addNoteBtn"><i class="fas fa-plus"></i> Add Note</button>
+                <button class="add-note-btn" id="showNotesBtn" style="background: var(--accent-primary-hover); color: white;"><i class="fas fa-book"></i> Show Notes</button>
+            </div>
+        </div>
+        <div id="userNotesSection" style="margin-bottom:2rem; display:none;"></div>
+        <!-- Add Note Modal -->
+        <div class="modal" id="addNoteModal">
+            <div class="modal-content">
+                <span class="close" id="closeAddNoteModal">&times;</span>
+                <h2>Add a Note</h2>
+                <form id="addNoteForm">
+                    <div class="form-group">
+                        <label for="noteTitle">Title</label>
+                        <input type="text" id="noteTitle" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent">Content</label>
+                        <textarea id="noteContent" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Save Note</button>
+                </form>
+            </div>
         </div>
 
         <h2 style="margin-bottom: 2rem; color: var(--text-secondary);">Logical Reasoning</h2>
@@ -490,16 +513,20 @@
                         `;
                     } else {
                         // Custom note from database
-                        noteCard.innerHTML = `
-                            <h3 class="note-title">${note.title}</h3>
-                            <p class="note-description">${note.description}</p>
-                            
+                        const keyPointsHtml = (note.keyPoints && Array.isArray(note.keyPoints) && note.keyPoints.length > 0)
+                            ? `
                             <div class="key-points">
                                 <h4>Key Points</h4>
                                 <ul>
                                     ${note.keyPoints.map(point => `<li>${point}</li>`).join('')}
                                 </ul>
-                            </div>
+                            </div>`
+                            : '';
+
+                        noteCard.innerHTML = `
+                            <h3 class="note-title">${note.title}</h3>
+                            <p class="note-description">${note.content}</p>
+                            ${keyPointsHtml}
                             <div class="note-actions">
                                 <button class="edit-note-btn" data-note-id="${note._id}">
                                     <i class="fas fa-edit"></i> Edit
@@ -685,88 +712,98 @@
             renderNotes(notesData.quantitativeAptitude.advanced, 'quant-advanced-notes');
 
             // Modal functionality
-            const modal = document.getElementById('add-note-modal');
-            const addNoteBtn = document.getElementById('add-note-btn');
-            const closeBtn = document.querySelector('.close');
-            const addNoteForm = document.getElementById('add-note-form');
+            const addNoteModal = document.getElementById('addNoteModal');
+            const addNoteBtn = document.getElementById('addNoteBtn');
+            const showNotesBtn = document.getElementById('showNotesBtn');
+            const userNotesSection = document.getElementById('userNotesSection');
+            const closeAddNoteModal = document.getElementById('closeAddNoteModal');
+            const addNoteForm = document.getElementById('addNoteForm');
+
+            // Open modal
+            if (addNoteBtn) addNoteBtn.onclick = () => { addNoteModal.style.display = 'block'; };
+            if (closeAddNoteModal) closeAddNoteModal.onclick = () => { addNoteModal.style.display = 'none'; };
+            window.onclick = (e) => { if (e.target === addNoteModal) addNoteModal.style.display = 'none'; };
+
+            // Utility function to get the insecure user ID
+            function getUserIdOrAlert() {
+                const userId = localStorage.getItem('userId');
+                if (!userId) {
+                    alert('Could not find user ID. Please log in again.');
+                    return null;
+                }
+                return userId;
+            }
+
+            // --- EVENT LISTENERS ---
+            showNotesBtn.onclick = async () => {
+                const userId = getUserIdOrAlert();
+                if (!userId) return;
+
+                try {
+                    // Fetch notes for the specific user
+                    const res = await fetch(`/api/notes?userId=${userId}`);
+                    if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.message || 'Failed to fetch notes');
+                    }
+                    const notes = await res.json();
+                    renderNotes(notes, 'userNotesSection');
+
+                    // --- FIX: Make the notes container visible ---
+                    const userNotesContainer = document.getElementById('userNotesSection');
+                    if (userNotesContainer) {
+                        userNotesContainer.style.display = 'block';
+                    }
+
+                } catch (error) {
+                    console.error('Error fetching notes:', error);
+                    alert(`Error: ${error.message}`);
+                }
+            };
 
             addNoteBtn.onclick = () => {
-                modal.style.display = 'block';
+                addNoteModal.style.display = 'block';
             };
 
-            closeBtn.onclick = () => {
-                modal.style.display = 'none';
-            };
+            addNoteForm.onsubmit = async (e) => {
+                e.preventDefault();
 
-            window.onclick = (event) => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            };
+                const userId = getUserIdOrAlert();
+                if (!userId) return;
 
-            // Function to fetch user's notes from MongoDB
-            async function fetchUserNotes() {
-                const user = firebase.auth().currentUser;
-                if (user) {
-                    // Authenticated: fetch as before
-                    const idToken = await user.getIdToken();
+                // --- FIX: Only get fields that exist in this modal ---
+                const title = document.getElementById('noteTitle').value;
+                const description = document.getElementById('noteContent').value; 
+                
+                // Set default empty values for other fields
+                const category = 'General';
+                const keyPoints = description.split('.').map(p => p.trim()).filter(p => p);
+
+                try {
                     const response = await fetch('/api/notes', {
-                        headers: { 'Authorization': `Bearer ${idToken}` }
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId, title, description, category, keyPoints })
                     });
-                    if (response.ok) {
-                        const userNotes = await response.json();
-                        console.log('Fetched notes:', userNotes);
-                        
-                        // Clear existing notes
-                        const customNotesContainer = document.getElementById('custom-notes');
-                        customNotesContainer.innerHTML = '';
-                        
-                        if (userNotes.length === 0) {
-                            customNotesContainer.innerHTML = `
-                                <div class="no-notes-message">
-                                    <p>You haven't created any notes yet.</p>
-                                    <button class="add-note-btn" onclick="document.getElementById('add-note-modal').style.display='block'">
-                                        <i class="fas fa-plus"></i> Create Your First Note
-                                    </button>
-                                </div>
-                            `;
-                            return;
-                        }
 
-                        // Render all user notes in the custom notes section
-                        renderNotes(userNotes, 'custom-notes');
-                    } else {
+                    if (!response.ok) {
                         const errorData = await response.json();
-                        console.error('Error fetching notes:', errorData.message);
+                        throw new Error(errorData.message || 'Failed to save note');
                     }
-                } else {
-                    // Guest: fetch guest notes
-                    const response = await fetch(`/api/notes/guest/${guestId}`);
-                    if (response.ok) {
-                        const guestNotes = await response.json();
-                        console.log('Fetched guest notes:', guestNotes);
-                        
-                        // Clear existing notes
-                        const customNotesContainer = document.getElementById('custom-notes');
-                        customNotesContainer.innerHTML = '';
-                        
-                        if (guestNotes.length === 0) {
-                            customNotesContainer.innerHTML = `
-                                <div class="no-notes-message">
-                                    <p>You haven't created any notes yet.</p>
-                                    <button class="add-note-btn" onclick="document.getElementById('add-note-modal').style.display='block'">
-                                        <i class="fas fa-plus"></i> Create Your First Note
-                                    </button>
-                                </div>
-                            `;
-                            return;
-                        }
 
-                        // Render all guest notes in the custom notes section
-                        renderNotes(guestNotes, 'custom-notes');
-                    }
+                    addNoteModal.style.display = 'none';
+                    addNoteForm.reset();
+                    showNotesBtn.click(); // Refresh the notes list
+                } catch (error) {
+                    console.error('Error adding note:', error);
+                    alert(`Error: ${error.message}`);
                 }
-            }
+            };
+
+            // Close modal logic
+            const closeBtn = document.getElementById('closeAddNoteModal');
+            if (closeBtn) closeBtn.onclick = () => addNoteModal.style.display = 'none';
+            window.onclick = (e) => { if (e.target === addNoteModal) addNoteModal.style.display = 'none'; };
 
             // Initialize Firebase Auth listener
             firebase.auth().onAuthStateChanged((user) => {
@@ -800,38 +837,6 @@
                 guestId = 'guest_' + Math.random().toString(36).substr(2, 9);
                 localStorage.setItem('guestId', guestId);
             }
-
-            addNoteForm.onsubmit = async (e) => {
-                e.preventDefault();
-                const noteData = {
-                    title: document.getElementById('note-title').value,
-                    description: document.getElementById('note-description').value,
-                    category: document.getElementById('note-category').value,
-                    keyPoints: document.getElementById('key-points').value.split('\n').filter(point => point.trim()),
-                };
-
-                const user = firebase.auth().currentUser;
-                if (user) {
-                    // Authenticated: send as before
-                    const idToken = await user.getIdToken();
-                    await fetch('/api/notes', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${idToken}`
-                        },
-                        body: JSON.stringify(noteData)
-                    });
-                } else {
-                    // Guest: send to guest endpoint
-                    await fetch('/api/notes/guest', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ ...noteData, guestId })
-                    });
-                }
-                // ...refresh notes, close modal, etc.
-            };
         });
     </script>
 </body>

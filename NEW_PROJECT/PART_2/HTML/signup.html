@@ -324,11 +324,27 @@
                     throw new Error(data.message || 'Sign up failed. Please try again.');
                 }
 
-                successMessageEl.textContent = 'Account created successfully! Redirecting to login...';
-                successMessageEl.style.display = 'block';
+                // --- FIX & LOGGING ---
+                console.log('Signup successful. Server response:', data);
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    console.log('Token saved to localStorage on signup:', localStorage.getItem('token'));
+                } else {
+                    console.warn('No token received from server on signup.');
+                }
+                localStorage.setItem('isLoggedIn', 'true');
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('firstName', data.user.firstName);
+                    localStorage.setItem('userId', data.user.id || data.user._id);
+                }
+                // --- END FIX ---
 
+                successMessageEl.textContent = 'Sign up successful! Redirecting to login...';
+                successMessageEl.style.display = 'block';
+                
                 setTimeout(() => {
-                    window.location.href = 'login.html'; // Redirect to login page after successful signup
+                    window.location.href = 'login.html';
                 }, 2000);
 
             } catch (error) {

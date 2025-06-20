@@ -220,24 +220,6 @@ const progressSchema = new mongoose.Schema({
 
 const Progress = mongoose.model('Progress', progressSchema);
 
-// Authentication middleware
-const authenticateUser = async (req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ message: 'No token provided' });
-        }
-
-        const idToken = authHeader.split('Bearer ')[1];
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
-        req.user = decodedToken;
-        next();
-    } catch (error) {
-        console.error('Authentication error:', error);
-        res.status(401).json({ message: 'Invalid token' });
-    }
-};
-
 // Helper function to reliably determine the correct answer's index and text
 const getCorrectAnswerInfo = (question) => {
     if (!question || !question.correctAnswer || !question.options) {
@@ -274,54 +256,70 @@ const getCorrectAnswerInfo = (question) => {
 app.post('/api/signup', async (req, res) => {
     try {
         const { firstName, lastName, email, department, password } = req.body;
-        if (!firstName || !lastName || !email || !department || !password) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-        const existingUser = await User.findOne({ email });
+
+        // Check if user already exists
+        const existingUser = await User.findOne({ email: email.toLowerCase() });
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists with this email' });
+            return res.status(409).json({ message: 'An account with this email already exists.' });
         }
+
+        // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const user = new User({ firstName, lastName, email, department, password: hashedPassword });
-        await user.save();
-        
-        // Send welcome email
-        await sendWelcomeEmail(email, firstName);
-        
-        res.status(201).json({ message: 'User created successfully', userId: user._id, firstName: user.firstName });
+
+        const newUser = new User({
+            firstName,
+            lastName,
+            email: email.toLowerCase(),
+            department,
+            password: hashedPassword,
+        });
+
+        const savedUser = await newUser.save();
+
+        // Insecure: Return user object with ID, no token
+        res.status(201).json({
+            message: 'User created successfully',
+            user: {
+                id: savedUser._id,
+                firstName: savedUser.firstName,
+                email: savedUser.email,
+            }
+        });
+
     } catch (error) {
-        console.error('Signup error:', error);
-        res.status(500).json({ message: 'Server error during signup' });
+        console.error('Signup Error:', error);
+        res.status(500).json({ message: 'Server error during registration.' });
     }
 });
 
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-         if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
-        }
-        const user = await User.findOne({ email });
+
+        const user = await User.findOne({ email: email.toLowerCase() });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid credentials (user not found)' });
+            return res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
         }
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials (password incorrect)' });
+            return res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
         }
-        res.json({
+
+        // Insecure: Return user object with ID, no token
+        res.status(200).json({
             message: 'Login successful',
             user: {
                 id: user._id,
                 firstName: user.firstName,
-                email: user.email,
-                department: user.department
+                email: user.email
             }
         });
+
     } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ message: 'Server error during login' });
+        console.error('Login Error:', error);
+        res.status(500).json({ message: 'Server error during login.' });
     }
 });
 
@@ -509,13 +507,46 @@ app.post('/api/ask-gemini', async (req, res) => {
 app.get('/api/progress/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
-        const progress = await MockTestProgress.find({ userId })
-            .sort({ completedAt: -1 });
-        
-        res.json(progress);
+
+        if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+            return res.status(400).json({ message: 'Valid User ID is required.' });
+        }
+
+        // 1. Mock Test Progress
+        const testProgress = await MockTestProgress.find({ userId: userId });
+        const testsTaken = testProgress.length;
+        const totalScore = testProgress.reduce((sum, test) => sum + test.score, 0);
+        const averageScore = testsTaken > 0 ? totalScore / testsTaken : 0;
+        const modulesAttempted = [...new Set(testProgress.map(test => test.moduleId))].length;
+
+        // 2. Interview Progress
+        const interviewsTaken = await InterviewFeedback.countDocuments({ userId: userId });
+
+        // Using a hardcoded value for total modules as a placeholder
+        const TOTAL_MODULES = 10; 
+
+        // 3. Profile Strength Calculation
+        const scoreWeight = 0.5;
+        const modulesWeight = 0.4;
+        const interviewWeight = 0.1;
+        const normalizedScore = (averageScore / 100) * 100;
+        const normalizedModules = (modulesAttempted / TOTAL_MODULES) * 100;
+        const normalizedInterviews = Math.min(interviewsTaken, 5) / 5 * 100;
+        const strength = (normalizedScore * scoreWeight) + (normalizedModules * modulesWeight) + (normalizedInterviews * interviewWeight);
+        const profileStrength = Math.round(Math.min(strength, 100));
+
+        res.json({
+            testsCompleted: testsTaken,
+            averageScore: averageScore,
+            modulesAttempted: modulesAttempted,
+            totalModules: TOTAL_MODULES,
+            interviewsCompleted: interviewsTaken,
+            profileStrength: profileStrength
+        });
+
     } catch (error) {
-        console.error('Error fetching progress:', error);
-        res.status(500).json({ message: 'Server error while fetching progress' });
+        console.error('Error fetching user progress:', error);
+        res.status(500).json({ message: 'Error fetching user progress' });
     }
 });
 
@@ -631,10 +662,13 @@ app.post('/api/explain-answers', async (req, res) => {
 // Submit test answers and save progress
 app.post('/api/submit-test', async (req, res) => {
     try {
-        const { userId, moduleId, answers, timeSpent } = req.body;
+        const { moduleId, answers, timeSpent, userId } = req.body;
+        
+        console.log('\n=== Test Submission API Call ===');
+        console.log('Received submission for moduleId:', moduleId, 'by userId:', userId);
 
-        if (!userId || !moduleId || !answers || !Array.isArray(answers)) {
-            return res.status(400).json({ message: 'Invalid submission data' });
+        if (!moduleId || !answers || !userId) {
+            return res.status(400).json({ message: 'Missing required fields: moduleId, answers, or userId' });
         }
 
         console.log('Submitting test for user:', userId, 'module:', moduleId);
@@ -731,16 +765,18 @@ app.get('/api/module-stats/:moduleId', async (req, res) => {
 });
 
 // Notes API endpoints
-app.post('/api/notes', authenticateUser, async (req, res) => {
+app.post('/api/notes', async (req, res) => {
     try {
-        const { title, description, category, keyPoints } = req.body;
+        const { userId, title, description, category, keyPoints } = req.body;
         
+        if (!userId || !title || !description) {
+             return res.status(400).json({ message: 'User ID, title, and description are required.' });
+        }
+
         const newNote = new Note({
-            userId: req.user.uid,
-            title,
-            description,
-            category,
-            keyPoints
+            userId: userId,
+            title: title,
+            content: description,
         });
 
         await newNote.save();
@@ -751,9 +787,15 @@ app.post('/api/notes', authenticateUser, async (req, res) => {
     }
 });
 
-app.get('/api/notes', authenticateUser, async (req, res) => {
+app.get('/api/notes', async (req, res) => {
     try {
-        const notes = await Note.find({ userId: req.user._id }).sort({ createdAt: -1 });
+        const { userId } = req.query; // Get userId from query parameter
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required to fetch notes.' });
+        }
+
+        const notes = await Note.find({ userId: userId }).sort({ createdAt: -1 });
         res.json(notes);
     } catch (error) {
         console.error('Error fetching notes:', error);
@@ -761,17 +803,28 @@ app.get('/api/notes', authenticateUser, async (req, res) => {
     }
 });
 
-app.put('/api/notes/:id', authenticateUser, async (req, res) => {
+app.put('/api/notes/:id', async (req, res) => {
     try {
-        const { title, description, category, keyPoints } = req.body;
+        const { userId, title, description, category, keyPoints } = req.body;
+        
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required to update a note.' });
+        }
+        
+        const updateData = {
+            title,
+            content: description,
+            updatedAt: Date.now()
+        };
+
         const note = await Note.findOneAndUpdate(
-            { _id: req.params.id, userId: req.user._id },
-            { title, description, category, keyPoints },
+            { _id: req.params.id, userId: userId },
+            updateData,
             { new: true }
         );
 
         if (!note) {
-            return res.status(404).json({ message: 'Note not found' });
+            return res.status(404).json({ message: 'Note not found or user does not have permission.' });
         }
 
         res.json(note);
@@ -781,15 +834,22 @@ app.put('/api/notes/:id', authenticateUser, async (req, res) => {
     }
 });
 
-app.delete('/api/notes/:id', authenticateUser, async (req, res) => {
+app.delete('/api/notes/:id', async (req, res) => {
     try {
+        // We get the userId from the query string for DELETE requests
+        const { userId } = req.query;
+
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required to delete a note.' });
+        }
+
         const note = await Note.findOneAndDelete({
             _id: req.params.id,
-            userId: req.user._id
+            userId: userId
         });
 
         if (!note) {
-            return res.status(404).json({ message: 'Note not found' });
+            return res.status(404).json({ message: 'Note not found or user does not have permission.' });
         }
 
         res.json({ message: 'Note deleted successfully' });
@@ -808,28 +868,6 @@ app.get('/api/test-questions', async (req, res) => {
     } catch (error) {
         console.error('Error fetching questions:', error);
         res.status(500).json({ error: 'Failed to fetch questions' });
-    }
-});
-
-// Add this before app.listen()
-// Debug endpoint to check questions
-app.get('/api/debug/questions', async (req, res) => {
-    try {
-        const allQuestions = await Question.find({});
-        console.log('Total questions in database:', allQuestions.length);
-        res.json({
-            totalQuestions: allQuestions.length,
-            questions: allQuestions.map(q => ({
-                moduleId: q.moduleId,
-                section: q.section,
-                questionText: q.questionText.substring(0, 50) + '...',
-                options: q.options,
-                correctAnswer: q.correctAnswer
-            }))
-        });
-    } catch (error) {
-        console.error('Debug endpoint error:', error);
-        res.status(500).json({ error: error.message });
     }
 });
 

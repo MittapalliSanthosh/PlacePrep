@@ -332,10 +332,31 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.message || 'Login failed. Please check credentials.');
+                    throw new Error(data.message || 'Login failed');
                 }
 
-                handleSuccessfulLogin(data);
+                // --- INSECURE: Save user ID from server ---
+                console.log('Login successful. Server response:', data);
+                if (data.user && data.user.id) {
+                    localStorage.setItem('userId', data.user.id);
+                    console.log('Saved userId to localStorage:', data.user.id);
+                } else {
+                    console.warn('No user ID received from server on login.');
+                }
+                
+                // Also save general user info
+                localStorage.setItem('isLoggedIn', 'true');
+                if (data.user) {
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('firstName', data.user.firstName);
+                }
+
+                successMessageEl.textContent = "Login successful! Redirecting...";
+                successMessageEl.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'placement_website.html'; 
+                }, 1500);
 
             } catch (error) {
                 showError(error.message);
