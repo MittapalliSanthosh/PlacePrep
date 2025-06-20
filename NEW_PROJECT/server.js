@@ -15,6 +15,7 @@ const { sendWelcomeEmail } = require('./utils/emailService');
 const Question = require('./models/Question');
 const MockTestProgress = require('./models/MockTestProgress');
 const Note = require('./models/Note');
+const InterviewFeedback = require('./models/InterviewFeedback');
 
 // Initialize Firebase Admin with service account (optional for now)
 let firebaseAdminInitialized = false;
@@ -33,6 +34,8 @@ try {
 const { OAuth2Client } = require('google-auth-library');
 
 // Check if essential environment variables are loaded
+// Temporarily commented out for testing
+/*
 if (!process.env.GEMINI_API_KEY || !process.env.GOOGLE_CLIENT_ID) {
     console.error("FATAL ERROR: Required environment variables are not defined.");
     console.error("Make sure both GEMINI_API_KEY and GOOGLE_CLIENT_ID are in your .env file.");
@@ -40,12 +43,13 @@ if (!process.env.GEMINI_API_KEY || !process.env.GOOGLE_CLIENT_ID) {
 }
 console.log("GEMINI_API_KEY Status: Loaded");
 console.log("GOOGLE_CLIENT_ID Status: Loaded");
+*/
 
 // Initialize Google OAuth client
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'test_client_id');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -177,7 +181,7 @@ app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
 });
 
 // Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'test_key');
 const model = genAI.getGenerativeModel({ 
     model: "gemini-1.5-flash",
     safetySettings: [ // Optional: Adjust safety settings if needed
@@ -207,7 +211,7 @@ const progressSchema = new mongoose.Schema({
     totalQuestions: Number,
     answers: [{
         questionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' },
-        selectedAnswer: Number,
+        selectedAnswer: { type: String, default: null },
         isCorrect: Boolean
     }],
     completedAt: { type: Date, default: Date.now },
@@ -232,6 +236,38 @@ const authenticateUser = async (req, res, next) => {
         console.error('Authentication error:', error);
         res.status(401).json({ message: 'Invalid token' });
     }
+};
+
+// Helper function to reliably determine the correct answer's index and text
+const getCorrectAnswerInfo = (question) => {
+    if (!question || !question.correctAnswer || !question.options) {
+        return { index: 0, text: null }; // Return 0 (invalid) for 1-based index
+    }
+
+    const dbAnswer = String(question.correctAnswer);
+    const normalize = (str) => String(str).replace(/\s+/g, ' ').trim().toLowerCase();
+
+    let correctIndexOneBased = 0;
+    let correctText = null;
+
+    // Case 1: The stored answer is a number (e.g., "1", "2")
+    if (!isNaN(parseInt(dbAnswer)) && !/[a-z]/i.test(dbAnswer)) {
+        const idx = parseInt(dbAnswer);
+        if (idx > 0 && idx <= question.options.length) {
+            correctIndexOneBased = idx;
+            correctText = question.options[idx - 1];
+        }
+    } 
+    // Case 2: The stored answer is text (e.g., "WHERE")
+    else {
+        const foundIndex = question.options.findIndex(opt => normalize(opt) === normalize(dbAnswer));
+        if (foundIndex !== -1) {
+            correctIndexOneBased = foundIndex + 1;
+            correctText = question.options[foundIndex];
+        }
+    }
+    
+    return { index: correctIndexOneBased, text: correctText };
 };
 
 // Routes (keep as is)
@@ -473,7 +509,7 @@ app.post('/api/ask-gemini', async (req, res) => {
 app.get('/api/progress/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
-        const progress = await Progress.find({ userId })
+        const progress = await MockTestProgress.find({ userId })
             .sort({ completedAt: -1 });
         
         res.json(progress);
@@ -518,6 +554,80 @@ app.get('/api/questions/:moduleId', async (req, res) => {
     }
 });
 
+// AI-powered answer explanation endpoint
+app.post('/api/explain-answers', async (req, res) => {
+    try {
+        const { questions, userAnswers, correctAnswers } = req.body;
+
+        if (!questions || !userAnswers || !correctAnswers) {
+            return res.status(400).json({ message: 'Missing required data for explanation' });
+        }
+
+        console.log('Generating AI explanations for', questions.length, 'questions');
+
+        const explanations = [];
+
+        for (let i = 0; i < questions.length; i++) {
+            const question = { ...questions[i], correctAnswer: correctAnswers[i] };
+            const userAnswerIndex = userAnswers[i]; // 0-based index
+
+            const { index: correctAnswerIndex, text: correctAnswerText } = getCorrectAnswerInfo(question);
+            const isCorrect = userAnswerIndex !== null && (userAnswerIndex + 1) === correctAnswerIndex;
+
+            // Create prompt for Gemini AI
+            const prompt = `
+            Question: ${question.questionText}
+            Options:
+            ${question.options.map((option, index) => `${index + 1}. ${option}`).join('\n')}
+            Correct Answer: ${correctAnswerIndex > 0 ? correctAnswerIndex + '. ' + correctAnswerText : 'N/A'}
+            User's Answer: ${userAnswerIndex !== null ? (userAnswerIndex + 1) + '. ' + question.options[userAnswerIndex] : 'Not answered'}
+            
+            Please provide a clear and educational explanation for this question. Explain why the correct answer is right and, if the user was wrong, why their choice is incorrect. Keep it concise.
+            
+            Format your response as:
+            Explanation: [Your explanation here]
+            `;
+
+            try {
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                const explanationText = response.text().trim();
+                
+                explanations.push({
+                    questionIndex: i + 1,
+                    question: question.questionText,
+                    userAnswer: userAnswerIndex !== null ? userAnswerIndex + 1 : null,
+                    correctAnswer: correctAnswerIndex,
+                    isCorrect: isCorrect,
+                    explanation: explanationText,
+                    options: question.options
+                });
+
+                console.log(`Generated explanation for question ${i + 1}`);
+            } catch (aiError) {
+                console.error(`Error generating explanation for question ${i + 1}:`, aiError);
+                // Provide a fallback explanation
+                explanations.push({
+                    questionIndex: i + 1,
+                    question: question.questionText,
+                    userAnswer: userAnswerIndex !== null ? userAnswerIndex + 1 : null,
+                    correctAnswer: correctAnswerIndex,
+                    isCorrect: isCorrect,
+                    explanation: isCorrect ? 
+                        "Correct! You answered this question correctly." : 
+                        `Incorrect. The correct answer is option ${correctAnswerIndex}: "${correctAnswerText || 'N/A'}"`,
+                    options: question.options
+                });
+            }
+        }
+
+        res.json({ explanations });
+    } catch (error) {
+        console.error('Error generating explanations:', error);
+        res.status(500).json({ message: 'Failed to generate explanations', error: error.message });
+    }
+});
+
 // Submit test answers and save progress
 app.post('/api/submit-test', async (req, res) => {
     try {
@@ -527,6 +637,9 @@ app.post('/api/submit-test', async (req, res) => {
             return res.status(400).json({ message: 'Invalid submission data' });
         }
 
+        console.log('Submitting test for user:', userId, 'module:', moduleId);
+        console.log('Answers received:', answers.length);
+
         // Fetch correct answers for the questions
         const questionIds = answers.map(a => a.questionId);
         const questions = await Question.find({
@@ -534,31 +647,45 @@ app.post('/api/submit-test', async (req, res) => {
             moduleId
         });
 
+        console.log('Questions found:', questions.length);
+
         // Calculate score and prepare graded answers
         let score = 0;
         const gradedAnswers = answers.map(answer => {
             const question = questions.find(q => q._id.toString() === answer.questionId);
-            const isCorrect = question && question.correctAnswer === parseInt(answer.selectedOption);
-            if (isCorrect) {
-                score += question.marks;
+            const selectedOptionIndex = answer.selectedOption !== null ? parseInt(answer.selectedOption) : -1; // 0-based
+            
+            let isCorrect = false;
+            if (question) {
+                const { index: correctIndex } = getCorrectAnswerInfo(question);
+                if (correctIndex > 0 && (selectedOptionIndex + 1) === correctIndex) {
+                    isCorrect = true;
+                    score += 1; // Always +1 for correct answer
+                }
             }
+            
             return {
                 questionId: answer.questionId,
-                selectedAnswer: parseInt(answer.selectedOption),
-                isCorrect
+                selectedAnswer: answer.selectedOption,
+                isCorrect: isCorrect
             };
         });
 
-        // Save progress
-        const progress = new Progress({
-            userId,
-            moduleId,
-            score,
+        console.log('Calculated score:', score, 'out of', questions.length);
+
+        // Save progress using MockTestProgress model
+        const progress = new MockTestProgress({
+            userId: userId,
+            moduleId: moduleId,
+            section: questions.length > 0 ? questions[0].section : moduleId,
+            score: score,
             totalQuestions: questions.length,
             answers: gradedAnswers,
-            timeSpent
+            timeSpent: timeSpent
         });
+        
         await progress.save();
+        console.log('Test progress saved to database');
 
         // Return results
         res.json({
@@ -571,7 +698,7 @@ app.post('/api/submit-test', async (req, res) => {
         });
     } catch (error) {
         console.error('Error submitting test:', error);
-        res.status(500).json({ message: 'Server error while submitting test' });
+        res.status(500).json({ message: 'Server error while submitting test', error: error.message });
     }
 });
 
@@ -581,14 +708,16 @@ app.get('/api/module-stats/:moduleId', async (req, res) => {
         const { moduleId } = req.params;
         
         // Get total attempts
-        const totalAttempts = await Progress.countDocuments({ moduleId });
+        const totalAttempts = await MockTestProgress.countDocuments({ moduleId });
         
         // Get average score
-        const progressRecords = await Progress.find({ moduleId });
-        const averageScore = progressRecords.reduce((acc, curr) => acc + curr.score, 0) / totalAttempts;
+        const progressRecords = await MockTestProgress.find({ moduleId });
+        const averageScore = progressRecords.length > 0 ? 
+            progressRecords.reduce((acc, curr) => acc + curr.score, 0) / totalAttempts : 0;
         
         // Get highest score
-        const highestScore = Math.max(...progressRecords.map(p => p.score));
+        const highestScore = progressRecords.length > 0 ? 
+            Math.max(...progressRecords.map(p => p.score)) : 0;
         
         res.json({
             totalAttempts,
@@ -701,6 +830,57 @@ app.get('/api/debug/questions', async (req, res) => {
     } catch (error) {
         console.error('Debug endpoint error:', error);
         res.status(500).json({ error: error.message });
+    }
+});
+
+// AI Interview Feedback Endpoint
+app.post('/api/ai-interview-feedback', async (req, res) => {
+    try {
+        const { userId, department, interests, conversationHistory } = req.body;
+        if (!userId || !conversationHistory || !Array.isArray(conversationHistory) || conversationHistory.length === 0) {
+            return res.status(400).json({ message: 'Missing userId or conversation history.' });
+        }
+
+        // Compose a prompt for Gemini
+        let transcript = '';
+        conversationHistory.forEach(turn => {
+            if (turn.role === 'user') {
+                transcript += `User: ${turn.parts[0].text}\n`;
+            } else if (turn.role === 'model') {
+                transcript += `AI: ${turn.parts[0].text}\n`;
+            }
+        });
+
+        const prompt = `You are an AI interview coach. Here is a transcript of a mock interview between a user and you (the AI):\n\n${transcript}\n\nPlease provide:\n1. Constructive feedback on the user's overall interview performance.\n2. A score out of 10 (as a number only, no explanation) for their performance.\n3. Suggestions for improvement.\n\nFormat your response as:\nFeedback: [your feedback]\nScore: [number out of 10]\n`;
+
+        // Call Gemini
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const aiText = response.text().trim();
+
+        // Parse feedback and score
+        let feedback = aiText;
+        let score = null;
+        const scoreMatch = aiText.match(/Score:\s*(\d{1,2})/i);
+        if (scoreMatch) {
+            score = parseInt(scoreMatch[1]);
+            feedback = aiText.replace(/Score:\s*\d{1,2}/i, '').replace('Feedback:', '').trim();
+        }
+
+        // Save to MongoDB
+        await InterviewFeedback.create({
+            userId,
+            department,
+            interests,
+            feedback,
+            score,
+            conversation: conversationHistory
+        });
+
+        res.json({ feedback, score });
+    } catch (error) {
+        console.error('AI Interview Feedback Error:', error);
+        res.status(500).json({ message: 'Failed to generate feedback', error: error.message });
     }
 });
 

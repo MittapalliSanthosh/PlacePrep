@@ -564,7 +564,14 @@
 
             <div class="ai-chat-container" id="ai-chat">
                 <!-- Chat messages will appear here -->
-                </div>
+            </div>
+
+            <div class="ai-feedback-section" id="ai-feedback-section" style="display:none; margin-top:2rem;">
+                <button class="mock-interview-btn" id="get-feedback-btn" style="margin-bottom:1rem;">
+                    <i class="fas fa-star"></i> Get AI Feedback
+                </button>
+                <div id="ai-feedback-result"></div>
+            </div>
 
             <div class="ai-controls">
                 <textarea class="ai-input" id="ai-user-input" placeholder="Type your response here..." rows="2"></textarea>
@@ -836,6 +843,11 @@
             conversationHistory = [];
             const loadingIndicator = showLoadingIndicator();
 
+            // Show feedback section (button)
+            document.getElementById('ai-feedback-section').style.display = 'block';
+            document.getElementById('ai-feedback-result').innerHTML = '';
+            document.getElementById('get-feedback-btn').disabled = false;
+
             try {
                 const response = await callBackendAPI({
                     department,
@@ -1103,6 +1115,39 @@
                 document.getElementById('ai-user-input').placeholder = 'Type your response here...';
             }
         }
+
+        // Feedback button logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const feedbackBtn = document.getElementById('get-feedback-btn');
+            if (feedbackBtn) {
+                feedbackBtn.onclick = async function() {
+                    feedbackBtn.disabled = true;
+                    document.getElementById('ai-feedback-result').innerHTML = '<div class="chat-message assistant-message loading"><div class="typing-indicator"><span></span><span></span><span></span></div> Getting feedback...</div>';
+                    try {
+                        const userId = localStorage.getItem('userId');
+                        const department = document.getElementById('ai-department').value;
+                        const interests = document.getElementById('ai-interests').value;
+                        const response = await fetch(`${BACKEND_URL}/api/ai-interview-feedback`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                userId,
+                                department,
+                                interests,
+                                conversationHistory
+                            })
+                        });
+                        const data = await response.json();
+                        if (!response.ok) throw new Error(data.message || 'Failed to get feedback');
+                        document.getElementById('ai-feedback-result').innerHTML = `<div class="alert alert-info"><strong>AI Feedback:</strong><br>Score: <b>${data.score}/10</b><br>${data.feedback}</div>`;
+                    } catch (err) {
+                        document.getElementById('ai-feedback-result').innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
+                    } finally {
+                        feedbackBtn.disabled = false;
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>

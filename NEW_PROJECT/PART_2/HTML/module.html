@@ -65,6 +65,58 @@
             bottom: 20px;
             right: 20px;
         }
+        
+        /* Detailed Report Styling */
+        .modal-xl {
+            max-width: 95%;
+        }
+        
+        .card-header h6 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .alert-info {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+            color: #495057;
+        }
+        
+        .alert-info strong {
+            color: #0c5460;
+        }
+        
+        .list-unstyled li {
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .list-unstyled li:last-child {
+            border-bottom: none;
+        }
+        
+        .text-success.fw-bold {
+            background-color: #d4edda;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        /* Responsive adjustments for detailed report */
+        @media (max-width: 768px) {
+            .modal-xl {
+                max-width: 100%;
+                margin: 0.5rem;
+            }
+            
+            .row .col-md-3 {
+                margin-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -103,7 +155,7 @@
 
     <!-- Result Modal -->
     <div class="modal fade" id="resultModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Test Results</h5>
@@ -113,8 +165,37 @@
                     <!-- Results will be displayed here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="window.location.href='dashboard.html'">
-                        Back to Dashboard
+                    <button type="button" class="btn btn-info" onclick="showDetailedReport()">
+                        <i class="fas fa-chart-bar"></i> View Detailed Report
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='placement_website.html'">
+                        <i class="fas fa-home"></i> Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Report Modal -->
+    <div class="modal fade" id="detailedReportModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detailed Test Report with AI Explanations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detailedReportContent">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Generating AI explanations...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="window.location.href='placement_website.html'">
+                        <i class="fas fa-home"></i> Back to Dashboard
                     </button>
                 </div>
             </div>
@@ -129,6 +210,7 @@
         let timeLeft = 1800; // 30 minutes in seconds
         let timer;
         let moduleId = '';
+        let testResults = null; // Store test results for detailed report
 
         // Get moduleId from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -136,6 +218,14 @@
 
         // Fetch questions when page loads
         window.onload = async function() {
+            // Check if user is logged in
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                alert('Please log in to take the test. You will be redirected to the login page.');
+                window.location.href = 'login.html';
+                return;
+            }
+
             if (!moduleId) {
                 alert('No module specified');
                 window.location.href = 'mocktest.html';
@@ -144,6 +234,7 @@
 
             console.log('\n=== Module Page Load ===');
             console.log('Module ID:', moduleId);
+            console.log('User ID:', userId);
             
             try {
                 // First, test if we can reach the server
@@ -320,6 +411,20 @@
         async function submitTest() {
             clearInterval(timer);
             
+            // Check if user is logged in
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                alert('Please log in to submit your test. You will be redirected to the login page.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Check if questions are loaded
+            if (!questions || questions.length === 0) {
+                alert('No questions loaded. Please refresh the page and try again.');
+                return;
+            }
+            
             const unanswered = userAnswers.filter(answer => answer === null).length;
             if (unanswered > 0 && !confirm(`You have ${unanswered} unanswered questions. Are you sure you want to submit?`)) {
                 startTimer();
@@ -327,47 +432,263 @@
             }
 
             try {
-                const answers = questions.map((q, index) => ({
-                    questionId: q._id,
-                    selectedOption: userAnswers[index]
-                }));
+                console.log('Submitting test for user:', userId, 'module:', moduleId);
+                console.log('Total questions:', questions.length);
+                console.log('User answers:', userAnswers);
+                
+                // Create answers array, handling null values properly
+                const answers = questions.map((q, index) => {
+                    const selectedOption = userAnswers[index];
+                    const answer = {
+                        questionId: q._id,
+                        selectedOption: selectedOption !== null ? selectedOption.toString() : null
+                    };
+                    console.log(`Question ${index + 1}:`, answer);
+                    return answer;
+                });
+
+                console.log('Sending answers:', answers.length, 'answers');
+                console.log('Sample answer:', answers[0]);
+
+                const requestBody = {
+                    userId: userId,
+                    moduleId: moduleId,
+                    answers: answers,
+                    timeSpent: 1800 - timeLeft
+                };
+
+                console.log('Request body:', requestBody);
 
                 const response = await fetch('/api/submit-test', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        userId: localStorage.getItem('userId'),
-                        moduleId,
-                        answers,
-                        timeSpent: 1800 - timeLeft
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
-                if (!response.ok) throw new Error('Failed to submit test');
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Server error response:', errorData);
+                    throw new Error(errorData.message || 'Failed to submit test');
+                }
                 
                 const result = await response.json();
+                console.log('Test submitted successfully:', result);
+                
+                // Store test results for detailed report
+                testResults = {
+                    score: result.score,
+                    totalQuestions: result.totalQuestions,
+                    timeSpent: 1800 - timeLeft,
+                    moduleId: moduleId
+                };
                 
                 // Display results
+                const percentage = Math.round((result.score / result.totalQuestions) * 100);
+                const timeSpentMinutes = Math.floor((1800 - timeLeft) / 60);
+                const timeSpentSeconds = (1800 - timeLeft) % 60;
+                
                 document.getElementById('resultContent').innerHTML = `
                     <div class="text-center">
-                        <h4>Your Score: ${result.score}/${result.totalQuestions}</h4>
-                        <p>Time Spent: ${Math.floor((1800 - timeLeft) / 60)} minutes</p>
+                        <h4>Test Results</h4>
+                        <div class="mb-3">
+                            <h5 class="text-primary">Score: ${result.score}/${result.totalQuestions}</h5>
+                            <h6 class="text-secondary">Percentage: ${percentage}%</h6>
+                        </div>
+                        <p><strong>Time Spent:</strong> ${timeSpentMinutes}m ${timeSpentSeconds}s</p>
                         <div class="progress mb-3">
-                            <div class="progress-bar" role="progressbar" 
-                                 style="width: ${(result.score / result.totalQuestions) * 100}%">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: ${percentage}%" aria-valuenow="${percentage}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                                ${percentage}%
                             </div>
+                        </div>
+                        <p class="text-success"><i class="fas fa-check-circle"></i> Your test results have been saved to the database!</p>
+                        <div class="mt-3">
+                            <small class="text-muted">Module: ${moduleId}</small><br>
+                            <small class="text-muted">Completed: ${new Date().toLocaleString()}</small>
                         </div>
                     </div>
                 `;
                 
                 new bootstrap.Modal(document.getElementById('resultModal')).show();
             } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to submit test. Please try again.');
+                console.error('Error submitting test:', error);
+                alert('Failed to submit test: ' + error.message + '. Please try again.');
                 startTimer();
             }
+        }
+
+        async function showDetailedReport() {
+            if (!testResults) {
+                alert('No test results available');
+                return;
+            }
+
+            // Close the result modal and open detailed report modal
+            const resultModal = bootstrap.Modal.getInstance(document.getElementById('resultModal'));
+            resultModal.hide();
+            
+            const detailedModal = new bootstrap.Modal(document.getElementById('detailedReportModal'));
+            detailedModal.show();
+
+            try {
+                // Prepare data for AI explanations
+                const correctAnswers = questions.map(q => q.correctAnswer);
+                
+                console.log('Requesting AI explanations...');
+                const response = await fetch('/api/explain-answers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        questions: questions,
+                        userAnswers: userAnswers,
+                        correctAnswers: correctAnswers
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate explanations');
+                }
+
+                const data = await response.json();
+                console.log('AI explanations received:', data.explanations.length);
+
+                // Display detailed report
+                displayDetailedReport(data.explanations);
+
+            } catch (error) {
+                console.error('Error generating detailed report:', error);
+                document.getElementById('detailedReportContent').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Failed to generate AI explanations: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function displayDetailedReport(explanations) {
+            const percentage = Math.round((testResults.score / testResults.totalQuestions) * 100);
+            const timeSpentMinutes = Math.floor(testResults.timeSpent / 60);
+            const timeSpentSeconds = testResults.timeSpent % 60;
+
+            let reportHTML = `
+                <div class="mb-4">
+                    <h4 class="text-center mb-3">Test Summary</h4>
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5>Score</h5>
+                                    <h3>${testResults.score}/${testResults.totalQuestions}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5>Percentage</h5>
+                                    <h3>${percentage}%</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5>Time Spent</h5>
+                                    <h3>${timeSpentMinutes}m ${timeSpentSeconds}s</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h5>Module</h5>
+                                    <h3>${testResults.moduleId}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h4 class="mb-3">Question-wise Analysis with AI Explanations</h4>
+            `;
+
+            explanations.forEach((explanation, index) => {
+                const statusClass = explanation.isCorrect ? 'success' : 'danger';
+                const statusIcon = explanation.isCorrect ? 'check-circle' : 'times-circle';
+                const statusText = explanation.isCorrect ? 'Correct' : 'Incorrect';
+
+                // Safely get the text for user's and correct answer
+                const userAnswerText = (explanation.userAnswer && explanation.options[explanation.userAnswer - 1]) 
+                    ? explanation.options[explanation.userAnswer - 1] 
+                    : 'Not answered';
+
+                const correctAnswerText = (explanation.correctAnswer && explanation.options[explanation.correctAnswer - 1])
+                    ? explanation.options[explanation.correctAnswer - 1]
+                    : 'N/A';
+
+                reportHTML += `
+                    <div class="card mb-3 border-${statusClass}">
+                        <div class="card-header bg-${statusClass} text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-${statusIcon}"></i>
+                                Question ${explanation.questionIndex} - ${statusText}
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">${explanation.question}</h6>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <strong>Your Answer:</strong> 
+                                    <span class="p-1 rounded ${!explanation.isCorrect ? 'bg-danger-subtle' : ''}">${userAnswerText}</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Correct Answer:</strong> 
+                                    <span class="p-1 rounded bg-success-subtle">${correctAnswerText}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <strong>Options:</strong>
+                                <ul class="list-group">
+                                    ${explanation.options.map((option, i) => {
+                                        let itemClass = 'list-group-item';
+                                        let icon = '';
+                                        // Highlight correct answer
+                                        if (i + 1 === explanation.correctAnswer) {
+                                            itemClass += ' list-group-item-success';
+                                            icon = ' <i class="fas fa-check text-success"></i>';
+                                        }
+                                        // Highlight user's incorrect answer
+                                        if (!explanation.isCorrect && i + 1 === explanation.userAnswer) {
+                                            itemClass += ' list-group-item-danger';
+                                            icon = ' <i class="fas fa-times text-danger"></i>';
+                                        }
+                                        return `<li class="${itemClass}">${i + 1}. ${option}${icon}</li>`;
+                                    }).join('')}
+                                </ul>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <strong><i class="fas fa-robot"></i> AI Explanation:</strong><br>
+                                ${explanation.explanation}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('detailedReportContent').innerHTML = reportHTML;
         }
 
         // Prevent accidental navigation

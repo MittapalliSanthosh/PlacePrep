@@ -413,6 +413,7 @@
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('firstName', data.user.firstName || data.user.displayName);
+            localStorage.setItem('userId', data.user.id); // Store userId for test submissions
 
             setTimeout(() => {
                 window.location.href = 'placement_website.html';
