@@ -199,9 +199,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Team
 
-- **Full Stack Development**: [Your Name]
-- **UI/UX Design**: [Your Name]
-- **Database Design**: [Your Name]
+- **Full Stack Development**: Mittapalli Santhosh Kumar
+- **UI/UX Design**: Mittapalli Santhosh Kumar
+- **Database Design**: Mittapalli Santhosh Kumar
 
 ## 🙏 Acknowledgments
 
@@ -214,7 +214,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support and questions:
 - Create an issue in the repository
-- Contact: [your-email@example.com]
+- Contact: santhoshkumarmittapalli7@gmail.com
 - Project documentation: [link-to-docs]
 
 ---
