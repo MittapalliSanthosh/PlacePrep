@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to PlacePrep - Your Placement Success Starts Here</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Landing Page Specific Theme - Based on the Image */
+            --lp-bg: linear-gradient(135deg, #FFF0F5 0%, #E6E6FA 60%, #FFF5EE 100%); /* Lavender, Seashell, LavenderBlush like gradient */
+            --lp-text-primary: #2D3748; /* Dark Gray/Slate for main text */
+            --lp-text-secondary: #4A5568; /* Medium Gray/Slate for subtext */
+            --lp-text-logo: #6B46C1; /* Deep Purple for "PlacePrep" in logo */
+            --lp-accent-primary: #FF69B4; /* Hot Pink for "Get Started Free" */
+            --lp-accent-primary-hover: #FF3E9E;
+            --lp-accent-secondary: #F97316; /* Orange for "Enter the Gateway" & sub-badge */
+            --lp-accent-secondary-hover: #EA580C;
+            --lp-btn-signin-border: #A0AEC0; /* Gray for "Sign In" button border */
+            --lp-btn-signin-text: var(--lp-text-secondary);
+            --lp-btn-signin-hover-bg: #EDF2F7; /* Very light gray */
+
+            --font-main: 'Poppins', sans-serif;
+            --font-heading: 'Orbitron', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--lp-bg);
+            color: var(--lp-text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .landing-navbar {
+            padding: 1.5rem 0; width: 100%;
+            position: absolute; top: 0; left: 0; z-index: 1000;
+            background: transparent; 
+        }
+        .landing-nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+        .landing-logo {
+            font-size: 2.2rem; font-weight: 900;
+            font-family: var(--font-heading);
+            color: var(--lp-text-logo);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+        /* Styling for the 'Prep' part of the logo if different color desired */
+        .landing-logo .logo-prep {
+            color: var(--lp-accent-primary); /* Making 'Prep' part Orange like buttons */
+        }
+
+        .landing-nav-actions a, .landing-nav-actions button { /* Targeting both if you use button for toggle */
+            padding: 0.6rem 1.5rem; border-radius: 50px; text-decoration: none;
+            font-weight: 600; font-size: 0.85rem; transition: all 0.25s ease;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            border: 2px solid transparent; /* Base border */
+            cursor: pointer;
+        }
+        .landing-nav-actions .btn-login {
+            background: var(--white-color);
+            color: var(--lp-text-secondary);
+            border-color: var(--lp-btn-signin-border);
+            margin-right: 0.75rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .landing-nav-actions .btn-login:hover {
+            background: var(--lp-btn-signin-hover-bg);
+            border-color: var(--lp-text-secondary);
+            transform: translateY(-1px);
+        }
+        .landing-nav-actions .btn-signup {
+            background: var(--lp-accent-primary);
+            color: var(--white-color);
+            border-color: var(--lp-accent-primary);
+            box-shadow: 0 4px 12px rgba(255,105,180, 0.3);
+        }
+        .landing-nav-actions .btn-signup:hover {
+            background: var(--lp-accent-primary-hover);
+            border-color: var(--lp-accent-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255,105,180, 0.4);
+        }
+        
+        .landing-hero {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; flex-grow: 1; /* Takes remaining space */
+            text-align: center; padding: 8rem 2rem 3rem; /* Increased top padding */
+            position: relative; overflow: hidden; 
+        }
+        /* Removed ::before aurora for the very light theme as per image */
+
+        .hero-content-landing { max-width: 750px; z-index: 1; }
+        .hero-content-landing .sub-badge {
+            display: inline-block;
+            background-color: rgba(255, 105, 180, 0.1); /* Light Pinkish-Orange */
+            color: var(--lp-accent-secondary); /* Main CTA orange for text */
+            padding: 0.45rem 1.2rem; border-radius: 50px;
+            font-size: 0.8rem; font-weight: 600; margin-bottom: 1.8rem;
+            letter-spacing: 0.5px; border: 1px solid rgba(255, 105, 180, 0.2);
+        }
+        .hero-content-landing .sub-badge i { margin-left: 0.3rem; }
+
+        .hero-content-landing h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 7vw, 4.2rem); /* Slightly adjusted max size */
+            font-weight: 800; 
+            color: var(--lp-text-primary);
+            line-height: 1.15; margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Very subtle shadow for depth */
+        }
+        
+        .hero-content-landing p.subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.2rem); /* Adjusted */
+            color: var(--lp-text-secondary);
+            margin-bottom: 2.5rem; max-width: 650px; 
+            margin-left: auto; margin-right: auto; opacity: 0.95;
+        }
+        .cta-button-landing {
+            padding: 0.9rem 2.8rem; font-size: 1.05rem; border-radius: 50px;
+            text-decoration: none; font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--lp-accent-secondary);
+            color: white;
+            box-shadow: 0 5px 18px rgba(249,115,22, 0.35); 
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+            letter-spacing: 0.3px;
+        }
+        .cta-button-landing:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: var(--lp-accent-secondary-hover); /* Assuming an orange hover */
+            box-shadow: 0 8px 22px rgba(249,115,22, 0.45);
+        }
+        .cta-button-landing i { transition: transform 0.3s ease; }
+        .cta-button-landing:hover i { transform: translateX(4px); }
+        
+        /* Removed landing-theme-toggle CSS as the button is removed */
+
+        @media (max-width: 768px) {
+            .landing-nav-container { padding: 0 1rem; }
+            .landing-logo { font-size: 1.8rem; }
+            .landing-nav-actions { display: none; } /* Hide for very simple mobile landing */
+            .landing-hero { padding-top: 4rem; } /* Less top padding if nav actions are hidden */
+            .hero-content-landing h1 { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+            .hero-content-landing p.subtitle { font-size: clamp(0.9rem, 4vw, 1.05rem); margin-bottom: 2rem;}
+            .cta-button-landing { padding: 0.8rem 2.2rem; font-size: 0.95rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="landing-navbar">
+        <div class="landing-nav-container">
+            <a href="#" class="landing-logo">Place<span class="logo-prep">Prep</span></a>
+            <div class="landing-nav-actions">
+                <a href="login.html" class="btn-login">Sign In</a>
+                <a href="signup.html" class="btn-signup">Get Started Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="landing-hero">
+        <div class="hero-content-landing" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+            <div class="sub-badge">Your Ultimate Placement Companion <i class="fas fa-star"></i></div>
+            <h1>Launch Your Career to New Heights</h1>
+            <p class="subtitle">
+                Comprehensive resources, AI-powered interview practice, department-specific materials, and real-time progress tracking. Everything you need to ace your placements, all in one place.
+            </p>
+            <a href="login.html" class="cta-button-landing">
+                Enter the Gateway <i class="fas fa-rocket"></i>
+            </a>
+        </div>
+    </main>
+    
+    <!-- Theme toggle button is removed from HTML as this page has a fixed theme -->
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+        });
+
+
+    </script>
+</body>
+</html>

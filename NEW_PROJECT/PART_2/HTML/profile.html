@@ -9,413 +9,412 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        /* ======== THEME VARIABLES (REFINED) ======== */
+        /* ======== THEME VARIABLES (REFINED FOR PROFILE PAGE AESTHETICS) ======== */
         :root {
-            /* --- Base Colors --- */
-            --bg-primary: #02040a;
+            --bg-primary: #02040a; /* Deeper space blue */
             --bg-secondary: #0a0c12; 
             --bg-card: #0e1018;   
             --bg-card-alt: #12141c; 
-            --bg-navbar: rgba(10, 10, 10, 0.7);
-            --bg-navbar-scrolled: rgba(2, 4, 10, 0.85);
-            --bg-theme-toggle-hover: #222222;
+            --bg-navbar: rgba(10, 10, 10, 0.6); /* More transparent */
+            --bg-navbar-scrolled: rgba(2, 4, 10, 0.8);
+            --bg-theme-toggle-hover: #334155; /* Slate 700 for hover */
 
-            /* --- Text Colors --- */
-            --text-primary: #E0E0E0;
-            --text-secondary: #B0B0B0;
-            --text-muted: #8892b0;
-            --text-headings: #FFFFFF;
+            --text-primary: #E0E5F0; /* Cool white/light gray */
+            --text-secondary: #94A3B8; /* Slate 400 for secondary text */
+            --text-muted: #64748B;    /* Slate 500 for muted text */
+            --text-headings: #F8FAFC; /* Brighter white for headings */
             --text-logo: #FFFFFF;
-            --text-nav-link: #A0A0A0;
-            --text-nav-link-hover: #FFFFFF;
-            --text-theme-toggle: #E0E0E0;
+            --text-nav-link: #CBD5E1; /* Lighter nav links */
+            --text-nav-link-hover: var(--accent-cyber-glow); /* Glow on hover */
+            --text-theme-toggle: var(--text-primary);
             
-            /* --- Accent Colors --- */
-            --accent-primary: #F97316; /* Main Orange */
-            --accent-primary-hover: #EA580C;
-            --accent-secondary: #00F0FF; /* Neon Cyan (Main Accent) */
-            --accent-tertiary: #9333ea; /* Purple for gradients */
+            --border-primary: #1E293B;   /* Darker Slate border */
+            --border-secondary: #334155; /* Slightly lighter Slate border */
+            --border-highlight: var(--accent-secondary); /* Teal highlight border */
+            --border-theme-toggle: var(--border-secondary);
+
+            /* More vibrant and distinct accents */
+            --accent-primary: #F59E0B;      /* Amber/Gold - Main CTA */
+            --accent-primary-hover: #D97706;
+            --accent-secondary: #00D8FF;    /* Electric Blue/Cyan - Secondary Highlights */
+            --accent-tertiary: #BE185D;     /* Fuchsia - Tertiary or Gradients */
+            --accent-progress: var(--accent-secondary); /* Cyan for progress elements */
+
+            /* RGB versions for rgba() - Important: Update these if accent colors change */
+            --accent-primary-rgb: 245,158,11; /* Amber/Gold */
+            --accent-secondary-rgb: 0,216,255; /* Electric Blue */
+            --accent-tertiary-rgb: 190,24,93;   /* Fuchsia */
+
+            --gradient-profile-avatar: linear-gradient(145deg, var(--accent-secondary), var(--accent-tertiary));
+            --gradient-heading-border: linear-gradient(90deg, var(--accent-secondary) 30%, transparent);
             
-            /* --- Border Colors --- */
-            --border-primary: #222630;
-            --border-secondary: #303642;
-            --border-highlight: var(--accent-secondary);
-            --border-theme-toggle: #444444;
+            --shadow-card: 0 10px 25px rgba(0,0,0,0.5);
+            --shadow-card-hover: 0 15px 35px rgba(0,0,0,0.6);
+            --shadow-text-glow: 0 0 15px rgba(var(--accent-secondary-rgb), 0.6);
 
-            /* --- Gradients & Effects --- */
-            --gradient-profile-avatar: linear-gradient(135deg, var(--accent-secondary), var(--accent-tertiary));
-            --gradient-heading-border: linear-gradient(90deg, var(--accent-secondary), transparent);
-            --shadow-card: 0 10px 30px -15px rgba(0,0,0,0.7);
-            --shadow-card-hover: 0 20px 40px -15px rgba(0,0,0,0.6);
-            --shadow-accent-glow: 0 0 18px rgba(var(--accent-secondary-rgb), 0.6);
-            --shadow-text-glow: 0 0 8px rgba(var(--accent-secondary-rgb), 0.5);
-
-            /* --- RGB versions for rgba() --- */
-            --accent-primary-rgb: 249,115,22;
-            --accent-secondary-rgb: 0,240,255;
-
-            /* --- Transition --- */
-            --transition-speed: 0.3s;
-            --transition-curve: cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Specific Stat Card Icon Colors - Dark Theme */
+            --icon-overall-progress: var(--accent-secondary); /* Electric Blue */
+            --icon-topics-mastered:  var(--accent-tertiary);  /* Fuchsia */
+            --icon-assessments-taken: #34D399; /* Emerald Green */
+            --icon-average-score:    var(--accent-primary); /* Amber/Gold */
         }
 
         html.light-mode {
-            --bg-primary: #F0F2F5;
+            --bg-primary: #F3F4F6;    /* Lighter Gray background */
             --bg-secondary: #FFFFFF;
-            --bg-card: #FFFFFF;
-            --bg-card-alt: #F8F9FA;
-            --bg-navbar: rgba(255, 255, 255, 0.7);
-            --bg-navbar-scrolled: rgba(255, 255, 255, 0.9);
-            --bg-theme-toggle-hover: #E9ECEF;
+            --bg-card: #FFFFFF;    
+            --bg-card-alt: #F9FAFB; 
+            --bg-navbar: rgba(255, 255, 255, 0.6);
+            --bg-navbar-scrolled: rgba(255, 255, 255, 0.85);
+            --bg-theme-toggle-hover: #E5E7EB;
 
-            --text-primary: #1A202C;
-            --text-secondary: #475569;
-            --text-muted: #6B7280;
-            --text-headings: #0F172A;
+            --text-primary: #111827;    /* Very Dark Gray */
+            --text-secondary: #4B5563;  /* Dark Gray */
+            --text-muted: #6B7280;     /* Medium Gray */
+            --text-headings: #111827;
             --text-logo: var(--accent-primary);
-            --text-nav-link: #495057;
+            --text-nav-link: var(--text-secondary);
             --text-nav-link-hover: var(--accent-primary);
-            --text-theme-toggle: #495057;
+            --text-theme-toggle: var(--text-primary);
 
-            --accent-secondary: #0891B2; /* Darker Cyan for light mode */
-            --accent-tertiary: #7e22ce;
+            --border-primary: #E5E7EB;   /* Gray 200 */
+            --border-secondary: #D1D5DB; /* Gray 300 */
+            --border-highlight: var(--accent-secondary); 
+            --border-theme-toggle: var(--border-secondary);
             
-            --border-primary: #E2E8F0;
-            --border-secondary: #CBD5E1;
-            --border-highlight: var(--accent-secondary);
-            --border-theme-toggle: #CED4DA;
+            --accent-primary: #F97316; /* Orange */
+            --accent-secondary: #0891B2; /* Darker Cyan */
+            --accent-tertiary: #A21CAF;  /* Darker Fuchsia */
+            --gradient-profile-avatar: linear-gradient(145deg, var(--accent-secondary), var(--accent-tertiary));
 
-            --gradient-profile-avatar: linear-gradient(135deg, var(--accent-secondary), var(--accent-tertiary));
-            --gradient-heading-border: linear-gradient(90deg, var(--accent-secondary), transparent);
-
-            --shadow-card: 0 8px 20px rgba(100, 116, 139, 0.1);
-            --shadow-card-hover: 0 12px 30px rgba(100, 116, 139, 0.15);
-            --shadow-accent-glow: 0 0 15px rgba(var(--accent-secondary-rgb), 0.4);
+            --shadow-card: 0 8px 16px rgba(100, 116, 139, 0.1);
+            --shadow-card-hover: 0 12px 24px rgba(100, 116, 139, 0.15);
             --shadow-text-glow: 0 0 10px rgba(var(--accent-secondary-rgb), 0.3);
 
-            --accent-secondary-rgb: 8,145,178;
+             /* Specific Stat Card Icon Colors - Light Theme */
+            --icon-overall-progress: var(--accent-secondary);
+            --icon-topics-mastered:  var(--accent-tertiary); 
+            --icon-assessments-taken: #059669; /* Darker Emerald */
+            --icon-average-score:    var(--accent-primary);
         }
 
-        /* ======== GENERAL & UTILITIES ======== */
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Outfit', sans-serif; 
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.65;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .main-content-profile { padding: 3rem 0; }
-        .container { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
-        
-        /* ======== SHARED CARD BASE STYLE ======== */
-        .card-base {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-primary);
-            border-radius: 12px;
-            box-shadow: var(--shadow-card);
-            transition: transform var(--transition-speed) var(--transition-curve), box-shadow var(--transition-speed) var(--transition-curve);
-        }
-        .card-base:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-card-hover);
-        }
-
-        /* ======== NAVIGATION ======== */
         .navbar {
             position: sticky; top: 0; width: 100%;
-            background: var(--bg-navbar); backdrop-filter: blur(10px);
+            background: var(--bg-navbar); backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-primary);
             z-index: 1000; padding: 1rem 0;
-            transition: background-color var(--transition-speed) ease, border-bottom-color var(--transition-speed) ease;
+            transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
         }
         html[data-page-scrolled="true"] .navbar { background: var(--bg-navbar-scrolled); }
         .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
-        .logo { font-size: 2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;}
+        .logo { font-size: 2.2rem; font-weight: 800; color: var(--text-logo); text-decoration: none; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;}
         html.light-mode .logo { color: var(--accent-primary); }
         .nav-right-controls { display: flex; align-items: center; gap: 1rem; }
         .theme-toggle-btn {
             background: transparent; color: var(--text-theme-toggle); border: 1.5px solid var(--border-theme-toggle);
-            padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all var(--transition-speed) ease;
+            padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 1rem; transition: all 0.3s ease;
         }
         .theme-toggle-btn:hover { background: var(--bg-theme-toggle-hover); border-color: var(--border-hover); transform: scale(1.05); }
-        
 
-        /* ======== PROFILE COMMAND CENTER (ENHANCED) ======== */
+        .main-content-profile { padding: 3rem 0; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; } 
+
         .profile-command-center {
-            /* Inherits .card-base styles via class in HTML */
-            padding: 2rem;
-            margin-bottom: 2.5rem;
-            display: flex; flex-direction: column;
-            align-items: center; gap: 1rem; text-align: center;
+            background: var(--bg-card); border-radius: 20px; padding: 3rem 2.5rem;
+            margin-bottom: 3rem; border: 1px solid var(--border-primary);
+            box-shadow: var(--shadow-card); display: flex; flex-direction: column;
+            align-items: center; gap: 1.5rem; text-align: center;
             position: relative; overflow: hidden;
-            /* Added a subtle top border highlight */
-            border-top: 2px solid var(--border-highlight); 
         }
-        .profile-command-center::before { /* Enhanced grid background */
-            content: ''; position: absolute; top:0; left:0; right: 0; bottom: 0;
+        .profile-command-center::before { 
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
             background-image: 
-                linear-gradient(var(--border-primary) 1px, transparent 1px),
-                linear-gradient(to right, var(--border-primary) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.2; z-index: 0;
+                radial-gradient(circle at 10% 10%, rgba(var(--accent-secondary-rgb),0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(var(--accent-tertiary-rgb),0.1) 0%, transparent 50%);
+            opacity: 0.7; z-index: 0;
+            animation: subtleShift 20s infinite alternate;
         }
-        .profile-command-center::after { /* Aurora glow from top */
-            content: ''; position: absolute; top: 0; left: 50%;
-            transform: translateX(-50%); width: 200%; height: 250px;
-            background: radial-gradient(circle, rgba(var(--accent-secondary-rgb), 0.15) 0%, transparent 60%);
-            z-index: 0; pointer-events: none;
+        @keyframes subtleShift {
+            0% { transform: translate(0,0); }
+            100% { transform: translate(10px, 5px); }
         }
 
         .profile-avatar {
-            width: 140px; height: 140px; border-radius: 50%;
+            width: 160px; height: 160px; border-radius: 50%;
             background: var(--gradient-profile-avatar);
-            display: grid; place-items: center; /* Simplifies centering */
-            font-size: 4.5rem; color: white; font-weight: 700;
+            display: grid; place-items: center;
+            font-size: 5rem; color: white; font-weight: 700;
             font-family: 'Orbitron', sans-serif;
-            border: 5px solid var(--bg-card);
-            box-shadow: 0 0 0 2px var(--border-primary), var(--shadow-accent-glow), var(--shadow-card);
-            position: relative; z-index: 1;
-            transition: transform var(--transition-speed) ease;
+            border: 6px solid var(--bg-card); 
+            box-shadow: 0 0 0 3px var(--border-secondary), 0 0 35px rgba(var(--accent-secondary-rgb), 0.5), var(--shadow-card);
+            position: relative; z-index: 1; transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
-        .profile-avatar:hover { transform: scale(1.05) rotate(5deg); }
+        .profile-avatar:hover { transform: scale(1.08) rotate(4deg); box-shadow: 0 0 0 4px var(--border-secondary), 0 0 50px rgba(var(--accent-secondary-rgb), 0.7), var(--shadow-card-hover); }
         .profile-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
 
-        .user-identity { position: relative; z-index: 1; }
         .user-identity h1 {
-            font-family: 'Orbitron', sans-serif; font-size: 2.5rem;
-            font-weight: 700; color: var(--text-headings); margin-bottom: 0.5rem;
-            letter-spacing: 1.5px;
+            font-family: 'Orbitron', sans-serif; font-size: 2.6rem; 
+            font-weight: 700; color: var(--text-headings); margin-bottom: 0.4rem;
+            letter-spacing: 1px; position: relative; z-index: 1;
         }
         .user-identity .department-tag {
-            display: inline-block;
-            background-color: color-mix(in srgb, var(--accent-secondary) 15%, transparent); /* Tinted background */
-            color: var(--accent-secondary);
-            padding: 0.4rem 1rem; border-radius: 6px; font-size: 0.8rem;
-            font-weight: 600; border: 1px solid var(--accent-secondary);
-            margin-bottom: 1rem;
-            text-shadow: var(--shadow-text-glow);
-            letter-spacing: 0.5px;
+            display: inline-block; background-color: transparent;
+            color: var(--accent-secondary); padding: 0.35rem 1.2rem; border-radius: 20px;
+            font-size: 0.9rem; font-weight: 500; border: 2px solid var(--accent-secondary);
+            margin-bottom: 1rem; text-shadow: var(--shadow-text-glow); position: relative; z-index: 1;
+            box-shadow: 0 0 15px rgba(var(--accent-secondary-rgb),0.3);
         }
-         .user-identity .user-email { color: var(--text-secondary); font-size: 1rem; }
-
-        .edit-profile-fab { /* Orange action button */
-            background: var(--accent-primary); color: white;
-            border: none; width: 50px; height: 50px; border-radius: 50%;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.3);
-            cursor: pointer;
-            transition: all var(--transition-speed) ease;
-            display: grid; place-items: center; /* Simplifies centering */
-            margin-top: 1rem; position: relative; z-index: 1;
+         .user-identity .user-email { color: var(--text-secondary); font-size: 1.05rem; position: relative; z-index: 1;}
+        .edit-profile-fab { 
+            background: var(--accent-primary); color: white; border: none;
+            width: 55px; height: 55px; border-radius: 50%; font-size: 1.3rem;
+            box-shadow: 0 5px 15px rgba(var(--accent-primary-rgb), 0.3); cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: grid; place-items: center; margin-top: 1.5rem; position: relative; z-index: 1;
         }
         .edit-profile-fab:hover {
-            background: var(--accent-primary-hover);
-            transform: translateY(-3px) scale(1.08);
-            box-shadow: 0 8px 18px rgba(var(--accent-primary-rgb), 0.4);
+            background: var(--accent-primary-hover); transform: translateY(-3px) scale(1.1) rotate(-12deg);
+            box-shadow: 0 8px 20px rgba(var(--accent-primary-rgb), 0.4);
         }
-        
-        /* ======== STATS GRID (ENHANCED) ======== */
+
+        /* STATS GRID - ALIGNED WITH IMAGE */
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem; margin-bottom: 2.5rem;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-bottom: 3rem;
+            padding: 2rem; background: var(--bg-secondary); /* Distinct background */
+            border-radius: 16px; border: 1px solid var(--border-primary); box-shadow: var(--shadow-card);
         }
-        .stat-pod { 
-            padding: 1.75rem 1.5rem; text-align: center;
-            /* Creates a layered background feel */
-            background-image: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent-secondary) 8%, transparent) 0%, transparent 50%);
-        }
-        .stat-pod .stat-icon {
-            font-size: 2.2rem; color: var(--accent-secondary);
-            margin-bottom: 1rem; height: 40px; text-shadow: var(--shadow-text-glow);
-        }
+        .stat-pod { text-align: center; padding: 1rem 0.5rem; }
+        .stat-pod .stat-icon { font-size: 2rem; margin-bottom: 0.75rem; height: 36px; line-height: 36px; display: block; opacity:0.9;}
+        .stat-pod.overall-progress .stat-icon { color: var(--icon-overall-progress); }
+        .stat-pod.topics-mastered .stat-icon { color: var(--icon-topics-mastered); }
+        .stat-pod.assessments-taken .stat-icon { color: var(--icon-assessments-taken); }
+        .stat-pod.average-score .stat-icon { color: var(--icon-average-score); }
         .stat-pod .stat-value {
-            font-size: 2.5rem; font-weight: 700;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--text-headings); line-height: 1; margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif; font-size: 2.4rem; font-weight: 500; /* Matched style */
+            color: var(--text-headings); line-height: 1; margin-bottom: 0.3rem;
         }
-        .stat-pod .stat-label { color: var(--text-secondary); font-size: 0.9rem; }
-        
-        /* ======== PROFILE DETAILS (ENHANCED) ======== */
+        .stat-pod .stat-label { color: var(--text-secondary); font-size: 0.8rem; font-weight: 400; letter-spacing:0.3px;}
+
+
         .details-section-container {
-             /* Inherits .card-base styles via class in HTML */
-            padding: 2.5rem;
+            background: var(--bg-card); border: 1px solid var(--border-primary);
+            border-radius: 16px; padding: 2.5rem; box-shadow: var(--shadow-card);
         }
         .details-section { margin-bottom: 2.5rem; }
         .details-section:last-child { margin-bottom: 0; }
         .details-section h2 {
-            font-size: 1.5rem; font-weight: 600;
-            margin-bottom: 1.5rem; color: var(--text-headings);
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid;
-            /* Creates a fading gradient line for the border */
-            border-image-source: var(--gradient-heading-border);
-            border-image-slice: 1;
+            font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem;
+            color: var(--text-headings); padding-bottom: 0.75rem;
+            border-bottom: 1px solid; border-image-source: var(--gradient-heading-border); border-image-slice: 1;
             display: flex; align-items: center; gap: 0.75rem; letter-spacing: 0.5px;
         }
-        .details-section h2 i { color: var(--accent-secondary); font-size: 0.9em; }
-
-        .details-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
+        .details-section h2 i { color: var(--accent-secondary); font-size: 1em;} 
+        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
         .detail-item {
-            background: var(--bg-card-alt);
-            border: 1px solid var(--border-primary);
-            /* Adds a colored highlight bar on the left */
-            border-left: 3px solid var(--border-secondary); 
-            border-radius: 8px; padding: 1rem 1.2rem;
-            transition: background-color var(--transition-speed) ease, border-left-color var(--transition-speed) ease;
+            background: var(--bg-card-alt); border-left: 4px solid var(--border-secondary);
+            border-radius: 8px; padding: 1rem 1.2rem; transition: background-color 0.2s ease, border-left-color 0.2s ease;
         }
-        .detail-item:hover {
-            background-color: var(--bg-secondary);
-            border-left-color: var(--accent-secondary); /* Highlight on hover */
-        }
+        .detail-item:hover { background-color: var(--bg-secondary); border-left-color: var(--accent-secondary); }
         .detail-label {
-            color: var(--text-muted); font-size: 0.8rem;
-            margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text-muted); font-size: 0.75rem; margin-bottom: 0.4rem;
+            text-transform: uppercase; letter-spacing: 0.8px; font-weight: 500;
         }
-        .detail-value {
-            color: var(--text-primary); font-size: 1rem; font-weight: 500;
-            word-break: break-word; /* Better than break-all */
+        .detail-value { color: var(--text-primary); font-size: 1rem; font-weight: 500; word-break: break-word; }
+        
+        /* STREAK GRID STYLES */
+        .streak-grid-wrapper {
+            padding: 1rem;
+            background-color: var(--bg-card-alt);
+            border-radius: 8px;
+            border: 1px solid var(--border-secondary);
+            overflow-x: auto; /* Allow horizontal scroll for many months */
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-secondary) var(--bg-card-alt);
+        }
+        .streak-grid-wrapper::-webkit-scrollbar { height: 6px; }
+        .streak-grid-wrapper::-webkit-scrollbar-track { background: var(--bg-card-alt); }
+        .streak-grid-wrapper::-webkit-scrollbar-thumb { background-color: var(--border-secondary); border-radius:3px; }
+
+        .streak-grid-inner { /* This div will contain the month labels and the cells container */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align month labels properly */
+        }
+        .streak-months-container {
+            display: flex;
+            gap: 2px; /* Gap between weeks, accounts for cell gap */
+            padding-left: 25px; /* Space for weekday labels */
+            margin-bottom: 5px;
+        }
+        .streak-month-label {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-align: left; /* Align to the start of the month block */
+            /* Width will be determined by number of weeks in month * (cell_size + gap) */
         }
 
-        /* ======== MEDIA QUERIES (ADJUSTED) ======== */
-        @media (max-width: 768px) {
-            .container { padding: 0 1rem; }
-            .profile-command-center { padding: 2rem 1.5rem; gap:1rem; }
-            .profile-avatar { width: 120px; height: 120px; font-size: 4rem; border-width: 4px;}
-            .user-identity h1 { font-size: 2rem; }
-            .user-identity .department-tag { font-size: 0.75rem; }
-            .edit-profile-fab { width: 48px; height: 48px; font-size: 1.1rem; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-            .stat-pod .stat-value { font-size: 2rem; }
-            .details-section h2 { font-size: 1.3rem; }
+        .streak-days-and-cells {
+            display: flex;
         }
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .details-grid { grid-template-columns: 1fr; }
-            .user-identity h1 { font-size: 1.8rem; letter-spacing: 1px; }
+        .streak-weekday-labels {
+            display: flex;
+            flex-direction: column;
+            gap: 2px; /* Same as cell gap */
+            margin-right: 5px;
+            padding-top: 15px; /* Align with first row of cells */
+        }
+        .streak-weekday-labels span {
+            display: block;
+            width: 20px; /* Width for labels like M, W, F */
+            height: 13px; /* Same as cell height */
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: right;
+            line-height: 13px; /* Vertical align */
+        }
+
+        .streak-cells-container {
+            display: flex;
+            flex-wrap: wrap; /* Changed to wrap */
+            flex-direction: column; /* Cells stack vertically first for a week */
+            height: calc(7 * (13px + 2px) - 2px); /* 7 days * (cell height + gap) - last gap */
+            gap: 2px;
+            align-content: flex-start; /* Allow weeks to wrap */
+        }
+        .streak-day-cell {
+            width: 13px; height: 13px;
+            background-color: color-mix(in srgb, var(--border-secondary) 50%, var(--bg-card-alt)); /* Default "no activity" */
+            border-radius: 2.5px;
+            border: 1px solid transparent; /* For hover/focus indication */
+            transition: transform 0.1s ease-out;
+        }
+        .streak-day-cell:hover:not([data-level="0"]) {
+             transform: scale(1.2); border-color: var(--text-primary);
+        }
+        .streak-day-cell[data-level="0"] { background-color: color-mix(in srgb, var(--border-secondary) 30%, var(--bg-card-alt));} /* No activity slightly lighter */
+        .streak-day-cell[data-level="1"] { background-color: color-mix(in srgb, var(--accent-progress) 30%, transparent) !important; }
+        .streak-day-cell[data-level="2"] { background-color: color-mix(in srgb, var(--accent-progress) 60%, transparent) !important; }
+        .streak-day-cell[data-level="3"] { background-color: color-mix(in srgb, var(--accent-progress) 80%, transparent) !important; }
+        .streak-day-cell[data-level="4"] { background-color: var(--accent-progress) !important; }
+        
+        #leetcodeStreakPlaceholder { color:var(--text-muted);margin-top:8px; }
+        #leetcodeStreakCount { margin-top:1rem;font-size:0.9rem;color:var(--text-secondary);font-weight:500; }
+        #leetcodeStreakCount strong { color: var(--text-primary); }
+
+        @media (max-width: 768px) {
+            /* Other responsive styles */
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 1rem; }
+            .details-section-container { padding: 1.5rem; }
+            .streak-grid-wrapper { margin-top: 1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="placement_website.html" class="logo">PlacePrep</a>
             <div class="nav-right-controls">
-                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme">
-                    <i class="fas fa-moon"></i> <!-- JS will set correct icon -->
-                </button>
+                 <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="main-content-profile">
         <div class="container">
-            <!-- Profile Command Center Header -->
             <div class="profile-command-center card-base" data-aos="fade-down" data-aos-duration="600">
-                <div class="profile-avatar" id="profileAvatar">
-                     <i class="fas fa-user-astronaut"></i> <!-- Placeholder -->
-                </div>
+                <div class="profile-avatar" id="profileAvatar"><i class="fas fa-user-astronaut"></i></div>
                 <div class="user-identity">
                     <h1 id="profileUserName">User FullName</h1>
                     <div class="department-tag" id="profileUserDepartment">Department Field</div>
                     <p class="user-email" id="profileUserEmail">user.email@example.com</p>
                 </div>
-                 <button class="edit-profile-fab" onclick="editProfile()" aria-label="Edit Profile">
-                    <i class="fas fa-pencil-alt"></i>
-                </button>
+                 <button class="edit-profile-fab" onclick="editProfile()" aria-label="Edit Profile"><i class="fas fa-user-edit"></i></button>
             </div>
 
-            <!-- Profile Stats Grid -->
-            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100" data-aos-duration="600">
-                <div class="stat-pod card-base">
-                    <div class="stat-icon"><i class="fas fa-tasks"></i></div>
-                    <div class="stat-value" id="overallProgressStat">0%</div>
-                    <div class="stat-label">Overall Progress</div>
-                </div>
-                <div class="stat-pod card-base">
-                    <div class="stat-icon"><i class="fas fa-book-open"></i></div>
-                    <div class="stat-value" id="topicsCompletedStat">0</div>
-                    <div class="stat-label">Topics Mastered</div>
-                </div>
-                <div class="stat-pod card-base">
-                     <div class="stat-icon"><i class="fas fa-diagnoses"></i></div>
-                    <div class="stat-value" id="testsTakenStat">0</div>
-                    <div class="stat-label">Assessments Taken</div>
-                </div>
-                <div class="stat-pod card-base">
-                     <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
-                    <div class="stat-value" id="avgScoreStat">N/A</div>
-                    <div class="stat-label">Average Score</div>
-                </div>
+            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-pod card-base overall-progress"><div class="stat-icon"><i class="fas fa-tasks-alt"></i></div><div class="stat-value" id="overallProgressStat">0%</div><div class="stat-label">Overall Progress</div></div>
+                <div class="stat-pod card-base topics-mastered"><div class="stat-icon"><i class="fas fa-book-open-reader"></i></div><div class="stat-value" id="topicsCompletedStat">0</div><div class="stat-label">Topics Mastered</div></div>
+                <div class="stat-pod card-base assessments-taken"><div class="stat-icon"><i class="fas fa-user-pen"></i></div><div class="stat-value" id="testsTakenStat">0</div><div class="stat-label">Assessments Taken</div></div>
+                <div class="stat-pod card-base average-score"><div class="stat-icon"><i class="fas fa-bullseye-pointer"></i></div><div class="stat-value" id="avgScoreStat">N/A</div><div class="stat-label">Average Score</div></div>
             </div>
 
-            <!-- Profile Details Pod -->
-            <div class="details-section-container card-base" data-aos="fade-up" data-aos-delay="200" data-aos-duration="600">
+            <div class="details-section-container card-base" data-aos="fade-up" data-aos-delay="200">
                 <div class="details-section">
-                    <h2><i class="fas fa-id-card"></i> Personal Information</h2>
+                    <h2><i class="fas fa-address-card"></i> Identity Log</h2>
                     <div class="details-grid">
-                        <div class="detail-item">
-                            <div class="detail-label">First Name</div>
-                            <div class="detail-value" id="infoFirstName">Loading...</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Last Name</div>
-                            <div class="detail-value" id="infoLastName">Loading...</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Registered Email</div>
-                            <div class="detail-value" id="infoEmail">Loading...</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Primary Department</div>
-                            <div class="detail-value" id="infoDepartment">Loading...</div>
-                        </div>
+                        <div class="detail-item"><div class="detail-label">First Name</div><div class="detail-value" id="infoFirstName">Loading...</div></div>
+                        <div class="detail-item"><div class="detail-label">Last Name</div><div class="detail-value" id="infoLastName">Loading...</div></div>
+                        <div class="detail-item"><div class="detail-label">Registered Email</div><div class="detail-value" id="infoEmail">Loading...</div></div>
+                        <div class="detail-item"><div class="detail-label">Primary Department</div><div class="detail-value" id="infoDepartment">Loading...</div></div>
                     </div>
                 </div>
-
                 <div class="details-section">
-                    <h2><i class="fas fa-chart-line"></i> Academic & Preparation Snapshot</h2>
+                    <h2><i class="fas fa-layer-group"></i> Preparation Stacks</h2>
                     <div class="details-grid">
-                        <div class="detail-item">
-                            <div class="detail-label">Total Topics Covered</div>
-                            <div class="detail-value" id="infoTopicsCovered">0/0</div>
+                        <div class="detail-item"><div class="detail-label">Topics Covered</div><div class="detail-value" id="infoTopicsCovered">0/0</div></div>
+                        <div class="detail-item"><div class="detail-label">Avg. Test Performance</div><div class="detail-value" id="infoTestPerformance">N/A</div></div>
+                        <div class="detail-item"><div class="detail-label">Mock Interviews</div><div class="detail-value" id="infoInterviewsDone">0</div></div>
+                        <div class="detail-item"><div class="detail-label">Last System Sync</div><div class="detail-value" id="infoLastActive">Loading...</div></div>
+                    </div>
+                </div>
+                 <div class="details-section">
+                    <h2><i class="fas fa-laptop-code"></i> Coding Platform Sync</h2>
+                     <div class="details-grid">
+                         <div class="detail-item" style="grid-column: 1 / -1;"> {/* Make LeetCode username span full if only item */}
+                             <div class="detail-label">LeetCode Username</div>
+                             <div class="detail-value" id="leetcodeUsernameDisplay">Not Linked</div>
+                             <button onclick="editLeetCodeUsername()" style="background:var(--accent-secondary); color:white; border:none; padding:0.4rem 0.8rem; font-size:0.8rem; border-radius:4px; cursor:pointer; margin-top:8px;">
+                                <i class="fas fa-link"></i> Link/Edit
+                            </button>
+                         </div>
+                     </div>
+                     <h3 style="font-size:1.1rem; font-weight:500; color:var(--text-secondary); margin-top:1.5rem; margin-bottom:0.75rem;">Activity Cadence (Last 12 Months)</h3>
+                    <div class="streak-grid-wrapper">
+                        <div class="streak-grid-inner">
+                             <div class="streak-months-container" id="streakMonthsContainer">
+                                <!-- Month labels will be generated here by JS -->
+                            </div>
+                            <div class="streak-days-and-cells">
+                                <div class="streak-weekday-labels" id="streakWeekdayLabels">
+                                    <!-- Weekday labels (M, W, F) generated by JS -->
+                                </div>
+                                <div class="streak-cells-container" id="leetcodeStreakGrid">
+                                    <!-- Activity cells will be generated here by JS -->
+                                </div>
+                            </div>
                         </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Recent Test Performance</div>
-                            <div class="detail-value" id="infoTestPerformance">N/A</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Mock Interviews Completed</div>
-                            <div class="detail-value" id="infoInterviewsDone">0</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Last Logged In</div>
-                            <div class="detail-value" id="infoLastActive">Loading...</div>
-                        </div>
+                    </div>
+                    <div id="leetcodeStreakPlaceholder" style="color:var(--text-muted);margin-top:8px; text-align:center;">Link LeetCode username to see activity.</div>
+                    <div id="leetcodeStreakCount" style="margin-top:1rem;font-size:0.9rem;color:var(--text-secondary);font-weight:500; text-align:center;"></div>
+                     <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        <span>Less</span>
+                        <div class="streak-day-cell" style="background-color: color-mix(in srgb, var(--border-secondary) 50%, var(--bg-card-alt)); width:10px; height:10px;"></div>
+                        <div class="streak-day-cell" style="background-color: color-mix(in srgb, var(--accent-progress) 30%, transparent); width:10px; height:10px;"></div>
+                        <div class="streak-day-cell" style="background-color: color-mix(in srgb, var(--accent-progress) 60%, transparent); width:10px; height:10px;"></div>
+                        <div class="streak-day-cell" style="background-color: var(--accent-progress); width:10px; height:10px;"></div>
+                        <span>More</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    // Animation library initialization
-    AOS.init({
-        once: true, // Only animate elements once
-        offset: 50, // Animate a little earlier
-    });
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+    // --- Script for Profile Page Functionality ---
+    AOS.init({ duration: 700, once: true, offset: 30 });
 
-    // All existing JavaScript functionality is kept the same
     document.addEventListener('DOMContentLoaded', function() {
-        // --- Theme Toggle ---
         const themeToggleButton = document.getElementById('theme-toggle-btn');
         const htmlElement = document.documentElement;
         let currentIcon = themeToggleButton ? themeToggleButton.querySelector('i') : null;
@@ -428,146 +427,96 @@
         }
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
         setTheme(savedTheme);
-         if (themeToggleButton) {
+        if (themeToggleButton) {
             themeToggleButton.addEventListener('click', () => {
                 setTheme(htmlElement.classList.contains('light-mode') ? 'dark' : 'light');
             });
         }
         
-        // --- Navbar Scroll Effect ---
         const navbar = document.querySelector('.navbar');
-        window.addEventListener('scroll', () => {
-            document.documentElement.setAttribute('data-page-scrolled', window.scrollY > 20);
-        });
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                document.documentElement.setAttribute('data-page-scrolled', window.scrollY > 20);
+            });
+        }
 
+        const userData = JSON.parse(localStorage.getItem('user')) || {};
+        const firstName = localStorage.getItem('firstName') || userData.firstName || "Cadet";
 
-        // --- Load User Data ---
-        const userData = JSON.parse(localStorage.getItem('user')) || {}; // From login
-        const firstName = localStorage.getItem('firstName') || userData.firstName || "User"; // Prioritize direct firstName
-
-        // Simulated progress data - replace with actual fetched data
-        const mockTestData = JSON.parse(localStorage.getItem('mockTestProgress')) || { testsCompleted: 5, averageScore: 78, totalTests: 10 };
-        const topicsProgress = JSON.parse(localStorage.getItem('cseDepartmentProgress')) || { // Example from CSE page
-            'dsa': { topics: [{completed:true},{completed:true},{completed:false},{completed:true}]},
-            'system-design': { topics: [{completed:true},{completed:false},{completed:true}]},
-            'networking': { topics: [{completed:true},{completed:false},{completed:false}]}
+        const mockTestData = { testsCompleted: 12, averageScore: 82 }; 
+        const topicsProgressData = JSON.parse(localStorage.getItem('topicsProgressData')) || { // Consolidated key
+             aptitude: { completed: 25, total: 50},
+             dsa: {completed: 40, total: 60},
+             core_cs: {completed: 15, total: 30}
         };
-        const interviewProgress = JSON.parse(localStorage.getItem('interviewProgress')) || { completed: 2, score: 80 };
+        const interviewProgressData = { completed: 3, overallScore: 78 }; // Example
 
-
-        // Calculate total topics and completed topics from potentially multiple department progresses
         let totalTopicsOverall = 0;
         let completedTopicsOverall = 0;
-        
-        for (const catKey in topicsProgress) {
-            if (topicsProgress[catKey] && topicsProgress[catKey].topics) {
-                totalTopicsOverall += topicsProgress[catKey].topics.length;
-                completedTopicsOverall += topicsProgress[catKey].topics.filter(t => t.completed).length;
-            }
+        for (const key in topicsProgressData) {
+            totalTopicsOverall += topicsProgressData[key].total || 0;
+            completedTopicsOverall += topicsProgressData[key].completed || 0;
         }
         
-        const overallProgress = calculateOverallProgress(
-            mockTestData.averageScore || 0, 
+        const overallProgressCalc = calculateOverallProgress(
+            mockTestData.averageScore, 
             totalTopicsOverall > 0 ? (completedTopicsOverall / totalTopicsOverall) * 100 : 0, 
-            interviewProgress.completed > 0 ? interviewProgress.score : 0
+            interviewProgressData.overallScore
         );
 
-        // Update Profile Header
         const profileAvatar = document.getElementById('profileAvatar');
-        if (firstName) {
-            profileAvatar.innerHTML = firstName.charAt(0).toUpperCase();
-        }
-        // if (userData.profilePictureUrl) { 
-        //    profileAvatar.innerHTML = `<img src="${userData.profilePictureUrl}" alt="${firstName}'s profile">`;
-        // }
-        document.getElementById('profileUserName').textContent = `${firstName} ${userData.lastName || ''}`.trim();
-        document.getElementById('profileUserDepartment').textContent = userData.department || 'Aspiring Developer';
-        document.getElementById('profileUserEmail').textContent = userData.email || 'N/A';
+        if (profileAvatar) profileAvatar.innerHTML = firstName.charAt(0).toUpperCase();
+        
+        setText('profileUserName', `${firstName} ${userData.lastName || ''}`.trim());
+        setText('profileUserDepartment', userData.department || 'Aspiring Professional');
+        setText('profileUserEmail', userData.email || 'N/A');
+        
+        setText('overallProgressStat', `${Math.round(overallProgressCalc)}%`);
+        setText('topicsCompletedStat', completedTopicsOverall);
+        setText('testsTakenStat', mockTestData.testsCompleted);
+        setText('avgScoreStat', mockTestData.averageScore ? `${mockTestData.averageScore.toFixed(1)}%` : 'N/A');
 
-        // Update Stats Grid
-        document.getElementById('overallProgressStat').textContent = `${Math.round(overallProgress)}%`;
-        document.getElementById('topicsCompletedStat').textContent = completedTopicsOverall;
-        document.getElementById('testsTakenStat').textContent = mockTestData.testsCompleted || 0;
-        document.getElementById('avgScoreStat').textContent = mockTestData.averageScore ? `${mockTestData.averageScore.toFixed(1)}%` : 'N/A';
+        setText('infoFirstName', firstName);
+        setText('infoLastName', userData.lastName || 'Not Set');
+        setText('infoEmail', userData.email || 'Not Set');
+        setText('infoDepartment', userData.department || 'Not Set');
 
-        // Update Personal Information Details
-        document.getElementById('infoFirstName').textContent = firstName || 'Not Set';
-        document.getElementById('infoLastName').textContent = userData.lastName || 'Not Set';
-        document.getElementById('infoEmail').textContent = userData.email || 'Not Set';
-        document.getElementById('infoDepartment').textContent = userData.department || 'Not Set';
-
-        // Update Academic Progress Details
-        document.getElementById('infoTopicsCovered').textContent = `${completedTopicsOverall} / ${totalTopicsOverall || 'N/A'}`;
-        document.getElementById('infoTestPerformance').textContent = mockTestData.averageScore ? `${mockTestData.averageScore.toFixed(1)}% Avg.` : 'N/A';
-        document.getElementById('infoInterviewsDone').textContent = `${interviewProgress.completed || 0} Completed`;
+        setText('infoTopicsCovered', `${completedTopicsOverall} / ${totalTopicsOverall || 'N/A'}`);
+        setText('infoTestPerformance', mockTestData.averageScore ? `${mockTestData.averageScore.toFixed(1)}% Avg.` : 'N/A');
+        setText('infoInterviewsDone', `${interviewProgressData.completed || 0} Sessions`);
         const lastActive = localStorage.getItem('lastLoginDate') || new Date().toISOString();
-        document.getElementById('infoLastActive').textContent = formatLastActive(lastActive);
-         localStorage.setItem('lastLoginDate', new Date().toISOString());
+        setText('infoLastActive', formatLastActive(lastActive));
+        localStorage.setItem('lastLoginDate', new Date().toISOString());
 
-        const addNoteForm = document.getElementById('add-note-form');
-        addNoteForm.onsubmit = async (e) => {
-            e.preventDefault();
-            const user = firebase.auth().currentUser;
-            if (!user) {
-                alert('Please log in to add notes');
-                return;
-            }
-            const idToken = await user.getIdToken();
-            const noteData = {
-                title: document.getElementById('note-title').value,
-                description: document.getElementById('note-description').value,
-                category: document.getElementById('note-category').value,
-                keyPoints: document.getElementById('key-points').value.split('\n').filter(point => point.trim()),
-            };
-            const response = await fetch('/api/notes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${idToken}`
-                },
-                body: JSON.stringify(noteData)
-            });
-            if (response.ok) {
-                alert('Note added!');
-                addNoteForm.reset();
-                document.getElementById('add-note-modal').style.display = 'none';
-                fetchUserNotes(); // Refresh notes
-            } else {
-                alert('Failed to add note');
-            }
-        };
+        loadLeetCodeActivity();
     });
+
+    function setText(id, text) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = text;
+    }
 
     function calculateOverallProgress(testScorePercent, topicsCompletePercent, interviewScorePercent) {
         testScorePercent = Math.max(0, Math.min(100, Number(testScorePercent) || 0));
         topicsCompletePercent = Math.max(0, Math.min(100, Number(topicsCompletePercent) || 0));
         interviewScorePercent = Math.max(0, Math.min(100, Number(interviewScorePercent) || 0));
-
-        const testWeight = 0.35;    
-        const topicsWeight = 0.45;    
-        const interviewWeight = 0.20; 
-
-        return (
-            (testScorePercent * testWeight) +
-            (topicsCompletePercent * topicsWeight) +
-            (interviewScorePercent * interviewWeight)
-        );
+        const testWeight = 0.35, topicsWeight = 0.45, interviewWeight = 0.20; 
+        return (testScorePercent * testWeight) + (topicsCompletePercent * topicsWeight) + (interviewScorePercent * interviewWeight);
     }
 
     function formatLastActive(isoString) {
         const date = new Date(isoString);
+        if (isNaN(date.getTime())) return 'N/A';
         const now = new Date();
         const diffTime = Math.abs(now - date);
         const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-
-        if (isNaN(date.getTime())) return 'N/A';
         if (diffDays === 0) return 'Today';
         if (diffDays === 1) return 'Yesterday';
         if (diffDays < 7) return `${diffDays} days ago`;
         return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
     }
 
-    function editProfile() {
+    window.editProfile = function() { // Made global for onclick
         const currentFirstName = localStorage.getItem('firstName') || '';
         const currentUserData = JSON.parse(localStorage.getItem('user')) || {};
         const newFirstName = prompt('Update First Name:', currentFirstName);
@@ -585,6 +534,159 @@
         localStorage.setItem('user', JSON.stringify(updatedUserData));
         location.reload(); 
     }
+    
+    window.editLeetCodeUsername = function() { // Made global for onclick
+        const current = localStorage.getItem('leetcodeUsernamePlaceprep') || '';
+        const updated = prompt('Enter your LeetCode username:', current);
+        if (updated !== null) {
+            localStorage.setItem('leetcodeUsernamePlaceprep', updated);
+            document.getElementById('leetcodeUsernameDisplay').textContent = updated || 'Not Linked';
+            loadLeetCodeActivity(); // Refresh streak grid
+        }
+    }
+
+    function getDaysInYear(year) {
+        return ((year % 4 === 0 && year % 100 > 0) || year % 400 == 0) ? 366 : 365;
+    }
+
+    function loadLeetCodeActivity() {
+        const username = localStorage.getItem('leetcodeUsernamePlaceprep');
+        const streakGridEl = document.getElementById('leetcodeStreakGrid');
+        const streakMonthsContainerEl = document.getElementById('streakMonthsContainer');
+        const streakWeekdayLabelsEl = document.getElementById('streakWeekdayLabels');
+        const placeholderEl = document.getElementById('leetcodeStreakPlaceholder');
+        const countEl = document.getElementById('leetcodeStreakCount');
+
+        if (!username) {
+            if(streakGridEl) streakGridEl.innerHTML = '';
+            if(streakMonthsContainerEl) streakMonthsContainerEl.innerHTML = '';
+            if(streakWeekdayLabelsEl) streakWeekdayLabelsEl.innerHTML = '';
+            if(placeholderEl) placeholderEl.style.display = 'block';
+            if(countEl) countEl.textContent = '';
+            setText('leetcodeUsernameDisplay', 'Not Linked');
+            return;
+        }
+        
+        setText('leetcodeUsernameDisplay', username);
+        if(placeholderEl) placeholderEl.style.display = 'none';
+
+        // Simulate fetching activity data for the last year (365 days for simplicity)
+        // In a real app, you'd fetch this from your backend, which fetches from LeetCode API (if available and allowed)
+        // Or, track user's own problem solving activity on your platform.
+        const today = new Date();
+        const oneYearAgo = new Date(new Date().setDate(today.getDate() - 364)); // Start from 365 days ago inclusive of today
+        
+        let activityData = JSON.parse(localStorage.getItem(`leetcodeActivity_${username}`)) || {};
+        
+        // If no stored data or data is old, simulate it for this demo for the past year
+        if (Object.keys(activityData).length < 200) { // Arbitrary check to re-simulate
+            activityData = {};
+            for (let i = 0; i < 365; i++) {
+                const date = new Date(oneYearAgo);
+                date.setDate(oneYearAgo.getDate() + i);
+                const dateString = date.toISOString().split('T')[0];
+                activityData[dateString] = Math.floor(Math.random() * 5); // 0 to 4 submissions
+            }
+            localStorage.setItem(`leetcodeActivity_${username}`, JSON.stringify(activityData));
+        }
+        
+        renderStreakCalendar(activityData, streakGridEl, streakMonthsContainerEl, streakWeekdayLabelsEl, countEl);
+    }
+    
+    function renderStreakCalendar(activity, gridContainer, monthsContainer, weekdaysContainer, countContainer) {
+        gridContainer.innerHTML = '';
+        monthsContainer.innerHTML = '';
+        weekdaysContainer.innerHTML = '';
+
+        const today = new Date();
+        const endDate = new Date(today); // today
+        const startDate = new Date(new Date().setDate(today.getDate() - 364)); // 365 days ago
+
+        const days = [];
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            days.push(new Date(d));
+        }
+        
+        // Add empty cells for the first week's offset
+        const firstDayOfWeek = (startDate.getDay() === 0) ? 6 : startDate.getDay() -1; // 0=Mon, 6=Sun
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'streak-day-cell';
+            emptyCell.dataset.level = "0"; // Treat as no activity for visual consistency
+            gridContainer.appendChild(emptyCell);
+        }
+
+        let totalActiveDays = 0;
+        let currentStreak = 0;
+        let maxStreak = 0;
+        let lastActive = false;
+
+        days.forEach(date => {
+            const dateString = date.toISOString().split('T')[0];
+            const level = activity[dateString] || 0; // Level based on number of submissions
+            const cell = document.createElement('div');
+            cell.className = 'streak-day-cell';
+            cell.dataset.level = Math.min(level, 4); // Cap level at 4 for styling
+            cell.title = `${date.toDateString()}: ${level} activities`;
+            gridContainer.appendChild(cell);
+
+            if (level > 0) {
+                totalActiveDays++;
+                currentStreak++;
+            } else {
+                currentStreak = 0;
+            }
+            maxStreak = Math.max(maxStreak, currentStreak);
+        });
+        
+        // Weekday Labels (M, W, F)
+        const dayLabels = ['', 'M', '', 'W', '', 'F', '']; // Show M, W, F
+        dayLabels.forEach((label, index) => {
+            if(label) { // Only add if label is not empty
+                const dayLabel = document.createElement('span');
+                dayLabel.textContent = label;
+                weekdaysContainer.appendChild(dayLabel);
+            } else { // Add spacer for alignment if no label
+                 const spacer = document.createElement('span');
+                 spacer.innerHTML = ' '; // Non-breaking space
+                 weekdaysContainer.appendChild(spacer);
+            }
+        });
+
+        // Month Labels
+        let currentMonth = -1;
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+        // Calculate how many cells constitute the width of one week visually in the grid container
+        const cellsPerWeekColumn = 7; // Number of days shown vertically
+        const cellVisualSizeWithGap = 13 + 2; // cell height + gap
+
+        // Add an offset to months so they align approximately with their weeks
+        let weekCount = Math.ceil((firstDayOfWeek + days.length) / 7) ;
+        
+        for(let i=0; i<weekCount; i++){
+             // Estimate the date for the start of this week column in the grid
+            const approxDateIndex = i * 7 - firstDayOfWeek;
+            const dateForMonthLabel = days[Math.max(0, approxDateIndex)];
+            
+            if(dateForMonthLabel && dateForMonthLabel.getMonth() !== currentMonth){
+                currentMonth = dateForMonthLabel.getMonth();
+                const monthLabel = document.createElement('span');
+                monthLabel.className = 'streak-month-label';
+                monthLabel.textContent = monthNames[currentMonth];
+                 // The left position should be dynamic based on 'i' (week index)
+                monthLabel.style.position = 'absolute'; // Use absolute positioning relative to monthsContainer
+                monthLabel.style.left = `${i * cellVisualSizeWithGap}px`;
+                monthsContainer.appendChild(monthLabel);
+            }
+        }
+        // Ensure the container for months is relative if children are absolute
+        monthsContainer.style.position = 'relative';
+        monthsContainer.style.height = '15px'; // Give it some height
+
+        if(countContainer) countContainer.innerHTML = `<strong>${totalActiveDays}</strong> active days & max streak of <strong>${maxStreak}</strong> days in the last year.`;
+    }
+
 </script>
 </body>
 </html>

@@ -155,9 +155,9 @@ app.get('/api/questions/:moduleId', async (req, res) => {
 app.use(express.static(path.join(__dirname, 'PART_2', 'HTML')));
 app.use('/PART_2', express.static(path.join(__dirname, 'PART_2')));
 
-// Serve the root page
+// Serve landingpage.html as the default homepage
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'PART_2', 'HTML', 'placement_website.html'));
+    res.sendFile(path.join(__dirname, 'PART_2', 'HTML', 'landingpage.html'));
 });
 
 // Serve mock test page
