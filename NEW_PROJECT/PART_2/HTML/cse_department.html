@@ -308,7 +308,6 @@
             color: var(--text-on-accent);
             border-color: var(--border-hover);
         }
-        /* .btn-notes { /* Specific to this button if needed */ } */
         .btn-complete { /* Solid Accent Button */
             background: var(--accent-primary);
             color: var(--text-on-accent);
@@ -324,6 +323,243 @@
         }
         .solve-btn:hover { background: var(--accent-primary-hover); }
 
+        /* AI Chatbot Styles */
+        .ai-chat-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gradient-highlight-start), var(--gradient-highlight-end));
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-chat-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .ai-chat-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .ai-chat-btn:hover i {
+            transform: rotate(15deg);
+        }
+
+        .chat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .chat-modal.active {
+            display: flex;
+        }
+
+        .chat-container {
+            background: var(--bg-card-dark);
+            border: 1px solid var(--border-secondary);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .chat-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h3 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .chat-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .chat-close:hover {
+            background: var(--bg-card-dark-hover);
+            color: var(--text-primary);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: var(--accent-primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot {
+            background: var(--bg-card-dark-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border-primary);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.bot.loading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 0.2rem;
+        }
+
+        .loading-dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: loading 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--border-primary);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .chat-send {
+            padding: 0.8rem 1.2rem;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send:hover {
+            background: var(--accent-primary-hover);
+        }
+
+        .chat-send:disabled {
+            background: var(--border-secondary);
+            cursor: not-allowed;
+        }
+
+        .topic-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .topic-suggestion {
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-card-dark-hover);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topic-suggestion:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .ai-info-btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .ai-info-btn:hover {
+            background: var(--accent-primary-hover);
+        }
 
         /* Coding Section */
         .coding-section { /* Is a .card-base like Topics section*/
@@ -390,6 +626,8 @@
             .categories, .progress-stats { grid-template-columns: 1fr; }
             .difficulty-tabs { flex-direction: column; gap: 0.5rem; }
             .progress-header h2, .topics-section > h2, .coding-section > h2 { font-size: 1.4rem; }
+            .ai-chat-btn { bottom: 1rem; right: 1rem; width: 50px; height: 50px; font-size: 1.2rem; }
+            .chat-container { max-width: 95%; margin: 1rem; }
         }
     </style>
 </head>
@@ -491,6 +729,49 @@
                         <button class="solve-btn" onclick="showSolution('medianArrays')">View Solution</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chatbot Button -->
+    <button class="ai-chat-btn" onclick="openChat()" aria-label="Open AI Assistant" title="Chat with AI Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <!-- AI Chatbot Modal -->
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3><i class="fas fa-robot" style="margin-right: 0.5rem; color: var(--accent-primary);"></i>CSE AI Assistant</h3>
+                <button class="chat-close" onclick="closeChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <p>Hello! I'm your CSE learning assistant. I can help you with:</p>
+                    <div class="topic-suggestions">
+                        <span class="topic-suggestion" onclick="askAboutTopic('Data Structures')">Data Structures</span>
+                        <span class="topic-suggestion" onclick="askAboutTopic('Algorithms')">Algorithms</span>
+                        <span class="topic-suggestion" onclick="askAboutTopic('System Design')">System Design</span>
+                        <span class="topic-suggestion" onclick="askAboutTopic('Operating Systems')">Operating Systems</span>
+                        <span class="topic-suggestion" onclick="askAboutTopic('Database Management')">Database Management</span>
+                        <span class="topic-suggestion" onclick="askAboutTopic('Computer Networks')">Computer Networks</span>
+                    </div>
+                    <p style="margin-top: 1rem;">Or ask me anything about Computer Science topics!</p>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <textarea 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Ask me about any CSE topic..."
+                    rows="1"
+                    onkeypress="handleChatKeyPress(event)"
+                ></textarea>
+                <button class="chat-send" onclick="sendMessage()" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -626,6 +907,9 @@
                             </div>
                             <div class="topic-actions">
                                 <button class="btn btn-notes" onclick="toggleNotes('${topic.id}', event)">Show Notes</button>
+                                <button class="ai-info-btn" onclick="askAboutTopic('${topic.name}')">
+                                    <i class="fas fa-robot"></i> AI Info
+                                </button>
                                 <button class="btn btn-complete" onclick="markTopicComplete('${key}', '${topic.id}')" ${topic.completed ? 'disabled' : ''}>
                                     ${topic.completed ? 'Completed' : 'Mark Complete'}
                                 </button>
@@ -734,6 +1018,188 @@
         function showSolution(problemId) {
             alert(`Solution for ${problemId} can be displayed here.`);
         }
+
+        // AI Chatbot Functions
+        let chatHistory = [];
+        let isProcessing = false;
+
+        function openChat() {
+            document.getElementById('chatModal').classList.add('active');
+            document.getElementById('chatInput').focus();
+        }
+
+        function closeChat() {
+            document.getElementById('chatModal').classList.remove('active');
+            document.getElementById('chatInput').value = '';
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function askAboutTopic(topicName) {
+            openChat();
+            const input = document.getElementById('chatInput');
+            input.value = `Tell me about ${topicName}`;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message || isProcessing) return;
+
+            // Add user message to chat
+            addMessage(`<p>${message}</p>`, 'user');
+            input.value = '';
+            
+            // Show loading message
+            const loadingId = addLoadingMessage();
+            
+            try {
+                isProcessing = true;
+                const response = await getGoogleAIResponse(message);
+                removeLoadingMessage(loadingId);
+                addMessage(response, 'bot');
+            } catch (error) {
+                removeLoadingMessage(loadingId);
+                // Display the specific error message from the AI function
+                addMessage(error.message, 'bot');
+                console.error('AI Response Error:', error);
+            } finally {
+                isProcessing = false;
+            }
+        }
+
+        function addMessage(html, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = html; // Allow full HTML content
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Store in chat history
+            chatHistory.push({ sender, text: html, timestamp: new Date() });
+        }
+
+        function addLoadingMessage() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const loadingDiv = document.createElement('div');
+            const loadingId = 'loading-' + Date.now();
+            loadingDiv.id = loadingId;
+            loadingDiv.className = 'message bot loading';
+            loadingDiv.innerHTML = `
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span>AI is thinking...</span>
+            `;
+            messagesContainer.appendChild(loadingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return loadingId;
+        }
+
+        function removeLoadingMessage(loadingId) {
+            const loadingElement = document.getElementById(loadingId);
+            if (loadingElement) {
+                loadingElement.remove();
+            }
+        }
+
+        async function getGoogleAIResponse(userMessage) {
+            const API_KEY = 'AIzaSyDxTwXNxyyvpuY2upCxjKGelJLYb7qUz0Q';
+            const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+            
+            if (API_KEY === 'YOUR_GOOGLE_API_KEY') {
+                throw new Error('<strong>Live AI is not configured.</strong><br>Please add your Google API key to the `getGoogleAIResponse` function in the HTML file to enable this feature.');
+            }
+
+            const prompt = `You are a powerful AI assistant, like a mini Gemini, specializing in Computer Science and Artificial Intelligence. Your purpose is to be a comprehensive knowledge engine for university students.
+Your tone should be helpful, encouraging, and clear.
+Provide a detailed, educational response for the following user query: "${userMessage}".
+
+Structure your response using markdown for readability. Use:
+- Headings for main concepts.
+- Bullet points for lists.
+- Bold text for key terms.
+
+If the user asks about a topic outside of Computer Science or AI, politely state that it's outside your scope. Do not provide code unless explicitly asked. Focus on concepts.`;
+
+            let response;
+            try {
+                response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+            } catch (networkError) {
+                console.error("Network Error:", networkError);
+                throw new Error("<strong>Network Error</strong><br>Could not connect to the AI service. Please check your internet connection and if any browser extensions are blocking the request.");
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Google AI API Error:", errorData);
+                let userMessage = `<strong>AI Service Error (${response.status})</strong><br>`;
+                switch (response.status) {
+                    case 400:
+                        userMessage += "The request was malformed, which could be due to an issue with your API key or the API settings in your Google Cloud project.";
+                        break;
+                    case 403:
+                        userMessage += "The request was forbidden. Please check your API key's permissions and ensure the 'Generative Language API' is enabled in your project.";
+                        break;
+                    case 404:
+                        userMessage += "The requested API endpoint was not found. This may be due to an incorrect model name in the URL.";
+                        break;
+                    case 429:
+                        userMessage += "You have exceeded your API usage quota. Please check your Google Cloud console for limits and billing status.";
+                        break;
+                    default:
+                        userMessage += "An unexpected error occurred with the AI service. Check the browser's developer console for more details.";
+                }
+                throw new Error(userMessage);
+            }
+
+            const data = await response.json();
+            
+            if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+                throw new Error('<strong>No Content from AI</strong><br>The AI returned an empty response. This may happen if the query was flagged for safety reasons. Please try rephrasing your question.');
+            }
+
+            let responseText = data.candidates[0].content.parts[0].text;
+            
+            // Basic Markdown to HTML conversion
+            return responseText
+                .replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^(##?#?)\s*(.*)/gm, (match, hashes, content) => {
+                    const level = hashes.length + 2; // h2 -> h4, h3 -> h5
+                    return `<h${level}>${content}</h${level}>`;
+                })
+                .replace(/^\s*\n?[\*-]\s/gm, '<ul><li>')
+                .replace(/(\n[\*-]\s)/g, '</li><li>')
+                .replace(/<\/li>$/, '</li></ul>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Auto-resize textarea
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('input', function() {
+                    this.style.height = 'auto';
+                    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+                });
+            }
+        });
     </script>
 </body>
 </html>
